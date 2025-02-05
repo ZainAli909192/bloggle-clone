@@ -1493,6 +1493,7 @@ h2 {
     display: block;
     opacity: 1;
     transform: scale(1);
+    color: var(--primary-color);
 }
  
 /* Responsive Image Styling */
