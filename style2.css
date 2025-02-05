@@ -1123,9 +1123,7 @@ footer img{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    animation: slideright 2s ;
-    animation-timeline: view();
-    animation-range: entry 0% cover 30% ; 
+    animation: slideright 2s ; 
 }
 @keyframes slideright {
     from {
@@ -1527,5 +1525,99 @@ h2 {
     }
     .tab-panel:first-child{
         margin-left: 0.5rem;
+    }
+}
+
+
+.pricing-section {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.pricing-section h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.pricing-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    max-width: 1100px;
+    margin: auto;
+}
+
+.pricing-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    text-align: left;
+    transform: scale(0.9);
+    opacity: 0;
+    animation: fadeInScale 1s forwards;
+    animation-timeline: view();
+    animation-range: entry 0% cover 30% ;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0 5px 5px rgb(120, 120, 120);   
+}
+
+@keyframes fadeInScale {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.pricing-card:hover {
+    transform: scale(1.09);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.pricing-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.price {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.pricing-card ul {
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+.pricing-card ul li {
+    font-size: 1rem;
+    margin: 8px 0;
+    color: #555;
+}
+
+.trial {
+    background: #f8f9fa;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .pricing-section h2 {
+        font-size: 1.2rem;
+    }
+    .pricing-container {
+        grid-template-columns: 1fr;
     }
 }
