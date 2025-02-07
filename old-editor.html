@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag & Drop Editor</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #f4f4f4;
+            padding: 20px;
+            border-right: 2px solid #ddd;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 15px;
+        }
+
+        .draggable {
+            padding: 10px;
+            margin: 10px 0;
+            background: #007bff;
+            color: white;
+            text-align: center;
+            cursor: grab;
+            border-radius: 5px;
+        }
+
+        .editor {
+            flex: 1;
+            padding: 20px;
+            position: relative;
+            background: #fff;
+        }
+
+        .drop-zone {
+            width: 100%;
+            min-height: 500px;
+            border: 2px dashed #ccc;
+            padding: 20px;
+            position: relative;
+        }
+
+        .dropped-item {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            background: #f9f9f9;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .dropped-item img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .settings-panel {
+            width: 250px;
+            background: #fff;
+            border-left: 2px solid #ddd;
+            padding: 20px;
+        }
+
+        .settings-panel h3 {
+            margin-bottom: 15px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Left Sidebar -->
+    <div class="sidebar">
+        <h3>Drag Elements</h3>
+        <div class="draggable" draggable="true" data-type="heading">Heading</div>
+        <div class="draggable" draggable="true" data-type="paragraph">Paragraph</div>
+        <div class="draggable" draggable="true" data-type="image">Image</div>
+    </div>
+
+    <!-- Editor Area -->
+    <div class="editor">
+        <div class="drop-zone">Drop your elements here</div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="settings-panel hidden">
+        <h3>Customize</h3>
+        <div id="text-settings" class="hidden">
+            <label>Text Color:</label>
+            <input type="color" id="text-color">
+            <label>Font Size:</label>
+            <input type="number" id="font-size" min="12" max="72">
+            <label>Line Height:</label>
+            <input type="number" id="line-height" step="0.1">
+        </div>
+
+        <div id="image-settings" class="hidden">
+            <label>Image URL:</label>
+            <input type="text" id="image-url">
+            <button id="update-image">Update Image</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedElement = null;
+
+        // Drag Start
+        $('.draggable').on('dragstart', function (event) {
+            event.originalEvent.dataTransfer.setData('type', $(this).attr('data-type'));
+        });
+
+        // Drop Zone Events
+        $('.drop-zone').on('dragover', function (event) {
+            event.preventDefault();
+        });
+
+        $('.drop-zone').on('drop', function (event) {
+            event.preventDefault();
+            let type = event.originalEvent.dataTransfer.getData('type');
+            let newElement;
+
+            if (type === 'heading') {
+                newElement = $('<h2 class="dropped-item">New Heading</h2>');
+            } else if (type === 'paragraph') {
+                newElement = $('<p class="dropped-item">New Paragraph</p>');
+            } else if (type === 'image') {
+                newElement = $('<img class="dropped-item" src="https://via.placeholder.com/150">');
+            }
+
+            if (newElement) {
+                newElement.appendTo('.drop-zone');
+                newElement.on('click', function () {
+                    selectedElement = $(this);
+                    openSettings(type);
+                });
+            }
+        });
+
+        function openSettings(type) {
+            $('.settings-panel').removeClass('hidden');
+            $('#text-settings, #image-settings').addClass('hidden');
+
+            if (type === 'heading' || type === 'paragraph') {
+                $('#text-settings').removeClass('hidden');
+                $('#text-color').val(rgbToHex(selectedElement.css('color')));
+                $('#font-size').val(parseInt(selectedElement.css('font-size')));
+                $('#line-height').val(parseFloat(selectedElement.css('line-height')));
+            } else if (type === 'image') {
+                $('#image-settings').removeClass('hidden');
+                $('#image-url').val(selectedElement.attr('src'));
+            }
+        }
+
+        // Update Text Settings
+        $('#text-color').on('input', function () {
+            if (selectedElement) selectedElement.css('color', $(this).val());
+        });
+
+        $('#font-size').on('input', function () {
+            if (selectedElement) selectedElement.css('font-size', $(this).val() + 'px');
+        });
+
+        $('#line-height').on('input', function () {
+            if (selectedElement) selectedElement.css('line-height', $(this).val());
+        });
+
+        // Update Image
+        $('#update-image').on('click', function () {
+            if (selectedElement) selectedElement.attr('src', $('#image-url').val());
+        });
+
+        // Helper function to convert RGB to HEX
+        function rgbToHex(rgb) {
+            let rgbValues = rgb.match(/\d+/g);
+            if (!rgbValues) return '#000000';
+            return '#' + rgbValues.map(x => ('0' + parseInt(x).toString(16)).slice(-2)).join('');
+        }
+    </script>
+
+</body>
+</html>
