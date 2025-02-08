@@ -3,28 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drag & Drop Editor</title>
+    <title>Editor</title>
     <link rel="stylesheet" href="editor.css">
+    <link rel="stylesheet" href="style2.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body> 
 
+     <!-- Navbar  -->
+     <nav class="navbar" id="top">
+        <div class="navbar-logo">
+            <img src="./img/logo.png" alt=" logo">
+        </div>
+        <ul class="navbar-links">
+                <li> 
+                    <a href="https://apps.shopify.com/bloggle?utm_medium=website&utm_campaign=_&utm_source=homepage&_gl=1*11bps7*_gcl_au*MjEyMzQ1MjczMS4xNzM3NDQ1MjQy"> 
+                        <i class="fas fa-box-open"></i> <!-- Products Icon -->
+                        Products
+                    </a>
+                </li>
+                <li> 
+                    <a href="./.#pricing"> 
+                        <i class="fas fa-tags"></i> <!-- Pricing Icon -->
+                        Pricing
+                    </a>
+                </li>
+                <li>                
+                    <a href="https://bloggle.app/"> 
+                        <i class="fas fa-users"></i> <!-- Clients Icon -->
+                        Clients 
+                    </a>
+                </li>                
+                <li>
+                    <a href="./">
+                        <i class="fas fa-book-open"></i> <!-- Resources Icon -->
+                        Resources
+                    </a>
+                </li> 
+                <li>
+                    <a href="#watch-demo">
+                        <i class="fas fa-play-circle"></i> <!-- Watch Demo Icon -->
+                        Watch Demo
+                    </a>
+                </li>  
+            
+        </ul>
+        <div></div>
+       
+        <div class="navbar-toggle">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </nav> 
+
+    <main>
+        
     <!-- Left Sidebar -->
     <div class="sidebar">
-        <h3>Drag Elements</h3>
+        <h3>Dragable Elements</h3>
         <div class="categories">
             <h4>Content</h4>
             <div class="draggable" draggable="true" data-type="heading">Heading</div>
             <div class="draggable" draggable="true" data-type="paragraph">Paragraph</div>
             <div class="draggable" draggable="true" data-type="table-of-contents">Table of Contents</div>
-            <div class="draggable" draggable="true" data-type="author">Author</div>
             <div class="draggable" draggable="true" data-type="summary">Summary</div>
-            <div class="draggable" draggable="true" data-type="faq">FAQ</div>
+            <!-- <div class="draggable" draggable="true" data-type="faq">FAQ</div>
             <div class="draggable" draggable="true" data-type="quote">Quote</div>
-            <!-- <div class="draggable" draggable="true" data-type="two-text-columns">Two Text Columns</div> -->
+            <div class="draggable" draggable="true" data-type="two-text-columns">Two Text Columns</div> -->
 
             <h4>Medias</h4>
-            <div class="draggable" draggable="true" data-type="image">Image</div>
-            <div class="draggable" draggable="true" data-type="images-gallery">Images Gallery</div>
+            <div class="draggable" draggable="true" data-type="image">Image (Product)</div>
+            <!-- <div class="draggable" draggable="true" data-type="images-gallery">Images Gallery</div> -->
             <div class="draggable" draggable="true" data-type="two-images-columns">Two Images Columns</div>
             <div class="draggable" draggable="true" data-type="three-images-columns">Three Images Columns</div>
             <div class="draggable" draggable="true" data-type="text-image">Text + Image</div>
@@ -42,25 +93,40 @@
             <h4>Other</h4>
             <div class="draggable" draggable="true" data-type="button">Button</div>
             <div class="draggable" draggable="true" data-type="divider">Divider</div>
-            <div class="draggable" draggable="true" data-type="embed-code">Embed Code</div>
-            <div class="draggable" draggable="true" data-type="klaviyo-form">Klaviyo Form</div>
-            <div class="draggable" draggable="true" data-type="related-blogs">Related Blogs</div>
-            <div class="draggable" draggable="true" data-type="social-share">Social Share</div>
-            <div class="draggable" draggable="true" data-type="recipe-header">Recipe Header</div>
+<!-- =            <div class="draggable" draggable="true" data-type="social-share">Social Share</div> -->
         </div>
     </div>
 
     <!-- Editor Area -->
-    <div class="editor">
-        <div class="drop-zone">Drop your elements here</div>
+    <!-- <div class="editor">
+        <p>Drop your elements here</p>
+        <div class="drop-zone"></div>
+        <button class="btn-success">Publish</button>
+    </div> -->
+
+<div class="editor desktop-view" id="editor">
+    <!-- Icons for Responsiveness -->
+    <div class="view-toggle">
+        <i class="fas fa-laptop" onclick="changeView('desktop'); toggleActiveClass(this)" > </i>
+        <i class="fas fa-tablet-alt" onclick="changeView('tablet'); toggleActiveClass(this)" ></i>
+        <i class="fas fa-mobile-alt" onclick="changeView('mobile'); toggleActiveClass(this)" ></i>
     </div>
+    
+    <p>Drop your elements here     
+    </p>
+    <div class="drop-zone"></div>
+</div>
+
     <div class="customization-panel">
+        
+        <button class="btn-success" style="margin-bottom: 1rem;">Publish blog</button>
         <h3>Customize Element</h3>
         <div id="customization-options">
             <p>Select an element to customize</p>
         </div>
     </div>
     
+</main>
     <script src="editor.js"></script>
 </body>
 </html>

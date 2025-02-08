@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Published Blog</title>
+    <!-- <link rel="stylesheet" href="editor.css"> -->
+</head>
+<body>
+    <style>
+        .published-content{
+            padding: 20px;
+            border-radius: 4px;
+            margin: 0% 10%;
+        }
+        body{
+            display: block;
+        }
+    </style>
+
+    <h2>Published Blog</h2>
+    <div class="published-content"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const publishedContent = localStorage.getItem('publishedContent');
+            if (publishedContent) {
+                document.querySelector('.published-content').innerHTML = publishedContent;
+            } else {
+                document.querySelector('.published-content').innerHTML = '<p>No content available.</p>';
+            }
+        });
+    </script>
+
+</body>
+</html>
