@@ -1,65 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const draggables = document.querySelectorAll('.draggable');
     const dropZone = document.querySelector('.drop-zone');
-
-    draggables.forEach(draggable => {
-        draggable.addEventListener('dragstart', event => {
-            event.dataTransfer.setData('type', draggable.getAttribute('data-type'));
-        });
-    });
-
-    dropZone.addEventListener('dragover', event => {
-        event.preventDefault();
-    });
-
-    dropZone.addEventListener('drop', event => {
-        event.preventDefault();
-        const type = event.dataTransfer.getData('type');
-        let newElement = createElement(type);
-        if (newElement) {
-            newElement.classList.add('dropped-item');
-            dropZone.appendChild(newElement);
-        }
-    });
-
-    function createElement(type) {
-        switch (type) {
-            case 'heading':
-                return createTextElement('h2', 'New Heading');
-            case 'paragraph':
-                return createTextElement('p', 'New Paragraph');
-            case 'table-of-contents':
-                return createTextElement('div', 'Table of Contents');
-            case 'author':
-                return createTextElement('div', 'Author Name');
-            case 'quote':
-                return createTextElement('blockquote', 'This is a quote');
-            case 'image':
-                let img = document.createElement('img');
-                img.src = 'https://via.placeholder.com/150';
-                return img;
-            case 'button':
-                let btn = document.createElement('button');
-                btn.textContent = 'Click Me';
-                return btn;
-            case 'divider':
-                return document.createElement('hr');
-            default:
-                return createTextElement('div', `New ${type}`);
-        }
-    }
-
-    function createTextElement(tag, text) {
-        let elem = document.createElement(tag);
-        elem.textContent = text;
-        return elem;
-    }
-});
-
-// new js for customization
-document.addEventListener('DOMContentLoaded', () => {
-    const draggables = document.querySelectorAll('.draggable');
-    const dropZone = document.querySelector('.drop-zone');
     const customizationPanel = document.getElementById('customization-options');
 
     let selectedElement = null;
@@ -79,7 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle Drop Event
     dropZone.addEventListener('drop', event => {
         event.preventDefault();
+
         const type = event.dataTransfer.getData('type');
+        if (!type) return; // Prevent empty drops
+
         let newElement = createElement(type);
         if (newElement) {
             newElement.classList.add('dropped-item');
@@ -94,7 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Function to Create Elements
-    function createElement(type) {
+  // Function to Create Elements
+     // Function to Create Elements
+     function createElement(type) {
         let element;
         switch (type) {
             case 'heading':
@@ -111,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'image':
                 element = document.createElement('img');
-                element.src = 'https://via.placeholder.com/150';
+                element.src = 'https://images.unsplash.com/photo-1566438480900-0609be27a4be?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aW1hZ2V8ZW58MHx8MHx8fDA%3D';
                 break;
             case 'button':
                 element = document.createElement('button');
@@ -119,6 +65,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'divider':
                 element = document.createElement('hr');
+                break;
+            case 'summary':
+                element = document.createElement('details');
+                let summary = document.createElement('summary');
+                summary.textContent = 'Summary';
+                element.appendChild(summary);
+                let content = document.createElement('div');
+                content.textContent = 'This is a summary';
+                element.appendChild(content);
                 break;
             default:
                 element = document.createElement('div');
@@ -130,9 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to Show Customization Options
     function showCustomizationOptions(element) {
         customizationPanel.innerHTML = '';
-
+        element.style.borderRight = '5px solid #ccc';
         if (element.tagName !== 'HR') {
             customizationPanel.innerHTML += `
+                <label>Text:</label>
+                <input type="text" id="text">
                 <label>Font Size:</label>
                 <input type="number" id="font-size" value="16">
                 <label>Text Color:</label>
@@ -158,8 +115,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <label>Border Radius:</label>
                 <input type="number" id="border-radius" min="0" max="100">
             
+                <button id="remove-item">Remove item </button>
                 `;
 
+            document.getElementById('text').addEventListener('input', (e) => {
+                element.textContent = e.target.value;
+            });
             document.getElementById('font-size').addEventListener('input', (e) => {
                 element.style.fontSize = e.target.value + 'px';
             });
@@ -187,16 +148,40 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('border-size').addEventListener('input', (e) => {
                 element.style.borderWidth = e.target.value + 'px';
             });
-        }
 
+            
+        }
         if (element.tagName === 'IMG') {
+            const children = [...customizationPanel.children];
+            customizationPanel.innerHTML = '';
+            for (let i = Math.max(0, children.length - 6); i < children.length; i++) {
+                customizationPanel.appendChild(children[i]);
+            }
             customizationPanel.innerHTML += `
                 <label>Image URL:</label>
                 <input type="text" id="img-url" value="${element.src}">
+                
+                <label>Height:</label>
+                <input type="number" id="img-height" value="${element.height}">
+                
+                <label>Width:</label>
+                <input type="number" id="img-width" value="${element.width}">
+                
             `;
             document.getElementById('img-url').addEventListener('input', (e) => {
                 element.src = e.target.value;
             });
+            document.getElementById('img-height').addEventListener('input', (e) => {
+                element.height = e.target.value;
+            });
+            document.getElementById('img-width').addEventListener('input', (e) => {
+                element.width = e.target.value;
+            });
+            
         }
+        document.getElementById('remove-item').addEventListener('click', () => {
+            element.remove();
+        });
     }
+    
 });
