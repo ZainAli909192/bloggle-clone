@@ -24,10 +24,18 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const publishedContent = localStorage.getItem('publishedContent');
+            const dropZoneStyles = localStorage.getItem('dropZoneStyles');
             if (publishedContent) {
                 document.querySelector('.published-content').innerHTML = publishedContent;
             } else {
                 document.querySelector('.published-content').innerHTML = '<p>No content available.</p>';
+            }
+            if (dropZoneStyles) {
+                document.querySelector('.published-content').style.backgroundColor = dropZoneStyles.backgroundColor;
+                document.querySelector('.published-content').style.backgroundImage = dropZoneStyles.backgroundImage;
+                document.querySelector('.published-content').style.backgroundRepeat = dropZoneStyles.backgroundRepeat;
+                document.querySelector('.published-content').style.backgroundSize = dropZoneStyles.backgroundSize;
+                document.querySelector('.published-content').style.backgroundAttachment = dropZoneStyles.backgroundAttachment;
             }
         });
     </script>

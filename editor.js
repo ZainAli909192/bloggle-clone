@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const customizationPanel = document.getElementById('customization-options');
 
     let selectedElement = null;
-
+    // Customization Options for Drop Zone
+  
     // Drag Start Event
     draggables.forEach(draggable => {
         draggable.addEventListener('dragstart', event => {
@@ -45,8 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to Show Customization Options
     function showCustomizationOptions(element) {
         customizationPanel.innerHTML = '';
-        element.style.borderRight = '5px solid #ccc';
+        element.style.border = '1px solid #ccc';
     
+        // Common customization options for most elements
         if (element.tagName !== 'HR') {
             customizationPanel.innerHTML += `
                 <label>Text:</label>
@@ -67,15 +69,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     <option value="Georgia">Georgia</option>
                     <option value="Tahoma">Tahoma</option>
                 </select>
+                <label>Border:</label>
                 <label>Border Color:</label>
                 <input type="color" id="border-color">
                 <label>Border Size:</label>
                 <input type="number" id="border-size" min="0" max="100">
                 <label>Border Radius:</label>
                 <input type="number" id="border-radius" min="0" max="100">
+                <label>Outline:</label>
+                <label>Outline Style:</label>
+                <select id="outline-style">
+                    <option value="">None</option>
+                    <option value="solid">Solid</option>
+                    <option value="dotted">Dotted</option>
+                    <option value="dashed">Dashed</option>
+                    <option value="double">Double</option>
+                </select>
+                <label>Outline Color:</label>
+                <input type="color" id="outline-color">
+                <label>Outline Width:</label>
+                <input type="number" id="outline-width" min="0" max="100">
                 <button id="remove-item">Remove item</button>
             `;
     
+            // Event listeners for common options
             document.getElementById('text').addEventListener('input', (e) => {
                 element.textContent = e.target.value;
             });
@@ -102,17 +119,35 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     
+        // Customization options for images
         if (element.tagName === 'IMG') {
             customizationPanel.innerHTML += `
                 <label>Image URL:</label>
                 <input type="text" id="img-url" value="${element.src}">
+                <label>Alt Text:</label>
+                <input type="text" id="img-alt" value="${element.alt}">
                 <label>Height:</label>
                 <input type="number" id="img-height" value="${element.height}">
                 <label>Width:</label>
                 <input type="number" id="img-width" value="${element.width}">
+                <label>Object Fit:</label>
+                <select id="img-object-fit">
+                    <option value="fill">Fill</option>
+                    <option value="contain">Contain</option>
+                    <option value="cover">Cover</option>
+                    <option value="none">None</option>
+                    <option value="scale-down">Scale Down</option>
+                </select>
+                <label>Object Position:</label>
+                <input type="text" id="img-object-position" value="50% 50%">
             `;
+    
+            // Event listeners for image-specific options
             document.getElementById('img-url').addEventListener('input', (e) => {
                 element.src = e.target.value;
+            });
+            document.getElementById('img-alt').addEventListener('input', (e) => {
+                element.alt = e.target.value;
             });
             document.getElementById('img-height').addEventListener('input', (e) => {
                 element.height = e.target.value;
@@ -120,8 +155,58 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('img-width').addEventListener('input', (e) => {
                 element.width = e.target.value;
             });
+            document.getElementById('img-object-fit').addEventListener('input', (e) => {
+                element.style.objectFit = e.target.value;
+            });
+            document.getElementById('img-object-position').addEventListener('input', (e) => {
+                element.style.objectPosition = e.target.value;
+            });
         }
     
+        // Customization options for videos
+        if (element.tagName === 'VIDEO') {
+            customizationPanel.innerHTML += `
+                <label>Video URL:</label>
+                <input type="text" id="video-url" value="${element.src}">
+                <label>Height:</label>
+                <input type="number" id="video-height" value="${element.height}">
+                <label>Width:</label>
+                <input type="number" id="video-width" value="${element.width}">
+                <label>Controls:</label>
+                <input type="checkbox" id="video-controls" ${element.controls ? 'checked' : ''}>
+                <label>Autoplay:</label>
+                <input type="checkbox" id="video-autoplay" ${element.autoplay ? 'checked' : ''}>
+                <label>Loop:</label>
+                <input type="checkbox" id="video-loop" ${element.loop ? 'checked' : ''}>
+                <label>Muted:</label>
+                <input type="checkbox" id="video-muted" ${element.muted ? 'checked' : ''}>
+            `;
+    
+            // Event listeners for video-specific options
+            document.getElementById('video-url').addEventListener('input', (e) => {
+                element.src = e.target.value;
+            });
+            document.getElementById('video-height').addEventListener('input', (e) => {
+                element.height = e.target.value;
+            });
+            document.getElementById('video-width').addEventListener('input', (e) => {
+                element.width = e.target.value;
+            });
+            document.getElementById('video-controls').addEventListener('change', (e) => {
+                element.controls = e.target.checked;
+            });
+            document.getElementById('video-autoplay').addEventListener('change', (e) => {
+                element.autoplay = e.target.checked;
+            });
+            document.getElementById('video-loop').addEventListener('change', (e) => {
+                element.loop = e.target.checked;
+            });
+            document.getElementById('video-muted').addEventListener('change', (e) => {
+                element.muted = e.target.checked;
+            });
+        }
+    
+        // Customization options for text-image and text-video elements
         if (element.classList.contains('text-image') || element.classList.contains('text-video')) {
             customizationPanel.innerHTML += `
                 <label>Text Content:</label>
@@ -137,36 +222,44 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     
+        // Customization options for text-video elements
+        if (element.classList.contains('text-video')) {
+            customizationPanel.innerHTML += `
+                <label>Video URL:</label>
+                <input type="text" id="video-url" value="${element.querySelector('video').src}">
+            `;
+            document.getElementById('video-url').addEventListener('input', (e) => {
+                element.querySelector('video').src = e.target.value;
+            });
+        }
+    
+        // Customization options for two-images and three-images elements
         if (element.classList.contains('two-images') || element.classList.contains('three-images')) {
             const images = element.querySelectorAll('img');
             let imagesHTML = '';
-        
-            // Generate all input fields first
+    
             images.forEach((img, index) => {
                 imagesHTML += `
                     <label>Image ${index + 1} URL:</label>
                     <input type="text" id="img-url-${index}" value="${img.src}">
                 `;
             });
-        
-            // Append all inputs at once (prevents overwriting)
+    
             customizationPanel.insertAdjacentHTML('beforeend', imagesHTML);
-        
-            // Attach event listeners for each image input field
+    
             images.forEach((img, index) => {
                 document.getElementById(`img-url-${index}`).addEventListener('input', (e) => {
                     img.src = e.target.value;
                 });
             });
         }
-        
+    
+        // Remove item functionality
         document.getElementById('remove-item').addEventListener('click', () => {
             element.remove();
             customizationPanel.innerHTML = '';
         });
     }
-    
-    
     
 });
 
@@ -181,9 +274,18 @@ function createElement(type) {
             element = document.createElement('p');
             element.textContent = 'New Paragraph';
             break;
+        case 'summary':
+            element = document.createElement('details');
+            let element2 = document.createElement('summary');
+            let element3 = document.createElement('p');
+            element2.textContent = 'New Summary';
+            element3.textContent = 'New Summary';
+            element.appendChild(element2);
+            element.appendChild(element3);
+            break;
         case 'image':
             element = document.createElement('img');
-            element.src = 'https://via.placeholder.com/300';
+            element.src = 'https://img.freepik.com/free-photo/businesswoman-looking-important-contact-phone_1163-4256.jpg?ga=GA1.1.572590152.1728395548&semt=ais_hybrid';
             break;
         case 'button':
             element = document.createElement('button');
@@ -195,25 +297,66 @@ function createElement(type) {
         case 'text-image':
             element = document.createElement('div');
             element.classList.add('text-image');
-            element.innerHTML = `<p>Sample Text</p> <img src="https://via.placeholder.com/150">`;
+            element.innerHTML = `<p>Sample Text</p> <img src="https://img.freepik.com/free-photo/businesswoman-looking-important-contact-phone_1163-4256.jpg?ga=GA1.1.572590152.1728395548&semt=ais_hybrid">`;
             break;
         case 'two-images-columns':
             element = document.createElement('div');
             element.classList.add('two-images');
-            element.innerHTML = `<img src="https://via.placeholder.com/150"><img src="https://via.placeholder.com/150">`;
+            element.innerHTML = `<img src="https://img.freepik.com/free-photo/businesswoman-looking-important-contact-phone_1163-4256.jpg?ga=GA1.1.572590152.1728395548&semt=ais_hybrid"><img src="https://img.freepik.com/free-photo/businesswoman-looking-important-contact-phone_1163-4256.jpg?ga=GA1.1.572590152.1728395548&semt=ais_hybrid">`;
             break;
         case 'three-images-columns':
             element = document.createElement('div');
             element.classList.add('three-images');
-            element.innerHTML = `<img src="https://via.placeholder.com/100"><img src="https://via.placeholder.com/100"><img src="https://via.placeholder.com/100">`;
+            element.innerHTML = `<img src="https://img.freepik.com/free-photo/businesswoman-looking-important-contact-phone_1163-4256.jpg?ga=GA1.1.572590152.1728395548&semt=ais_hybrid"><img src="https://img.freepik.com/free-photo/businesswoman-looking-important-contact-phone_1163-4256.jpg?ga=GA1.1.572590152.1728395548&semt=ais_hybrid"><img src="https://img.freepik.com/free-photo/businesswoman-looking-important-contact-phone_1163-4256.jpg?ga=GA1.1.572590152.1728395548&semt=ais_hybrid">`;
             break;
+        case 'video':
+            element = document.createElement('video');
+            element.src = 'https://videocdn.cdnpk.net/videos/a5d39ff5-0d99-41c7-8e99-a30bd8291127/horizontal/previews/clear/small.mp4?token=exp=1739946236~hmac=1e4145b63fe3bf1374edc932d6f9482a42a483017c6db0841c628240bfe2a6e1';
+            element.controls = true;
+            element.width = 300;
+            element.height = 200;
+            break;
+        case 'text-video':
+            element = document.createElement('div');
+            element.classList.add('text-video');
+            element.innerHTML = `<p>Sample Text</p> <video src="https://videocdn.cdnpk.net/videos/a5d39ff5-0d99-41c7-8e99-a30bd8291127/horizontal/previews/clear/small.mp4?token=exp=1739946236~hmac=1e4145b63fe3bf1374edc932d6f9482a42a483017c6db0841c628240bfe2a6e1" controls width="200" height="150"></video>`;
+            break;
+        case 'text':
+            element = document.createElement('p');
+            element.textContent = 'New Text';
+            break;
+        case 'list':
+            element = document.createElement('ul');
+            for (let i = 0; i < 5; i++) {
+                const li = document.createElement('li');
+                li.textContent = `Item ${i + 1}`;
+                element.appendChild(li);
+            }
+            break;
+        case 'quote':
+            element = document.createElement('blockquote');
+            element.textContent = 'New Quote';
+            break;
+                element = document.createElement('div');
+                element.classList.add('two-text-columns', 'separated');
+
+                const column1 = document.createElement('div');
+                column1.classList.add('column');
+                column1.innerHTML = `<p>Column 1 Text</p>`;
+
+                const column2 = document.createElement('div');
+                column2.classList.add('column');
+                column2.innerHTML = `<p>Column 2 Text</p>`;
+
+                element.appendChild(column1);
+                element.appendChild(column2);
+                break;
         default:
             element = document.createElement('div');
             element.textContent = `New ${type}`;
     }
     return element;
 }
-
 // save editor 
 document.addEventListener('DOMContentLoaded', () => {
     const dropZone = document.querySelector('.drop-zone');
@@ -250,4 +393,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         element.classList.add('active');
     }
-    
+

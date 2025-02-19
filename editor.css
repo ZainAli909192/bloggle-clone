@@ -42,10 +42,8 @@ main {
     cursor: grab;
     border-radius: 5px;
 }
-
 /* Editor */
 .editor {
-    
     flex: 1;
     padding: 20px;
     background: #fff;
@@ -65,24 +63,23 @@ main {
 .dropped-item {
     padding: 10px;
     margin: 10px 0;
-    border: 1px solid #ddd;
     background: #fff;
     cursor: pointer;
 }
 
 /* Customization Panel (Right) */
 .customization-panel {
-    width: 250px;
+    min-width: 250px;
     background: #f0f0f0;
     padding: 20px;
     border-left: 2px solid #ddd;
-    overflow-y: auto;
+    overflow-y: auto; /* Change from 'scroll' to 'auto' */
     position: fixed;
-    display: block;
     right: 0;
     top: 14%;
-    height: 100vh;
+    height: calc(100vh - 14%); /* Ensure it doesn’t exceed viewport */
 }
+
 
 select, input {
     padding: 5px;
@@ -171,7 +168,7 @@ select, input {
 /* Responsive Views */
 .active{
     color: white;
-background-color: var(--primary-color);
+    background-color: var(--primary-color);
 }
 :has(.mobile-view) {
     .editor{ 
@@ -249,3 +246,23 @@ background-color: var(--primary-color);
             width: 100%;
             margin: 5px 0;
         }
+.two-text-columns {
+    display: grid; /* Use grid for layout */
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    grid-template-rows: 1fr 1fr; /* Two equal rows */
+    gap: 10px; /* Adjust gap between rows and columns as needed */
+}
+
+.two-text-columns .row {
+    display: contents; /* Makes the row behave like its children in the grid */
+}
+
+.two-text-columns-two-rows .column {
+    /* Style your columns here if needed */
+    padding: 10px; /* Example padding */
+    border: 1px solid #ccc; /* Example border */
+}
+
+.two-text-columns-two-rows p {
+    margin: 0; /* Remove default paragraph margins */
+}
