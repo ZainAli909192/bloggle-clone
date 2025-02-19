@@ -143,8 +143,27 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
     
             // Event listeners for image-specific options
-            document.getElementById('img-url').addEventListener('input', (e) => {
-                element.src = e.target.value;
+            
+            document.getElementById('img-url').addEventListener('click', (e) => {
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*'; // Optional: Restrict to image files
+            
+                fileInput.addEventListener('change', (event) => {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+            
+                        reader.onload = (e) => {
+                            element.src = e.target.result; // Set the video source to the selected file
+                        }
+            
+                        reader.readAsDataURL(file); // Read the file as a data URL.
+                    }
+                });
+            
+                fileInput.click(); // Programmatically open the file chooser
+                e.preventDefault(); // Prevent the default input behavior
             });
             document.getElementById('img-alt').addEventListener('input', (e) => {
                 element.alt = e.target.value;
@@ -183,8 +202,26 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
     
             // Event listeners for video-specific options
-            document.getElementById('video-url').addEventListener('input', (e) => {
-                element.src = e.target.value;
+            document.getElementById('video-url').addEventListener('click', (e) => {
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = 'video/*'; // Optional: Restrict to video files
+            
+                fileInput.addEventListener('change', (event) => {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+            
+                        reader.onload = (e) => {
+                            element.src = e.target.result; // Set the video source to the selected file
+                        }
+            
+                        reader.readAsDataURL(file); // Read the file as a data URL.
+                    }
+                });
+            
+                fileInput.click(); // Programmatically open the file chooser
+                e.preventDefault(); // Prevent the default input behavior
             });
             document.getElementById('video-height').addEventListener('input', (e) => {
                 element.height = e.target.value;
