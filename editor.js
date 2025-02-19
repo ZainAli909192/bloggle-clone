@@ -311,15 +311,16 @@ function createElement(type) {
             break;
         case 'video':
             element = document.createElement('video');
-            element.src = 'https://videocdn.cdnpk.net/videos/a5d39ff5-0d99-41c7-8e99-a30bd8291127/horizontal/previews/clear/small.mp4?token=exp=1739946236~hmac=1e4145b63fe3bf1374edc932d6f9482a42a483017c6db0841c628240bfe2a6e1';
+            element.src = 'https://videocdn.cdnpk.net/videos/e2b614a8-38a2-4d1c-97f4-fa66c125f851/horizontal/previews/clear/small.mp4?token=exp=1739946236~hmac=5c13cf5abb966ea095890d23470177deb28075214397f6ee45dadb5e3d414166';
             element.controls = true;
+            element.autoplay = true;   
             element.width = 300;
             element.height = 200;
             break;
         case 'text-video':
             element = document.createElement('div');
             element.classList.add('text-video');
-            element.innerHTML = `<p>Sample Text</p> <video src="https://videocdn.cdnpk.net/videos/a5d39ff5-0d99-41c7-8e99-a30bd8291127/horizontal/previews/clear/small.mp4?token=exp=1739946236~hmac=1e4145b63fe3bf1374edc932d6f9482a42a483017c6db0841c628240bfe2a6e1" controls width="200" height="150"></video>`;
+            element.innerHTML = `<p>Sample Text</p> <video src="https://videocdn.cdnpk.net/videos/e2b614a8-38a2-4d1c-97f4-fa66c125f851/horizontal/previews/clear/small.mp4?token=exp=1739946236~hmac=5c13cf5abb966ea095890d23470177deb28075214397f6ee45dadb5e3d414166" controls width="200" height="150"></video>`;
             break;
         case 'text':
             element = document.createElement('p');
