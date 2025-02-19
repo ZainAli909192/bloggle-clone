@@ -107,8 +107,12 @@ select, input {
     max-height: 100%;
 }
 
+.customization-panel button:hover {
+    scale: 1.09;
+    transition: scale 0.3s ease;
+}
 .customization-panel button {
-    padding: 5px;
+    padding: 10px 15px;
     background-color: var(--primary-color);
     color: white;
     border: none;

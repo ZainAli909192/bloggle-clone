@@ -48,7 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
         customizationPanel.innerHTML = '';
         element.style.border = '1px solid #ccc';
     
-        // Common customization options for most elements
         if (element.tagName !== 'HR') {
             customizationPanel.innerHTML += `
                 <label>Text:</label>
@@ -116,8 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             document.getElementById('border-size').addEventListener('input', (e) => {
                 element.style.borderWidth = e.target.value + 'px';
-            });
-        }
+        });
+    }
     
         // Customization options for images
         if (element.tagName === 'IMG') {
@@ -297,6 +296,9 @@ document.addEventListener('DOMContentLoaded', () => {
             customizationPanel.innerHTML = '';
         });
     }
+      
+        // Common customization options for most elements
+       
     
 });
 
