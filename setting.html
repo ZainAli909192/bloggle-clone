@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile</title>
+    <link rel="stylesheet" href="settings.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 class="logo">BLOGS+</h2>
+            <nav class="nav-links">
+                <a href="dashboard.html">Dashboard Home</a>
+                <a href="#">Templates</a>
+                <a href="#">Analytics</a>
+                <a href="#">SEO Optimization</a>
+                <a href="./setting.html">Settings</a>
+                <a href="./">Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <header>
+                <h1>Update Profile</h1>
+            </header>
+
+            <section class="profile-container">
+                <div class="profile-card">
+                    
+
+                    <form id="profileForm">
+                        <label for="fullName">Full Name:</label>
+                        <input type="text" id="fullName" >
+
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" >
+
+                        <label for="bio">Bio:</label>
+                        <textarea id="bio" rows="3" resize="none"></textarea>
+
+                        <label for="password">New Password:</label>
+                        <input type="password" id="password" >
+
+                        <button type="submit" class="action-btn">Update Profile</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

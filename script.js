@@ -56,3 +56,46 @@ document.addEventListener('DOMContentLoaded', () => {
         switchTab(currentIndex);
     }, switchInterval);
 });
+
+// Form Submission Handling
+document.getElementById('login-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+  
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+  
+    // Basic validation
+    if (!email || !password) {
+      alert('Please fill in all fields.');
+      return;
+    }
+  
+    // Simulate login (replace with actual API call)
+    console.log('Logging in with:', { email, password });
+    alert('Login successful! Redirecting...');
+  
+    // Redirect to another page (example)
+    window.location.href = './dashboard.html';
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const navLinks = document.querySelectorAll(".nav-links a");
+
+    navLinks.forEach(link => {
+        link.addEventListener("click", function () {
+            navLinks.forEach(l => l.classList.remove("active"));
+            this.classList.add("active");
+        });
+    });
+});
+document.addEventListener("DOMContentLoaded", function () {
+    const navLinks = document.querySelectorAll(".nav-links a");
+
+    navLinks.forEach(link => {
+        link.addEventListener("click", function () {
+            navLinks.forEach(l => l.classList.remove("active"));
+            this.classList.add("active");
+        });
+    });
+});
+

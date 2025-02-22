@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Blogs</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 class="logo">BLOGS+</h2>
+            <nav class="nav-links">
+                <a href="./dashboard.html">Dashboard</a>
+                <a href="./view-blogs.html" class="active">Blog Posts</a>
+                <a href="./templates.html">Templates</a>
+                <a href="./analytics.html">Analytics</a>
+                <a href="./seo.html">SEO Optimization</a>
+                <a href="./setting.html">Settings</a>
+                <a href="./">Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <header>
+                <h1>Blog Posts</h1>
+            </header>
+
+            <!-- Search and Filters -->
+            <section class="actions">
+                <input type="text" class="search-bar" placeholder="Search blog by title">
+                <button class="filter-btn">Blogs</button>
+                <button class="filter-btn">Sort ▼</button>
+            </section>
+
+            <!-- Blog List -->
+            <section class="blog-list">
+                <div class="blog-item">
+                    <div class="blog-info">
+                        <h3>Video Blog</h3>
+                        <p class="last-update">Updated 2 days ago</p>
+                        <br>
+                    </div>
+                    <div class="score">
+                        <span class="seo-score green">seo 6</span>
+                        <span class="ux-score yellow">ux 20</span>
+                    </div>
+                    <div class="actions">
+                        <button class="edit-btn">Edit</button>
+                        <button class="more-btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="blog-item">
+                    <div class="blog-info">
+                        <h3>Testing Blog</h3>
+                        <p class="last-update">Updated 2 days ago</p>
+                        <br>
+                    </div>
+                    <div class="score">
+                        <span class="seo-score green">seo 6</span>
+                        <span class="ux-score yellow">ux 20</span>
+                    </div>
+                    <div class="actions">
+                        <button class="edit-btn">Edit</button>
+                        <button class="more-btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="blog-item">
+                    <div class="blog-info">
+                        <h3>How to Style a Denim Corset Top</h3>
+                        <p class="last-update">Updated 1 week ago</p>
+                        <br>
+                    </div>
+                    <div class="score">
+                        <span class="seo-score green">seo 93</span>
+                        <span class="ux-score yellow">ux45</span>
+                    </div>
+                    <div class="actions">
+                        <button class="edit-btn">Edit</button>
+                        <button class="more-btn">Delete</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

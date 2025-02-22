@@ -1,0 +1,73 @@
+:root{
+  --secondory-color:#333;
+}
+/* Profile Page Styles */
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  margin-left: 4rem;
+}
+
+.profile-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  text-align: center;
+}
+
+.profile-image {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.profile-image img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid var(--primary-color);
+  object-fit: cover;
+}
+
+.profile-image input {
+  display: block;
+  margin: 10px auto;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  text-align: left;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.action-btn {
+  margin-top: 15px;
+  background: var(--primary-color);
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.action-btn:hover {
+  background: var(--secondory-color);
+  color: white;
+}
