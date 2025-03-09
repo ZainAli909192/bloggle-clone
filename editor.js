@@ -48,75 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
         customizationPanel.innerHTML = '';
         element.style.border = '1px solid #ccc';
     
-        if (element.tagName !== 'HR') {
-            customizationPanel.innerHTML += `
-                <label>Text:</label>
-                <input type="text" id="text" value="${element.textContent || ''}">
-                <label>Font Size:</label>
-                <input type="number" id="font-size" value="16">
-                <label>Text Color:</label>
-                <input type="color" id="text-color">
-                <label>Background Color:</label>
-                <input type="color" id="bg-color">
-                <label>Font family:</label>
-                <select id="font-family">
-                    <option value="Times New Roman">Times New Roman</option>
-                    <option value="Sans-serif">Sans-serif</option>
-                    <option value="Arial">Arial</option>
-                    <option value="Helvetica">Helvetica</option>
-                    <option value="Verdana">Verdana</option>
-                    <option value="Georgia">Georgia</option>
-                    <option value="Tahoma">Tahoma</option>
-                </select>
-                <label>Border:</label>
-                <label>Border Color:</label>
-                <input type="color" id="border-color">
-                <label>Border Size:</label>
-                <input type="number" id="border-size" min="0" max="100">
-                <label>Border Radius:</label>
-                <input type="number" id="border-radius" min="0" max="100">
-                <label>Outline:</label>
-                <label>Outline Style:</label>
-                <select id="outline-style">
-                    <option value="">None</option>
-                    <option value="solid">Solid</option>
-                    <option value="dotted">Dotted</option>
-                    <option value="dashed">Dashed</option>
-                    <option value="double">Double</option>
-                </select>
-                <label>Outline Color:</label>
-                <input type="color" id="outline-color">
-                <label>Outline Width:</label>
-                <input type="number" id="outline-width" min="0" max="100">
-                <button id="remove-item">Remove item</button>
-            `;
-    
-            // Event listeners for common options
-            document.getElementById('text').addEventListener('input', (e) => {
-                element.textContent = e.target.value;
-            });
-            document.getElementById('font-size').addEventListener('input', (e) => {
-                element.style.fontSize = e.target.value + 'px';
-            });
-            document.getElementById('text-color').addEventListener('input', (e) => {
-                element.style.color = e.target.value;
-            });
-            document.getElementById('bg-color').addEventListener('input', (e) => {
-                element.style.backgroundColor = e.target.value;
-            });
-            document.getElementById('font-family').addEventListener('input', (e) => {
-                element.style.fontFamily = e.target.value;
-            });
-            document.getElementById('border-color').addEventListener('input', (e) => {
-                element.style.borderColor = e.target.value;
-            });
-            document.getElementById('border-radius').addEventListener('input', (e) => {
-                element.style.borderRadius = e.target.value + 'px';
-            });
-            document.getElementById('border-size').addEventListener('input', (e) => {
-                element.style.borderWidth = e.target.value + 'px';
-        });
-    }
     
         // Customization options for images
         if (element.tagName === 'IMG') {
@@ -182,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     
         // Customization options for videos
-        if (element.tagName === 'VIDEO') {
+       else if (element.tagName === 'VIDEO') {
             customizationPanel.innerHTML += `
                 <label>Video URL:</label>
                 <input type="text" id="video-url" value="${element.src}">
@@ -243,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     
         // Customization options for text-image and text-video elements
-        if (element.classList.contains('text-image') || element.classList.contains('text-video')) {
+      else  if (element.classList.contains('text-image') || element.classList.contains('text-video')) {
             customizationPanel.innerHTML += `
                 <label>Text Content:</label>
                 <input type="text" id="text-content" value="${element.querySelector('p').textContent}">
@@ -256,10 +187,11 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('img-url').addEventListener('input', (e) => {
                 element.querySelector('img').src = e.target.value;
             });
+
         }
     
         // Customization options for text-video elements
-        if (element.classList.contains('text-video')) {
+        else if (element.classList.contains('text-video')) {
             customizationPanel.innerHTML += `
                 <label>Video URL:</label>
                 <input type="text" id="video-url" value="${element.querySelector('video').src}">
@@ -270,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     
         // Customization options for two-images and three-images elements
-        if (element.classList.contains('two-images') || element.classList.contains('three-images')) {
+        else if (element.classList.contains('two-images') || element.classList.contains('three-images')) {
             const images = element.querySelectorAll('img');
             let imagesHTML = '';
     
@@ -290,17 +222,325 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     
+        else if (element.tagName !== 'HR' || element.classList.contains('text-image')) {
+            customizationPanel.innerHTML = `
+            <div class="customization-card">
+                <h4>Text Customization</h4>
+                <div class="two-column-grid">
+                    <!-- Row 1 -->
+                    <div>
+                        <label for="text"><i class="fas fa-font"></i> Text:</label>
+                        <input type="text" id="text" value="${element.textContent || ''}">
+                    </div>
+                    <div>
+                        <label for="font-size"><i class="fas fa-text-height"></i> Font Size:</label>
+                        <input type="number" id="font-size" value="16">
+                    </div>
+                    <!-- Row 2 -->
+                    <div>
+                        <label for="text-color"><i class="fas fa-palette"></i> Text Color:</label>
+                        <input type="color" id="text-color">
+                    </div>
+                    <div>
+                        <label for="bg-color"><i class="fas fa-fill-drip"></i> Background Color:</label>
+                        <input type="color" id="bg-color">
+                    </div>
+                </div>
+            </div>
+        
+            <div class="customization-card">
+                <h4>Font Customization</h4>
+                <div class="two-column-grid">
+                    <!-- Row 1 -->
+                    <div>
+                        <label for="font-family"><i class="fas fa-font"></i> Font Family:</label>
+                        <select id="font-family">
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Sans-serif">Sans-serif</option>
+                            <option value="Arial">Arial</option>
+                            <option value="Helvetica">Helvetica</option>
+                            <option value="Verdana">Verdana</option>
+                            <option value="Georgia">Georgia</option>
+                            <option value="Tahoma">Tahoma</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="line-height"><i class="fas fa-text-height"></i> Line Height:</label>
+                        <input type="number" id="line-height" value="1">
+                    </div>
+                </div>
+            </div>
+        
+            <div class="customization-card">
+                <h4>Border Customization</h4>
+                <div class="two-column-grid">
+                    <!-- Row 1 -->
+                    <div>
+                        <label for="border-color"><i class="fas fa-palette"></i> Border Color:</label>
+                        <input type="color" id="border-color">
+                    </div>
+                    <div>
+                        <label for="border-size"><i class="fas fa-border-all"></i> Border Size:</label>
+                        <input type="number" id="border-size" min="0" max="100">
+                    </div>
+                    <!-- Row 2 -->
+                    <div>
+                        <label for="border-radius"><i class="fas fa-circle"></i> Border Radius:</label>
+                        <input type="number" id="border-radius" min="0" max="100">
+                    </div>
+                    <br>
+
+                    <div>
+                        <label for="outline-style"><i class="fas fa-border-style"></i> Outline Style:</label>
+                        <select id="outline-style">
+                            <option value="">None</option>
+                            <option value="solid">Solid</option>
+                            <option value="dotted">Dotted</option>
+                            <option value="dashed">Dashed</option>
+                            <option value="double">Double</option>
+                        </select>
+                    </div>
+                    <!-- Row 3 -->
+                    <div>
+                        <label for="outline-color"><i class="fas fa-palette"></i> Outline Color:</label>
+                        <input type="color" id="outline-color">
+                    </div>
+                    <div>
+                        <label for="outline-width"><i class="fas fa-border-all"></i> Outline Width:</label>
+                        <input type="number" id="outline-width" min="0" max="100">
+                    </div>
+                </div>
+            </div>
+        
+            <div class="customization-card">
+                <h4>Spacing Customization</h4>
+                <div class="two-column-grid">
+                    <!-- Row 1 -->
+                    <div>
+                        <label for="padding"><i class="fas fa-arrows-alt"></i> Padding:</label>
+                        <input type="number" id="padding" value="0">
+                    </div>
+                    <div>
+                        <label for="margin"><i class="fas fa-arrows-alt"></i> Margin:</label>
+                        <input type="number" id="margin" value="0">
+                    </div>
+                </div>
+            </div>
+        
+            <div class="customization-card">
+                <h4>Transform Customization</h4>
+                <div class="two-column-grid">
+                    <!-- Row 1 -->
+                    <div>
+                        <label for="rotate"><i class="fas fa-sync-alt"></i> Rotate (degrees):</label>
+                        <input type="number" id="rotate" value="0">
+                    </div>
+                    <div>
+                        <label for="skew"><i class="fas fa-slash"></i> Skew (degrees):</label>
+                        <input type="number" id="skew" value="0">
+                    </div>
+                </div>
+                <div class="two-column-grid">
+                    <!-- Row 2 -->
+                    <div>
+                        <label for="translate-x"><i class="fas fa-sync-alt"></i> Translate X (px):</label>
+                        <input type="number" id="translate-x" value="0">
+                    </div>
+                    <div>
+                        <label for="translate-y"><i class="fas fa-slash"></i> Translate Y (px):</label>
+                        <input type="number" id="translate-y" value="0">
+                    </div>
+                </div>
+                <div class="two-column-grid">
+                    <!-- Row 2 -->
+                    <div>
+                        <label for="scale"><i class="fas fa-sync-alt"></i> Scale (px):</label>
+                        <input type="number" id="scale" value="0">
+                    </div>
+                </div>
+            </div>
+        
+            <div class="customization-card">
+                <h4>Box Shadow Customization</h4>
+                <div class="two-column-grid">
+                    <!-- Row 1 -->
+                    <div>
+                        <label for="box-shadow-x"><i class="fas fa-arrows-alt-h"></i> Horizontal Offset:</label>
+                        <input type="number" id="box-shadow-x" value="0">
+                    </div>
+                    <div>
+                        <label for="box-shadow-y"><i class="fas fa-arrows-alt-v"></i> Vertical Offset:</label>
+                        <input type="number" id="box-shadow-y" value="0">
+                    </div>
+                    <!-- Row 2 -->
+                    <div>
+                        <label for="box-shadow-blur"><i class="fas fa-blur"></i> Blur:</label>
+                        <input type="number" id="box-shadow-blur" value="0">
+                    </div>
+                    <div>
+                        <label for="box-shadow-spread"><i class="fas fa-expand"></i> Spread:</label>
+                        <input type="number" id="box-shadow-spread" value="0">
+                    </div>
+                    <!-- Row 3 -->
+                    <div>
+                        <label for="box-shadow-color"><i class="fas fa-palette"></i> Color:</label>
+                        <input type="color" id="box-shadow-color">
+                    </div>
+                </div>
+            </div>
+        
+            <div class="customization-card">
+                <h4>Transition Customization</h4>
+                <div class="two-column-grid">
+                    <!-- Row 1 -->
+                    <div>
+                        <label for="transition-duration"><i class="fas fa-clock"></i> Duration:</label>
+                        <input type="number" id="transition-duration" value="0">
+                    </div>
+                    <div>
+                        <label for="transition-delay"><i class="fas fa-clock"></i> Delay:</label>
+                        <input type="number" id="transition-delay" value="0">
+                    </div>
+                </div>
+            </div>
+        
+            <div class="customization-card">
+                <h4>Actions</h4>
+                <button id="remove-item"><i class="fas fa-trash"></i> Remove Item</button>
+            </div>
+        `;
+            // Event listeners for common options
+            document.getElementById('text').addEventListener('input', (e) => {
+                element.textContent = e.target.value;
+            });
+            document.getElementById('font-size').addEventListener('input', (e) => {
+                element.style.fontSize = e.target.value + 'px';
+            });
+            document.getElementById('text-color').addEventListener('input', (e) => {
+                element.style.color = e.target.value;
+            });
+            document.getElementById('bg-color').addEventListener('input', (e) => {
+                element.style.backgroundColor = e.target.value;
+            });
+            document.getElementById('font-family').addEventListener('input', (e) => {
+                element.style.fontFamily = e.target.value;
+            });
+            document.getElementById('border-color').addEventListener('input', (e) => {
+                element.style.borderColor = e.target.value;
+            });
+            document.getElementById('border-radius').addEventListener('input', (e) => {
+                element.style.borderRadius = e.target.value + 'px';
+            });
+            document.getElementById('border-size').addEventListener('input', (e) => {
+                element.style.borderWidth = e.target.value + 'px';
+        });
+            document.getElementById('outline-style').addEventListener('input', (e) => {
+                element.style.outlineStyle = e.target.value;
+            });
+            document.getElementById('outline-color').addEventListener('input', (e) => {
+                element.style.outlineColor = e.target.value;
+            });
+            document.getElementById('outline-width').addEventListener('input', (e) => {
+                element.style.outlineWidth = e.target.value + 'px';
+            });
+            document.getElementById('padding').addEventListener('input', (e) => {
+                element.style.padding = `${e.target.value}px ${e.target.value}px ${e.target.value}px ${e.target.value}px`;   
+            });
+            document.getElementById('line-height').addEventListener('input', (e) => {
+                element.style.lineHeight = e.target.value+'px';
+            });
+            document.getElementById('margin').addEventListener('input', (e) => {
+                element.style.margin = e.target.value+'px';
+            });
+            document.getElementById('rotate').addEventListener('input', (e) => {
+                element.style.transform = `rotate(${e.target.value}deg)`;
+            });
+            document.getElementById('scale').addEventListener('input', (e) => {
+                element.style.transform = `scale(${e.target.value})`;
+            });
+            document.getElementById('translate-x').addEventListener('input', (e) => {
+                const transform = element.style.transform.split(' ');
+                let translateY = '0px'; // Default translateY value
+            
+                // Check if translateY exists in the transform property
+                if (transform.length > 1 && transform[1].includes('translateY')) {
+                    translateY = transform[1].match(/translateY\(([^)]+)\)/)[1];
+                }
+            
+                // Update the transform property with the new translateX and existing translateY
+                element.style.transform = `translateX(${e.target.value}px) translateY(${translateY})`;
+            });
+            
+            document.getElementById('translate-y').addEventListener('input', (e) => {
+                const transform = element.style.transform.split(' ');
+                let translateX = '0px'; // Default translateX value
+            
+                // Check if translateX exists in the transform property
+                if (transform.length > 0 && transform[0].includes('translateX')) {
+                    translateX = transform[0].match(/translateX\(([^)]+)\)/)[1];
+                }
+            
+                // Update the transform property with the existing translateX and new translateY
+                element.style.transform = `translateX(${translateX}) translateY(${e.target.value}px)`;
+            });
+            document.getElementById('skew').addEventListener('input', (e) => {
+                element.style.transform = `skew(${e.target.value}deg)`;
+            });
+            document.getElementById('box-shadow-x').addEventListener('input', (e) => {
+                // element.style.boxShadow = boxShadow.join(' ';
+                // alert(element.style.boxShadow.value)
+                const boxShadow = element.style.boxShadow.split(' ');
+                boxShadow[0] = e.target.value+'px';
+
+                element.style.boxShadow = `${e.target.value}px 0 0 0`;
+            });
+            document.getElementById('box-shadow-y').addEventListener('input', (e) => {
+                // element.style.boxShadow = `0 ${e.target.value}px 0 0`;                
+                const boxShadow = element.style.boxShadow.split(' ');
+                boxShadow[1] = e.target.value+'px';
+                element.style.boxShadow = boxShadow.join(' ');
+            });
+            document.getElementById('box-shadow-blur').addEventListener('input', (e) => {
+                // element.style.boxShadow = `0 0 ${e.target.value}px 0`;
+                const boxShadow = element.style.boxShadow.split(' ');
+                boxShadow[2] = e.target.value+'px';
+                element.style.boxShadow = boxShadow.join(' ');
+           
+            });
+            document.getElementById('box-shadow-spread').addEventListener('input', (e) => {
+                // element.style.boxShadow = `0 0 0 ${e.target.value}px`;
+                const boxShadow = element.style.boxShadow.split(' ');
+                boxShadow[3] = e.target.value+'px';
+                element.style.boxShadow = boxShadow.join(' ');
+           
+            });
+            document.getElementById('box-shadow-color').addEventListener('input', (e) => {
+                // element.style.boxShadow = `0 0 0 0 ${e.target.value}`;
+                const boxShadow = element.style.boxShadow.split(' ');
+                boxShadow[4] = e.target.value;
+                element.style.boxShadow = boxShadow.join(' ');
+            });
+            document.getElementById('transition-duration').addEventListener('input', (e) => {
+                element.style.transitionDuration = `${e.target.value}s`;
+            });
+            document.getElementById('transition-delay').addEventListener('input', (e) => {
+                element.style.transitionDelay = `${e.target.value}s`;
+            });
+
+    }
         // Remove item functionality
         document.getElementById('remove-item').addEventListener('click', () => {
             element.remove();
             customizationPanel.innerHTML = '';
         });
+  
     }
       
         // Common customization options for most elements
        
     
 });
+
 
 function createElement(type) {
     let element;

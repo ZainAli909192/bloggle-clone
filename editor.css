@@ -270,3 +270,41 @@ select, input {
 .two-text-columns-two-rows p {
     margin: 0; /* Remove default paragraph margins */
 }
+
+/* new css  */
+
+#remove-item i{
+color: rgb(245, 241, 241);
+}
+#remove-item  {
+    margin-top: 1rem;
+    background: linear-gradient(135deg, #e74c3c, #c0392b); /* Red gradient */
+}
+input{
+    display: flex; 
+transform: ;
+}
+
+form i{
+    color: rgb(85, 71, 71);
+}
+h4{
+    font-size: 0.9rem;
+    color: var(--primary-color);
+}
+label{
+    color: rgb(64, 62, 62);
+    font-size: 0.87rem;
+}
+.two-column-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: 15px; /* Space between columns */
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    .two-column-grid {
+        grid-template-columns: 1fr; /* Stack columns on smaller screens */
+    }
+}
