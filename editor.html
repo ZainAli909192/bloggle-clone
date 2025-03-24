@@ -69,9 +69,9 @@
             <div class="draggable" draggable="true" data-type="paragraph"><i class="fas fa-paragraph"></i> Paragraph</div>
             <div class="draggable" draggable="true" data-type="table-of-contents"><i class="fas fa-list"></i> Table of Contents</div>
             <div class="draggable" draggable="true" data-type="summary"><i class="fas fa-file-alt"></i> Summary</div>
-            <!-- <div class="draggable" draggable="true" data-type="faq">FAQ</div> -->
+            <div class="draggable" draggable="true" data-type="faq"><i class="fas fa-question-circle"></i> FAQ</div>
             <div class="draggable" draggable="true" data-type="quote"><i class="fas fa-quote-right"></i> Quote</div>
-            <!-- <div class="draggable" draggable="true" data-type="two-text-columns">Two Text Columns</div> -->
+            <div class="draggable" draggable="true" data-type="two-text-columns"><i class="fas fa-pen"></i> Two Text Columns</div>
 
             <h4>Medias</h4>
             <div class="draggable" draggable="true" data-type="image"><i class="fas fa-image"></i> Image (Product)</div>
@@ -82,40 +82,34 @@
             <div class="draggable" draggable="true" data-type="video"><i class="fas fa-video"></i> Video</div>
             <div class="draggable" draggable="true" data-type="text-video"><i class="fas fa-pen"></i> <i class="fas fa-video"></i>&nbsp; Text + Video </div>
 
-            <!-- <h4>Products</h4>
-            <div class="draggable" draggable="true" data-type="one-product">One Product</div>
-            <div class="draggable" draggable="true" data-type="products-gallery">Products Gallery</div>
-            <div class="draggable" draggable="true" data-type="popular">Popular</div>
-            <div class="draggable" draggable="true" data-type="product-text">Product + Text</div>
-            <div class="draggable" draggable="true" data-type="product-grid">Product Grid</div> -->
+            <h4>Products</h4>
+            <div class="draggable" draggable="true" data-type="one-product"><i class="fas fas fab fa-product-hunt"></i> One Product</div>
+            <!-- <div class="draggable" draggable="true" data-type="products-gallery">Products Gallery</div> -->
+            <!-- <div class="draggable" draggable="true" data-type="popular">Popular</div> -->
+            <div class="draggable" draggable="true" data-type="text-product"> <i class="fas fa-pen"></i> <i class="fas fa-image"> </i> &nbsp;Product + Text</div>
+            <div class="draggable" draggable="true" data-type="product-grid"> <i class="fas fab fa-product-hunt"></i> Product Grid</div>
 
-       
+           
             <h4>Other</h4>
             <div class="draggable" draggable="true" data-type="button"><i class="fas fa-circle" ></i> Button</div>
             <div class="draggable" draggable="true" data-type="divider"><i class="fas fa-minus"></i> Divider</div>
 <!-- =            <div class="draggable" draggable="true" data-type="social-share">Social Share</div> -->
+      
         </div>
     </div>
 
-    <!-- Editor Area -->
-    <!-- <div class="editor">
-        <p>Drop your elements here</p>
+    <div class="editor desktop-view" id="editor">
+        <!-- Icons for Responsiveness -->
+        <div class="view-toggle">
+            <i class="fas fa-laptop" onclick="changeView('desktop'); toggleActiveClass(this)" > </i>
+            <i class="fas fa-tablet-alt" onclick="changeView('tablet'); toggleActiveClass(this)" ></i>
+            <i class="fas fa-mobile-alt" onclick="changeView('mobile'); toggleActiveClass(this)" ></i>
+        </div>
+        
+        <p>Drop your elements here     
+        </p>
         <div class="drop-zone"></div>
-        <button class="btn-success">Publish</button>
-    </div> -->
-
-<div class="editor desktop-view" id="editor">
-    <!-- Icons for Responsiveness -->
-    <div class="view-toggle">
-        <i class="fas fa-laptop" onclick="changeView('desktop'); toggleActiveClass(this)" > </i>
-        <i class="fas fa-tablet-alt" onclick="changeView('tablet'); toggleActiveClass(this)" ></i>
-        <i class="fas fa-mobile-alt" onclick="changeView('mobile'); toggleActiveClass(this)" ></i>
     </div>
-    
-    <p>Drop your elements here     
-    </p>
-    <div class="drop-zone"></div>
-</div>
 
     <div class="customization-panel">
         
@@ -127,8 +121,12 @@
             <p>Select an element to customize</p>
         </div>
     </div>
+</div>
+
+
     
 </main>
+
     <script src="editor.js"></script>
 </body>
 </html>

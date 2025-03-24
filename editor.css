@@ -21,6 +21,7 @@ main {
     background: var(--primary-color);
     padding: 20px;
     overflow-y: auto;
+    
 }
 
 .sidebar h3 {
@@ -283,12 +284,19 @@ color: rgb(245, 241, 241);
 input{
     display: flex; 
 }
-
+/* .fas
+ * Sets font size of font awesome icons to 0.7rem
+ */
+.fas{
+    font-size: 0.7rem;
+}
 form i{
     color: rgb(85, 71, 71);
 }
 h4{
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+
+    margin-bottom:0.5rem ;
     color: var(--primary-color);
 }
 label{
@@ -306,4 +314,43 @@ label{
     .two-column-grid {
         grid-template-columns: 1fr; /* Stack columns on smaller screens */
     }
+}
+
+ .product-grid {
+    padding: 20px;
+    border: 1px solid #ccc;
+    margin: 10px;
+    background-color: #f9f9f9;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.product {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    background-color: #fff;
+}
+
+.product img {
+    max-width: 100%;
+    height: auto;
+}
+
+.product h4 {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.product p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+.one-product{
+    width: 50%;
+    width: 100%;
 }

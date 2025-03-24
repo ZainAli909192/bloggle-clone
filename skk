@@ -1,0 +1,100 @@
+    // Check if the element is a <details> with <summary> and <p>
+            if (element.tagName === 'DETAILS' && element.querySelector('summary') && element.querySelector('p')) {
+                const summaryElement = element.querySelector('summary');
+                const pElement = element.querySelector('p');
+        
+                customizationPanel.innerHTML = `
+                    <div class="customization-card">
+                        <h4>Summary Customization</h4>
+                        <div class="two-column-grid">
+                            <!-- Row 1 -->
+                            <div>
+                                <label for="summary-text"><i class="fas fa-font"></i> Summary Text:</label>
+                                <input type="text" id="summary-text" value="${summaryElement.textContent}">
+                            </div>
+                            <div>
+                                <label for="summary-font-size"><i class="fas fa-text-height"></i> Font Size:</label>
+                                <input type="number" id="summary-font-size" value="${parseInt(getComputedStyle(summaryElement).fontSize)}">
+                            </div>
+                            <!-- Row 2 -->
+                            <div>
+                                <label for="summary-text-color"><i class="fas fa-palette"></i> Text Color:</label>
+                                <input type="color" id="summary-text-color" value="${getComputedStyle(summaryElement).color}">
+                            </div>
+                            <div>
+                                <label for="summary-bg-color"><i class="fas fa-fill-drip"></i> Background Color:</label>
+                                <input type="color" id="summary-bg-color" value="${getComputedStyle(summaryElement).backgroundColor}">
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="customization-card">
+                        <h4>Paragraph Customization</h4>
+                        <div class="two-column-grid">
+                            <!-- Row 1 -->
+                            <div>
+                                <label for="paragraph-text"><i class="fas fa-font"></i> Paragraph Text:</label>
+                                <input type="text" id="paragraph-text" value="${pElement.textContent}">
+                            </div>
+                            <div>
+                                <label for="paragraph-font-size"><i class="fas fa-text-height"></i> Font Size:</label>
+                                <input type="number" id="paragraph-font-size" value="${parseInt(getComputedStyle(pElement).fontSize)}">
+                            </div>
+                            <!-- Row 2 -->
+                            <div>
+                                <label for="paragraph-text-color"><i class="fas fa-palette"></i> Text Color:</label>
+                                <input type="color" id="paragraph-text-color" value="${getComputedStyle(pElement).color}">
+                            </div>
+                            <div>
+                                <label for="paragraph-bg-color"><i class="fas fa-fill-drip"></i> Background Color:</label>
+                                <input type="color" id="paragraph-bg-color" value="${getComputedStyle(pElement).backgroundColor}">
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="customization-card">
+                        <h4>Actions</h4>
+                        <button id="remove-item"><i class="fas fa-trash"></i> Remove Item</button>
+                    </div>
+                `;
+        
+                // Event listeners for summary customization
+                document.getElementById('summary-text').addEventListener('input', (e) => {
+                    summaryElement.textContent = e.target.value;
+                });
+        
+                document.getElementById('summary-font-size').addEventListener('input', (e) => {
+                    summaryElement.style.fontSize = `${e.target.value}px`;
+                });
+        
+                document.getElementById('summary-text-color').addEventListener('input', (e) => {
+                    summaryElement.style.color = e.target.value;
+                });
+        
+                document.getElementById('summary-bg-color').addEventListener('input', (e) => {
+                    summaryElement.style.backgroundColor = e.target.value;
+                });
+        
+                // Event listeners for paragraph customization
+                document.getElementById('paragraph-text').addEventListener('input', (e) => {
+                    pElement.textContent = e.target.value;
+                });
+        
+                document.getElementById('paragraph-font-size').addEventListener('input', (e) => {
+                    pElement.style.fontSize = `${e.target.value}px`;
+                });
+        
+                document.getElementById('paragraph-text-color').addEventListener('input', (e) => {
+                    pElement.style.color = e.target.value;
+                });
+        
+                document.getElementById('paragraph-bg-color').addEventListener('input', (e) => {
+                    pElement.style.backgroundColor = e.target.value;
+                });
+        
+                // Remove item
+                document.getElementById('remove-item').addEventListener('click', () => {
+                    element.remove();
+                    customizationPanel.innerHTML = '';
+                });
+            } 
