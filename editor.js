@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle Drop Event
     dropZone.addEventListener('drop', event => {
         event.preventDefault();
+        setTimeout(checkSEOAndUX, 500); // Small delay to allow drop to complete
 
         const type = event.dataTransfer.getData('type');
         if (!type) return; // Prevent empty drops
@@ -38,6 +39,246 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+// SEO and UX Checker Function (Count-based)
+function checkSEOAndUX() {
+    const dropzone = document.querySelector('.drop-zone');
+    const seoCount = document.querySelector('.seo-count');
+    const uxCount = document.querySelector('.ux-count');
+    
+    if (!dropzone) return;
+    
+    // Initialize counters
+    let seoIssues = 0;
+    let uxIssues = 0;
+    const seoReportItems = [];
+    const uxReportItems = [];
+    
+    // Check all elements in the dropzone
+    const elements = dropzone.querySelectorAll('*');
+    
+    // SEO Checks
+    const seoChecks = {
+        hasH1: false,
+        missingAltText: 0,
+        badLinkText: 0,
+        noSemanticHTML: true,
+        hasMetaDescription: document.querySelector('meta[name="description"]')?.content?.length > 0,
+        hasTitle: document.querySelector('title')?.textContent?.length > 0
+    };
+    
+    // UX Checks
+    const uxChecks = {
+        lowContrast: 0,
+        smallFont: 0,
+        nonResponsive: 0,
+        missingHover: 0,
+        poorSpacing: 0
+    };
+    
+    // Analyze each element
+    elements.forEach(element => {
+        const style = getComputedStyle(element);
+        
+        // SEO Analysis
+        if (element.tagName === 'H1') {
+            seoChecks.hasH1 = true;
+        }
+        
+        if (element.tagName === 'IMG') {
+            if (!element.alt || element.alt.trim().length === 0) {
+                seoChecks.missingAltText++;
+            }
+        }
+        
+        if (element.tagName === 'A') {
+            const linkText = element.textContent.trim();
+            if (linkText.length === 0 || ['click here', 'read more', 'link'].includes(linkText.toLowerCase())) {
+                seoChecks.badLinkText++;
+            }
+        }
+        
+        if (['ARTICLE', 'SECTION', 'NAV', 'HEADER', 'FOOTER', 'MAIN', 'ASIDE'].includes(element.tagName)) {
+            seoChecks.noSemanticHTML = false;
+        }
+        
+        // UX Analysis
+        // Check contrast (simplified)
+        if (style.color && style.backgroundColor) {
+            const contrast = getContrastRatio(style.color, style.backgroundColor);
+            if (contrast < 4.5) {
+                uxChecks.lowContrast++;
+            }
+        }
+        
+        // Check font size
+        if (style.fontSize) {
+            const fontSize = parseInt(style.fontSize);
+            if (fontSize < 16) {
+                uxChecks.smallFont++;
+            }
+        }
+        
+        // Check responsive design
+        if (style.width && !style.width.includes('%') && !style.maxWidth) {
+            uxChecks.nonResponsive++;
+        }
+        
+        // Check interactive elements
+        if (['BUTTON', 'A'].includes(element.tagName)) {
+            if (!element.getAttribute('hover')) {
+                uxChecks.missingHover++;
+            }
+        }
+        
+        // Check spacing
+        if (parseInt(style.margin) < 8 || parseInt(style.padding) < 8) {
+            uxChecks.poorSpacing++;
+        }
+    });
+    
+    // Calculate SEO issues count
+    if (!seoChecks.hasH1) {
+        seoIssues++;
+        seoReportItems.push('1. Missing H1 heading');
+    }
+    
+    if (seoChecks.missingAltText > 0) {
+        seoIssues += seoChecks.missingAltText;
+        seoReportItems.push(`2. ${seoChecks.missingAltText} image(s) missing alt text`);
+    }
+    
+    if (seoChecks.badLinkText > 0) {
+        seoIssues += seoChecks.badLinkText;
+        seoReportItems.push(`3. ${seoChecks.badLinkText} link(s) with poor text`);
+    }
+    
+    if (seoChecks.noSemanticHTML) {
+        seoIssues++;
+        seoReportItems.push('4. No semantic HTML elements used');
+    }
+    
+    if (!seoChecks.hasMetaDescription) {
+        seoIssues++;
+        seoReportItems.push('5. Missing meta description');
+    }
+    
+    if (!seoChecks.hasTitle) {
+        seoIssues++;
+        seoReportItems.push('6. Missing page title');
+    }
+    
+    // Calculate UX issues count
+    if (uxChecks.lowContrast > 0) {
+        uxIssues += uxChecks.lowContrast;
+        uxReportItems.push(`1. ${uxChecks.lowContrast} element(s) with poor contrast`);
+    }
+    
+    if (uxChecks.smallFont > 0) {
+        uxIssues += uxChecks.smallFont;
+        uxReportItems.push(`2. ${uxChecks.smallFont} element(s) with small font`);
+    }
+    
+    if (uxChecks.nonResponsive > 0) {
+        uxIssues += uxChecks.nonResponsive;
+        uxReportItems.push(`3. ${uxChecks.nonResponsive} element(s) not responsive`);
+    }
+    
+    if (uxChecks.missingHover > 0) {
+        uxIssues += uxChecks.missingHover;
+        uxReportItems.push(`4. ${uxChecks.missingHover} interactive element(s) missing hover state`);
+    }
+    
+    if (uxChecks.poorSpacing > 0) {
+        uxIssues += uxChecks.poorSpacing;
+        uxReportItems.push(`5. ${uxChecks.poorSpacing} element(s) with poor spacing`);
+    }
+    
+    // Update counters
+    seoCount.textContent = seoIssues;
+    uxCount.textContent = uxIssues;
+    
+    // Add appropriate classes
+    seoCount.classList.remove('success', 'warning', 'danger');
+    uxCount.classList.remove('success', 'warning', 'danger');
+    
+    if (seoIssues === 0) {
+        seoCount.classList.add('success');
+    } else if (seoIssues <= 3) {
+        seoCount.classList.add('warning');
+    } else {
+        seoCount.classList.add('danger');
+    }
+    
+    if (uxIssues === 0) {
+        uxCount.classList.add('success');
+    } else if (uxIssues <= 3) {
+        uxCount.classList.add('warning');
+    } else {
+        uxCount.classList.add('danger');
+    }
+    
+    // Generate detailed report
+    generateDetailedReport(seoReportItems, uxReportItems);
+}
+
+// Helper function to get contrast ratio (simplified)
+function getContrastRatio(color1, color2) {
+    // This is a simplified version - in a real app use proper contrast calculation
+    return 4.5; // Placeholder
+}
+
+// Generate detailed report
+function generateDetailedReport(seoItems, uxItems) {
+    const SEOreportContainer = document.querySelector('.seo-report')  
+    const UXreportContainer = document.querySelector('.ux-report') 
+    SEOreportContainer.innerHTML = '';
+    UXreportContainer.innerHTML = '';
+    
+    // SEO Report
+    const seoReport = document.createElement('div');
+    seoReport.className = 'seo-report';
+    
+    let seoContent = '<h3>SEO Issues</h3>';
+    if (seoItems.length === 0) {
+        seoContent += '<p class="success">✓ No SEO issues found</p>';
+    } else {
+        seoContent += '<ul>' + seoItems.map(item => `<li>${item}</li>`).join('') + '</ul>';
+    }
+    seoReport.innerHTML = seoContent;
+    
+    // UX Report
+    const uxReport = document.createElement('div');
+    uxReport.className = 'ux-report';
+    
+    let uxContent = '<h3>UX Issues</h3>';
+    if (uxItems.length === 0) {
+        uxContent += '<p class="success">✓ No UX issues found</p>';
+    } else {
+        uxContent += '<ul>' + uxItems.map(item => `<li>${item}</li>`).join('') + '</ul>';
+    }
+    uxReport.innerHTML = uxContent;
+    
+    SEOreportContainer.appendChild(seoReport);
+    UXreportContainer.appendChild(uxReport);
+    
+}
+document.querySelector(".main").addEventListener('mouseover', () => {
+  
+    document.querySelector(".seo-ux-wrapper").style.display = 'grid';
+})
+document.querySelector(".main").addEventListener('mouseout', () => {
+    document.querySelector(".seo-ux-wrapper").style.display = 'none';
+})
+// Run the check when elements are dropped
+document.querySelector('.drop-zone').addEventListener('drop', () => {
+    setTimeout(checkSEOAndUX, 500);
+});
+
+// Initial check
+document.addEventListener('DOMContentLoaded', checkSEOAndUX);
+
+// Periodic check
+setInterval(checkSEOAndUX, 1000);
     // Function to Create Elements
   // Function to Create Elements
      // Function to Create Elements
@@ -47,8 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function showCustomizationOptions(element) {
         customizationPanel.innerHTML = '';
         element.style.border = '1px solid transparent';
-    
-    
+   
         // Customization options for images
         if (element.tagName === 'IMG') {
             customizationPanel.innerHTML = `
@@ -3006,42 +3246,140 @@ else if (element.classList.contains('text-product')) {
     const productDesc = product.querySelector('.description');
     const textContent = textSection.querySelector('p');
 
+    // Get current styles
+    const currentStyles = getComputedStyle(element);
+    const textStyles = getComputedStyle(textContent);
+    const productNameStyles = getComputedStyle(productName);
+    const productDescStyles = getComputedStyle(productDesc);
+    const productPriceStyles = getComputedStyle(productPrice);
+
+    // Helper function to convert RGB to HEX
+    function rgbToHex(rgb) {
+        if (!rgb || rgb === 'rgba(0, 0, 0, 0)') return '#ffffff';
+        const parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+        if (!parts) return rgb;
+        const hex = (x) => ("0" + parseInt(x).toString(16)).slice(-2);
+        return "#" + hex(parts[1]) + hex(parts[2]) + hex(parts[3]);
+    }
+
     customizationPanel.innerHTML = `
         <div class="customization-card">
-            <h4>Text Content</h4>
-            <div>
-                <label for="text-content"><i class="fas fa-align-left"></i> Text:</label>
-                <textarea id="text-content">${textContent.textContent}</textarea>
-            </div>
-        </div>
-
-        <div class="customization-card">
-            <h4>Product Details</h4>
+            <h4>Content Customization</h4>
             <div class="two-column-grid">
+                <!-- Row 1 -->
                 <div>
-                    <label for="product-name"><i class="fas fa-font"></i> Name:</label>
-                    <input type="text" id="product-name" value="${productName.textContent}">
+                    <label for="text-content"><i class="fas fa-align-left"></i> Text Content:</label>
+                    <input type="text" id="text-content" value="${textContent.textContent}">
                 </div>
                 <div>
-                    <label for="product-price"><i class="fas fa-dollar-sign"></i> Price:</label>
+                    <label for="product-name"><i class="fas fa-font"></i> Product Name:</label>
+                    <input type="text" id="product-name" value="${productName.textContent}">
+                </div>
+                <!-- Row 2 -->
+                <div>
+                    <label for="product-price"><i class="fas fa-dollar-sign"></i> Product Price:</label>
                     <input type="text" id="product-price" value="${productPrice.textContent.replace('$', '')}">
                 </div>
                 <div>
                     <label for="product-image"><i class="fas fa-image"></i> Image URL:</label>
                     <input type="url" id="product-image" value="${productImage.src}">
                 </div>
+                <!-- Row 3 -->
                 <div>
-                    <label for="product-desc"><i class="fas fa-align-left"></i> Description:</label>
-                    <input value="${productDesc.textContent}" id="product-desc"></input>
+                    <label for="product-description"><i class="fas fa-align-left"></i> Description:</label>
+                    <input type="text" id="product-description" value="${productDesc.textContent}">
                 </div>
             </div>
         </div>
 
         <div class="customization-card">
-            <h4>Layout Settings</h4>
+            <h4>Text Styling</h4>
             <div class="two-column-grid">
+                <!-- Row 1 -->
                 <div>
-                    <label for="layout-direction"><i class="fas fa-arrows-alt-h"></i> Layout:</label>
+                    <label for="text-font-family"><i class="fas fa-font"></i> Font Family:</label>
+                    <select id="text-font-family">
+                        <option value="Arial, sans-serif">Arial</option>
+                        <option value="'Times New Roman', serif">Times New Roman</option>
+                        <option value="'Courier New', monospace">Courier New</option>
+                        <option value="'Georgia', serif">Georgia</option>
+                        <option value="'Palatino', serif">Palatino</option>
+                        <option value="'Verdana', sans-serif">Verdana</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="text-font-size"><i class="fas fa-text-height"></i> Font Size (px):</label>
+                    <input type="number" id="text-font-size" value="${parseInt(textStyles.fontSize)}">
+                </div>
+                <!-- Row 2 -->
+                <div>
+                    <label for="text-color"><i class="fas fa-palette"></i> Color:</label>
+                    <input type="color" id="text-color" value="${rgbToHex(textStyles.color)}">
+                </div>
+                <div>
+                    <label for="text-line-height"><i class="fas fa-arrows-alt-v"></i> Line Height:</label>
+                    <input type="number" id="text-line-height" value="${parseFloat(textStyles.lineHeight)}" step="0.1">
+                </div>
+                <!-- Row 3 -->
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="text-bold"><i class="fas fa-bold"></i> Bold</label>
+                    <label><input type="checkbox" id="text-italic"><i class="fas fa-italic"></i> Italic</label>
+                    <label><input type="checkbox" id="text-underline"><i class="fas fa-underline"></i> Underline</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="customization-card">
+            <h4>Product Styling</h4>
+            <div class="two-column-grid">
+                <!-- Row 1 -->
+                <div>
+                    <label for="product-name-font-family"><i class="fas fa-font"></i> Name Font:</label>
+                    <select id="product-name-font-family">
+                        <option value="Arial, sans-serif">Arial</option>
+                        <option value="'Times New Roman', serif">Times New Roman</option>
+                        <option value="'Courier New', monospace">Courier New</option>
+                        <option value="'Georgia', serif">Georgia</option>
+                        <option value="'Palatino', serif">Palatino</option>
+                        <option value="'Verdana', sans-serif">Verdana</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="product-name-font-size"><i class="fas fa-text-height"></i> Name Size (px):</label>
+                    <input type="number" id="product-name-font-size" value="${parseInt(productNameStyles.fontSize)}">
+                </div>
+                <!-- Row 2 -->
+                <div>
+                    <label for="product-name-color"><i class="fas fa-palette"></i> Name Color:</label>
+                    <input type="color" id="product-name-color" value="${rgbToHex(productNameStyles.color)}">
+                </div>
+                <div>
+                    <label for="product-price-font-size"><i class="fas fa-text-height"></i> Price Size (px):</label>
+                    <input type="number" id="product-price-font-size" value="${parseInt(productPriceStyles.fontSize)}">
+                </div>
+                <!-- Row 3 -->
+                <div>
+                    <label for="product-price-color"><i class="fas fa-palette"></i> Price Color:</label>
+                    <input type="color" id="product-price-color" value="${rgbToHex(productPriceStyles.color)}">
+                </div>
+                <div>
+                    <label for="product-desc-font-size"><i class="fas fa-text-height"></i> Desc Size (px):</label>
+                    <input type="number" id="product-desc-font-size" value="${parseInt(productDescStyles.fontSize)}">
+                </div>
+                <!-- Row 4 -->
+                <div>
+                    <label for="product-desc-color"><i class="fas fa-palette"></i> Desc Color:</label>
+                    <input type="color" id="product-desc-color" value="${rgbToHex(productDescStyles.color)}">
+                </div>
+            </div>
+        </div>
+
+        <div class="customization-card">
+            <h4>Layout Customization</h4>
+            <div class="two-column-grid">
+                <!-- Row 1 -->
+                <div>
+                    <label for="layout-direction"><i class="fas fa-arrows-alt-h"></i> Layout Direction:</label>
                     <select id="layout-direction">
                         <option value="row">Text + Product</option>
                         <option value="row-reverse">Product + Text</option>
@@ -3050,8 +3388,152 @@ else if (element.classList.contains('text-product')) {
                     </select>
                 </div>
                 <div>
-                    <label for="section-gap"><i class="fas fa-arrows-alt-h"></i> Gap Between Sections:</label>
-                    <input type="number" id="section-gap" value="20">
+                    <label for="section-gap"><i class="fas fa-arrows-alt-h"></i> Gap Between Sections (px):</label>
+                    <input type="number" id="section-gap" value="${parseInt(currentStyles.gap) || 20}">
+                </div>
+                <!-- Row 2 -->
+                <div>
+                    <label for="container-width"><i class="fas fa-arrows-alt-h"></i> Width (%):</label>
+                    <input type="number" id="container-width" value="${parseInt(currentStyles.width)}">
+                </div>
+                <div>
+                    <label for="container-height"><i class="fas fa-arrows-alt-v"></i> Height (%):</label>
+                    <input type="number" id="container-height" value="${parseInt(currentStyles.height)}">
+                </div>
+                <!-- Row 3 -->
+                <div>
+                    <label for="image-width"><i class="fas fa-arrows-alt-h"></i> Image Width (%):</label>
+                    <input type="number" id="image-width" value="${parseInt(getComputedStyle(productImage).width)}">
+                </div>
+                <div>
+                    <label for="image-height"><i class="fas fa-arrows-alt-v"></i> Image Height (%):</label>
+                    <input type="number" id="image-height" value="${parseInt(getComputedStyle(productImage).height)}">
+                </div>
+            </div>
+        </div>
+
+        <div class="customization-card">
+            <h4>Spacing Customization</h4>
+            <div class="two-column-grid">
+                <!-- Row 1 -->
+                <div>
+                    <label for="product-padding"><i class="fas fa-spacing"></i> Padding (px):</label>
+                    <input type="number" id="product-padding" value="${parseInt(currentStyles.padding)}">
+                </div>
+                <div>
+                    <label for="product-margin"><i class="fas fa-spacing"></i> Margin (px):</label>
+                    <input type="number" id="product-margin" value="${parseInt(currentStyles.margin)}">
+                </div>
+                <!-- Row 2 -->
+                <div>
+                    <label for="text-padding"><i class="fas fa-spacing"></i> Text Padding (px):</label>
+                    <input type="number" id="text-padding" value="${parseInt(textStyles.padding)}">
+                </div>
+                <div>
+                    <label for="text-margin"><i class="fas fa-spacing"></i> Text Margin (px):</label>
+                    <input type="number" id="text-margin" value="${parseInt(textStyles.margin)}">
+                </div>
+            </div>
+        </div>
+
+        <div class="customization-card">
+            <h4>Border Customization</h4>
+            <div class="two-column-grid">
+                <!-- Row 1 -->
+                <div>
+                    <label for="product-border-style"><i class="fas fa-border-style"></i> Border Style:</label>
+                    <select id="product-border-style">
+                        <option value="solid">Solid</option>
+                        <option value="dashed">Dashed</option>
+                        <option value="dotted">Dotted</option>
+                        <option value="double">Double</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="product-border-color"><i class="fas fa-palette"></i> Border Color:</label>
+                    <input type="color" id="product-border-color" value="${rgbToHex(currentStyles.borderColor)}">
+                </div>
+                <!-- Row 2 -->
+                <div>
+                    <label for="product-border-size"><i class="fas fa-border-all"></i> Border Size (px):</label>
+                    <input type="number" id="product-border-size" value="${parseInt(currentStyles.borderWidth)}">
+                </div>
+                <div>
+                    <label for="product-border-radius"><i class="fas fa-circle"></i> Border Radius (px):</label>
+                    <input type="number" id="product-border-radius" value="${parseInt(currentStyles.borderRadius)}">
+                </div>
+            </div>
+        </div>
+
+        <div class="customization-card">
+            <h4>Box Shadow Customization</h4>
+            <div class="two-column-grid">
+                <!-- Row 1 -->
+                <div>
+                    <label for="box-shadow-x"><i class="fas fa-arrows-alt-h"></i> Horizontal Offset (px):</label>
+                    <input type="number" id="box-shadow-x" value="0">
+                </div>
+                <div>
+                    <label for="box-shadow-y"><i class="fas fa-arrows-alt-v"></i> Vertical Offset (px):</label>
+                    <input type="number" id="box-shadow-y" value="0">
+                </div>
+                <!-- Row 2 -->
+                <div>
+                    <label for="box-shadow-blur"><i class="fas fa-blur"></i> Blur (px):</label>
+                    <input type="number" id="box-shadow-blur" value="0">
+                </div>
+                <div>
+                    <label for="box-shadow-spread"><i class="fas fa-expand"></i> Spread (px):</label>
+                    <input type="number" id="box-shadow-spread" value="0">
+                </div>
+                <!-- Row 3 -->
+                <div>
+                    <label for="box-shadow-color"><i class="fas fa-palette"></i> Color:</label>
+                    <input type="color" id="box-shadow-color" value="#000000">
+                </div>
+            </div>
+        </div>
+
+        <div class="customization-card">
+            <h4>Transform Customization</h4>
+            <div class="two-column-grid">
+                <!-- Row 1 -->
+                <div>
+                    <label for="rotate"><i class="fas fa-sync-alt"></i> Rotate (degrees):</label>
+                    <input type="number" id="rotate" value="0">
+                </div>
+                <div>
+                    <label for="skew"><i class="fas fa-slash"></i> Skew (degrees):</label>
+                    <input type="number" id="skew" value="0">
+                </div>
+                <!-- Row 2 -->
+                <div>
+                    <label for="translate-x"><i class="fas fa-arrows-alt-h"></i> Translate X (px):</label>
+                    <input type="number" id="translate-x" value="0">
+                </div>
+                <div>
+                    <label for="translate-y"><i class="fas fa-arrows-alt-v"></i> Translate Y (px):</label>
+                    <input type="number" id="translate-y" value="0">
+                </div>
+                <!-- Row 3 -->
+                <div>
+                    <label for="scale"><i class="fas fa-expand"></i> Scale:</label>
+                    <input type="number" id="scale" value="1" step="0.1">
+                </div>
+            </div>
+        </div>
+
+        <div class="customization-card">
+            <h4>Background Customization</h4>
+            <div class="two-column-grid">
+                <!-- Row 1 -->
+                <div>
+                    <label for="section-bg-color"><i class="fas fa-fill"></i> Background Color:</label>
+                    <input type="color" id="section-bg-color" value="${rgbToHex(currentStyles.backgroundColor)}">
+                </div>
+                <div>
+                    <label for="section-bg-image"><i class="fas fa-image"></i> Background Image URL:</label>
+                    <input type="url" id="section-bg-image" value="${currentStyles.backgroundImage !== 'none' ? currentStyles.backgroundImage.replace('url("', '').replace('")', '') : ''}">
                 </div>
             </div>
         </div>
@@ -3059,14 +3541,21 @@ else if (element.classList.contains('text-product')) {
         <div class="customization-card">
             <h4>Actions</h4>
             <button id="remove-text-product"><i class="fas fa-trash"></i> Remove Section</button>
+            <button id="reset-styles"><i class="fas fa-undo"></i> Reset Styles</button>
         </div>
     `;
 
-    // Set current layout direction
-    const currentDirection = getComputedStyle(element).flexDirection;
-    document.getElementById('layout-direction').value = currentDirection;
+    // Set current values for selects and checkboxes
+    document.getElementById('layout-direction').value = currentStyles.flexDirection;
+    document.getElementById('text-font-family').value = textStyles.fontFamily;
+    document.getElementById('product-name-font-family').value = productNameStyles.fontFamily;
+    document.getElementById('product-border-style').value = currentStyles.borderStyle;
+    
+    document.getElementById('text-bold').checked = textStyles.fontWeight === 'bold' || textStyles.fontWeight === '700';
+    document.getElementById('text-italic').checked = textStyles.fontStyle === 'italic';
+    document.getElementById('text-underline').checked = textStyles.textDecoration.includes('underline');
 
-    // Event listeners
+    // Event listeners for content customization
     document.getElementById('text-content').addEventListener('input', (e) => {
         textContent.textContent = e.target.value;
     });
@@ -3083,10 +3572,69 @@ else if (element.classList.contains('text-product')) {
         productImage.src = e.target.value;
     });
 
-    document.getElementById('product-desc').addEventListener('input', (e) => {
+    document.getElementById('product-description').addEventListener('input', (e) => {
         productDesc.textContent = e.target.value;
     });
 
+    // Event listeners for text styling
+    document.getElementById('text-font-family').addEventListener('change', (e) => {
+        textContent.style.fontFamily = e.target.value;
+    });
+
+    document.getElementById('text-font-size').addEventListener('input', (e) => {
+        textContent.style.fontSize = `${e.target.value}px`;
+    });
+
+    document.getElementById('text-color').addEventListener('input', (e) => {
+        textContent.style.color = e.target.value;
+    });
+
+    document.getElementById('text-line-height').addEventListener('input', (e) => {
+        textContent.style.lineHeight = e.target.value;
+    });
+
+    document.getElementById('text-bold').addEventListener('change', (e) => {
+        textContent.style.fontWeight = e.target.checked ? 'bold' : 'normal';
+    });
+
+    document.getElementById('text-italic').addEventListener('change', (e) => {
+        textContent.style.fontStyle = e.target.checked ? 'italic' : 'normal';
+    });
+
+    document.getElementById('text-underline').addEventListener('change', (e) => {
+        textContent.style.textDecoration = e.target.checked ? 'underline' : 'none';
+    });
+
+    // Event listeners for product styling
+    document.getElementById('product-name-font-family').addEventListener('change', (e) => {
+        productName.style.fontFamily = e.target.value;
+    });
+
+    document.getElementById('product-name-font-size').addEventListener('input', (e) => {
+        productName.style.fontSize = `${e.target.value}px`;
+    });
+
+    document.getElementById('product-name-color').addEventListener('input', (e) => {
+        productName.style.color = e.target.value;
+    });
+
+    document.getElementById('product-price-font-size').addEventListener('input', (e) => {
+        productPrice.style.fontSize = `${e.target.value}px`;
+    });
+
+    document.getElementById('product-price-color').addEventListener('input', (e) => {
+        productPrice.style.color = e.target.value;
+    });
+
+    document.getElementById('product-desc-font-size').addEventListener('input', (e) => {
+        productDesc.style.fontSize = `${e.target.value}px`;
+    });
+
+    document.getElementById('product-desc-color').addEventListener('input', (e) => {
+        productDesc.style.color = e.target.value;
+    });
+
+    // Event listeners for layout customization
     document.getElementById('layout-direction').addEventListener('change', (e) => {
         element.style.flexDirection = e.target.value;
     });
@@ -3095,13 +3643,134 @@ else if (element.classList.contains('text-product')) {
         element.style.gap = `${e.target.value}px`;
     });
 
+    document.getElementById('container-width').addEventListener('input', (e) => {
+        element.style.width = `${e.target.value}%`;
+    });
+
+    document.getElementById('container-height').addEventListener('input', (e) => {
+        element.style.height = `${e.target.value}%`;
+    });
+
+    document.getElementById('image-width').addEventListener('input', (e) => {
+        productImage.style.width = `${e.target.value}%`;
+    });
+
+    document.getElementById('image-height').addEventListener('input', (e) => {
+        productImage.style.height = `${e.target.value}%`;
+    });
+
+    // Event listeners for spacing customization
+    document.getElementById('product-padding').addEventListener('input', (e) => {
+        element.style.padding = `${e.target.value}px`;
+    });
+
+    document.getElementById('product-margin').addEventListener('input', (e) => {
+        element.style.margin = `${e.target.value}px`;
+    });
+
+    document.getElementById('text-padding').addEventListener('input', (e) => {
+        textContent.style.padding = `${e.target.value}px`;
+    });
+
+    document.getElementById('text-margin').addEventListener('input', (e) => {
+        textContent.style.margin = `${e.target.value}px`;
+    });
+
+    // Event listeners for border customization
+    document.getElementById('product-border-style').addEventListener('change', (e) => {
+        element.style.borderStyle = e.target.value;
+    });
+
+    document.getElementById('product-border-color').addEventListener('input', (e) => {
+        element.style.borderColor = e.target.value;
+    });
+
+    document.getElementById('product-border-size').addEventListener('input', (e) => {
+        element.style.borderWidth = `${e.target.value}px`;
+    });
+
+    document.getElementById('product-border-radius').addEventListener('input', (e) => {
+        element.style.borderRadius = `${e.target.value}px`;
+    });
+
+    // Event listeners for box-shadow customization
+    function updateBoxShadow(element) {
+        const x = document.getElementById('box-shadow-x').value;
+        const y = document.getElementById('box-shadow-y').value;
+        const blur = document.getElementById('box-shadow-blur').value;
+        const spread = document.getElementById('box-shadow-spread').value;
+        const color = document.getElementById('box-shadow-color').value;
+        element.style.boxShadow = `${x}px ${y}px ${blur}px ${spread}px ${color}`;
+    }
+
+    document.getElementById('box-shadow-x').addEventListener('input', () => updateBoxShadow(element));
+    document.getElementById('box-shadow-y').addEventListener('input', () => updateBoxShadow(element));
+    document.getElementById('box-shadow-blur').addEventListener('input', () => updateBoxShadow(element));
+    document.getElementById('box-shadow-spread').addEventListener('input', () => updateBoxShadow(element));
+    document.getElementById('box-shadow-color').addEventListener('input', () => updateBoxShadow(element));
+
+    // Event listeners for transform customization
+    document.getElementById('rotate').addEventListener('input', (e) => {
+        const rotate = e.target.value;
+        const transform = element.style.transform.replace(/rotate\([^)]+\)/, '').trim();
+        element.style.transform = `${transform} rotate(${rotate}deg)`;
+    });
+
+    document.getElementById('skew').addEventListener('input', (e) => {
+        const skew = e.target.value;
+        const transform = element.style.transform.replace(/skew\([^)]+\)/, '').trim();
+        element.style.transform = `${transform} skew(${skew}deg)`;
+    });
+
+    document.getElementById('translate-x').addEventListener('input', (e) => {
+        const translateX = e.target.value;
+        const transform = element.style.transform.replace(/translateX\([^)]+\)/, '').trim();
+        element.style.transform = `${transform} translateX(${translateX}px)`;
+    });
+
+    document.getElementById('translate-y').addEventListener('input', (e) => {
+        const translateY = e.target.value;
+        const transform = element.style.transform.replace(/translateY\([^)]+\)/, '').trim();
+        element.style.transform = `${transform} translateY(${translateY}px)`;
+    });
+
+    document.getElementById('scale').addEventListener('input', (e) => {
+        const scale = e.target.value;
+        const transform = element.style.transform.replace(/scale\([^)]+\)/, '').trim();
+        element.style.transform = `${transform} scale(${scale})`;
+    });
+
+    // Event listeners for background customization
+    document.getElementById('section-bg-color').addEventListener('input', (e) => {
+        element.style.backgroundColor = e.target.value;
+    });
+
+    document.getElementById('section-bg-image').addEventListener('input', (e) => {
+        element.style.backgroundImage = e.target.value ? `url("${e.target.value}")` : 'none';
+    });
+
+    // Action buttons
     document.getElementById('remove-text-product').addEventListener('click', () => {
         element.remove();
         customizationPanel.innerHTML = '';
     });
+
+    document.getElementById('reset-styles').addEventListener('click', () => {
+        element.removeAttribute('style');
+        textContent.removeAttribute('style');
+        productName.removeAttribute('style');
+        productDesc.removeAttribute('style');
+        productPrice.removeAttribute('style');
+        productImage.removeAttribute('style');
+        customizationPanel.innerHTML = '';
+        // Reopen the panel with default values
+        // (You might need to call this function again here)
+    });
 }
         else if (element.tagName !== 'HR' 
-            || element.classList.contains('text-image')) {
+            || element.classList.contains('text-image')
+            ) {
+             
                     // Check if the element is a <details> with <summary> and <p>
                  
                 
@@ -3450,6 +4119,7 @@ else if (element.classList.contains('text-product')) {
     
 });
 
+
 // Function to update box-shadow
 function updateBoxShadow(element) {
     try {
@@ -3473,12 +4143,11 @@ function updateBoxShadow(element) {
     }
 }
 
-
 function createElement(type) {
     let element;
     switch (type) {
         case 'heading':
-            element = document.createElement('h2');
+            element = document.createElement('h1');
             element.textContent = 'New Heading';
             break;
         case 'paragraph':
