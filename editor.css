@@ -432,7 +432,90 @@ margin-left: 8rem;
     top: 20%;
     z-index: 3 !important;
     background-color: rgb(238, 237, 237);
+    transition: all 2s ease-in-out;
 }
 
+
+/* Add to your existing CSS */
+.klaviyo-form {
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.klaviyo-form h3 {
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.klaviyo-form .form-group {
+    margin-bottom: 15px;
+}
+
+.klaviyo-form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.klaviyo-form button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.klaviyo-form button:hover {
+    opacity: 0.9;
+}
+
+/* new kalvio  */
+/* Add to your CSS */
+.klaviyo-form button {
+    transition: all 0.3s ease;
+}
+
+.klaviyo-form button:hover {
+    background-color: var(--hover-bg, #8e5fd5) !important;
+    color: var(--hover-text, #ffffff) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.field-group {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+.remove-field {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#reset-form-styles{
+    margin-top: 0.3rem; 
+}
  
+.klaviyo-form-container {
+    position: relative;
+    padding-bottom: 0.3rem;
+}
+.klaviyo-form-container button{
+    position: absolute;
+    bottom: -15%; 
+    width: 50%; 
+   
+}
 
