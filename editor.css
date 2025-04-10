@@ -14,34 +14,178 @@ main {
     display: flex;
     height: 100vh;
 }
+:root {
+    --primary-color: #7c3aed;
+    --secondary-color: #4c1d95;
+    --text-color: #f8fafc;
+    --hover-color: #6d28d9;
+    --category-color: #a78bfa;
+    --border-radius: 8px;
+    --primary-gradient: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+}
 
-/* Sidebar (Left) */
 .sidebar {
-     width: 250px;
-    background: var(--primary-color);
+    width: 280px;
+    background: var(--primary-gradient);
     padding: 20px;
     overflow-y: auto;
-    
+    color: var(--text-color);
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 }
 
 .sidebar h3 {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar h3::before {
+    content: "✏️";
+}
+.search-input {
+    width: 100%;
+    padding: 10px 15px;
     margin-bottom: 15px;
+    /* border: 1px solid #e2e8f0; */
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+    cursor:text;
+}
+.text{
+    display: none;
+}
+.text.show{
+    display: block;
+ 
+}
+.design{
+    display: none;
+    
+}
+.design.show{
+    display: block;
+  
+}
+.search-input:focus {
+    outline: none;
+    border-color: #a78bfa;
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2);
+}
+
+/* Optional: Add a nice search icon */
+.search-input {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2394a3b8' viewBox='0 0 16 16'%3e%3cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: 95% center;
+    background-size: 16px;
+    padding-right: 35px;
+}
+.categories {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.categories  input{
+    width: 90%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+}
+.categories  input::placeholder{
+    color: rgb(118, 116, 116);
+}
+.categories  input:focus{
+border: none;
+outline: none;
 }
 
 .categories h4 {
-    margin-top: 15px;
-    font-size: 16px;
-    color: #333;
+    margin: 25px 0 10px 0;
+    padding: 8px 0;
+    font-size: 0.8rem;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+.categories h4:hover {
+    letter-spacing: 2px;
+    padding-left: 10px;
+}
+
+.categories h4 i {
+    transition: transform 0.3s ease;
+}
+
+.categories h4:hover i {
+    transform: scale(1.2);
 }
 
 .draggable {
-    padding: 10px;
+    padding: 12px 15px;
     margin: 5px 0;
-    background: #f0f0f0;
-    color: rgb(10, 10, 10);
-    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
     cursor: grab;
-    border-radius: 5px;
+    border-radius: var(--border-radius);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    border-left: 3px solid transparent;
+}
+
+.draggable:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(3px);
+    border-left: 3px solid var(--category-color);
+}
+
+.draggable:active {
+    cursor: grabbing;
+}
+
+.draggable i {
+    width: 20px;
+    text-align: center;
+    font-size: 1rem;
+}
+
+/* Scrollbar styling */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 /* Editor */
 .editor {
@@ -59,7 +203,9 @@ main {
     padding: 20px;
     position: relative;
     background: #f9f9f9;
+border-color: var(--primary-color);
 }
+
 
 .dropped-item {
     padding: 10px;
@@ -146,7 +292,7 @@ select, input {
 }
 
 .view-toggle i {
-    font-size: 24px;
+    font-size: 16px; 
     cursor: pointer;
     padding: 5px;
     border: 2px solid #ddd;
@@ -519,3 +665,95 @@ margin-left: 8rem;
    
 }
 
+.one-product {
+    width: 50%;
+border: 0.2px solid var(--primary-color);
+}
+
+.klaviyo-form {
+    background: #f8f5ff;
+    border-radius: 12px;
+    padding: 25px;
+    border: 2px solid #7c3aed;
+    box-shadow: 0 4px 6px rgba(124, 58, 237, 0.1);
+    max-width: 400px;
+    margin: 15px auto;
+}
+
+.klaviyo-form-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-icon {
+    font-size: 2rem;
+    color: #7c3aed;
+    margin-bottom: 10px;
+}
+
+.klaviyo-form-container {
+    position: relative;
+}
+
+.input-wrapper {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+}
+
+.klaviyo-form input[type="email"] {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.klaviyo-form input:focus {
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+    outline: none;
+}
+
+.klaviyo-submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.klaviyo-submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(124, 58, 237, 0.2);
+}
+
+.form-footer {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.form-footer small {
+    color: #64748b;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}

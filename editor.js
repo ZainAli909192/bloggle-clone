@@ -279,296 +279,683 @@ document.addEventListener('DOMContentLoaded', checkSEOAndUX);
 
 // Periodic check
 setInterval(checkSEOAndUX, 1000);
+
+function imgcontrols(element){
+        customizationPanel.innerHTML = `
+            <div class="customization-card">
+                <h4>Image Customization</h4>
+                <div class="two-column-grid">
+                    <!-- Row 1 -->
+                    <div>
+                        <label for="img-url"><i class="fas fa-image"></i> Image URL:</label>
+                        <input type="text" id="img-url" value="${element.src}">
+                    </div>
+                    <div>
+                        <label for="img-alt"><i class="fas fa-font"></i> Alt Text:</label>
+                        <input type="text" id="img-alt" value="${element.alt}">
+                    </div>
+                    <!-- Row 2 -->
+                    <div>
+                        <label for="img-height"><i class="fas fa-arrows-alt-v"></i> Height:</label>
+                        <input type="number" id="img-height" value="${element.height}">
+                    </div>
+                    <div>
+                        <label for="img-width"><i class="fas fa-arrows-alt-h"></i> Width:</label>
+                        <input type="number" id="img-width" value="${element.width}">
+                    </div>
+                    <!-- Row 3 -->
+                    <div>
+                        <label for="img-object-fit"><i class="fas fa-expand"></i> Object Fit:</label>
+                        <select id="img-object-fit">
+                            <option value="fill" ${element.style.objectFit === 'fill' ? 'selected' : ''}>Fill</option>
+                            <option value="contain" ${element.style.objectFit === 'contain' ? 'selected' : ''}>Contain</option>
+                            <option value="cover" ${element.style.objectFit === 'cover' ? 'selected' : ''}>Cover</option>
+                            <option value="none" ${element.style.objectFit === 'none' ? 'selected' : ''}>None</option>
+                            <option value="scale-down" ${element.style.objectFit === 'scale-down' ? 'selected' : ''}>Scale Down</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="img-object-position"><i class="fas fa-crosshairs"></i> Object Position:</label>
+                        <input type="text" id="img-object-position" value="${element.style.objectPosition || '50% 50%'}">
+                    </div>
+                </div>
+            </div>
+    
+            <div class="customization-card">
+                <h4>Border Customization</h4>
+                <div class="two-column-grid">
+                    <!-- Row 1 -->
+                    <div>
+                        <label for="img-border-color"><i class="fas fa-palette"></i> Border Color:</label>
+                        <input type="color" id="img-border-color" value="${getComputedStyle(element).borderColor}">
+                    </div>
+                    <div>
+                        <label for="img-border-size"><i class="fas fa-border-all"></i> Border Size:</label>
+                        <input type="number" id="img-border-size" value="${parseInt(getComputedStyle(element).borderWidth)}">
+                    </div>
+                    <!-- Row 2 -->
+                    <div>
+                        <label for="img-border-style"><i class="fas fa-border-style"></i> Border Style:</label>
+                        <select id="img-border-style">
+                            <option value="none" ${getComputedStyle(element).borderStyle === 'none' ? 'selected' : ''}>None</option>
+                            <option value="solid" ${getComputedStyle(element).borderStyle === 'solid' ? 'selected' : ''}>Solid</option>
+                            <option value="dotted" ${getComputedStyle(element).borderStyle === 'dotted' ? 'selected' : ''}>Dotted</option>
+                            <option value="dashed" ${getComputedStyle(element).borderStyle === 'dashed' ? 'selected' : ''}>Dashed</option>
+                            <option value="double" ${getComputedStyle(element).borderStyle === 'double' ? 'selected' : ''}>Double</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="img-border-radius"><i class="fas fa-circle"></i> Border Radius:</label>
+                        <input type="number" id="img-border-radius" value="${parseInt(getComputedStyle(element).borderRadius)}">
+                    </div>
+                </div>
+            </div>
+    
+            <div class="customization-card">
+                <h4>Spacing Customization</h4>
+                <div class="two-column-grid">
+                    <!-- Row 1 -->
+                    <div>
+                        <label for="img-padding"><i class="fas fa-spacing"></i> Padding:</label>
+                        <input type="number" id="img-padding" value="${parseInt(getComputedStyle(element).padding)}">
+                    </div>
+                    <div>
+                        <label for="img-margin"><i class="fas fa-spacing"></i> Margin:</label>
+                        <input type="number" id="img-margin" value="${parseInt(getComputedStyle(element).margin)}">
+                    </div>
+                    <!-- Row 2 -->
+                 
+                </div>
+            </div>
+    
+            <div class="customization-card">
+                <h4>Box Shadow Customization</h4>
+                <div class="two-column-grid">
+                    <!-- Row 1 -->
+                    <div>
+                        <label for="img-box-shadow-x"><i class="fas fa-arrows-alt-h"></i> Horizontal Offset:</label>
+                        <input type="number" id="img-box-shadow-x" value="0">
+                    </div>
+                    <div>
+                        <label for="img-box-shadow-y"><i class="fas fa-arrows-alt-v"></i> Vertical Offset:</label>
+                        <input type="number" id="img-box-shadow-y" value="0">
+                    </div>
+                    <!-- Row 2 -->
+                    <div>
+                        <label for="img-box-shadow-blur"><i class="fas fa-blur"></i> Blur:</label>
+                        <input type="number" id="img-box-shadow-blur" value="0">
+                    </div>
+                    <div>
+                        <label for="img-box-shadow-spread"><i class="fas fa-expand"></i> Spread:</label>
+                        <input type="number" id="img-box-shadow-spread" value="0">
+                    </div>
+                    <!-- Row 3 -->
+                    <div>
+                        <label for="img-box-shadow-color"><i class="fas fa-palette"></i> Color:</label>
+                        <input type="color" id="img-box-shadow-color" value="#000000">
+                    </div>
+                </div>
+            </div>
+    
+            <div class="customization-card">
+                <h4>Transform Customization</h4>
+                <div class="two-column-grid">
+                    <!-- Row 1 -->
+                    <div>
+                        <label for="img-rotate"><i class="fas fa-sync-alt"></i> Rotate (degrees):</label>
+                        <input type="number" id="img-rotate" value="0">
+                    </div>
+                    <div>
+                        <label for="img-scale"><i class="fas fa-expand"></i> Scale:</label>
+                        <input type="number" id="img-scale" value="1" step="0.1">
+                    </div>
+                    <!-- Row 2 -->
+                    <div>
+                        <label for="img-translate-x"><i class="fas fa-arrows-alt-h"></i> Translate X (px):</label>
+                        <input type="number" id="img-translate-x" value="0">
+                    </div>
+                    <div>
+                        <label for="img-translate-y"><i class="fas fa-arrows-alt-v"></i> Translate Y (px):</label>
+                        <input type="number" id="img-translate-y" value="0">
+                    </div>
+                </div>
+            </div>
+    
+            <div class="customization-card">
+                <h4>Actions</h4>
+                <button id="remove-item"><i class="fas fa-trash"></i> Remove Item</button>
+            </div>
+        `;
+    
+        // Event listeners for image-specific options
+        document.getElementById('img-url').addEventListener('click', (e) => {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+    
+            fileInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        element.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+    
+            fileInput.click();
+            e.preventDefault();
+        });
+    
+        document.getElementById('img-alt').addEventListener('input', (e) => {
+            element.alt = e.target.value;
+        });
+    
+        document.getElementById('img-height').addEventListener('input', (e) => {
+            element.height = e.target.value;
+        });
+    
+        document.getElementById('img-width').addEventListener('input', (e) => {
+            element.width = e.target.value;
+        });
+    
+        document.getElementById('img-object-fit').addEventListener('change', (e) => {
+            element.style.objectFit = e.target.value;
+        });
+    
+        document.getElementById('img-object-position').addEventListener('input', (e) => {
+            element.style.objectPosition = e.target.value;
+        });
+    
+        document.getElementById('img-border-color').addEventListener('input', (e) => {
+            element.style.borderColor = e.target.value;
+        });
+    
+        document.getElementById('img-border-size').addEventListener('input', (e) => {
+            element.style.borderWidth = e.target.value + 'px';
+        });
+    
+        document.getElementById('img-border-radius').addEventListener('input', (e) => {
+            element.style.borderRadius = e.target.value + 'px';
+        });
+    
+        document.getElementById('img-border-style').addEventListener('change', (e) => {
+            element.style.borderStyle = e.target.value;
+        });
+    
+        // Padding
+        document.getElementById('img-padding').addEventListener('input', (e) => {
+            element.style.padding = e.target.value + 'px';
+        });
+    
+        // Margin
+        document.getElementById('img-margin').addEventListener('input', (e) => {
+            element.style.margin = e.target.value + 'px';
+        });
+    
+    
+        // Box Shadow
+        
+    // new  
+    
+    document.getElementById('img-box-shadow-x').addEventListener('input', (e) => {
+        // element.style.boxShadow = boxShadow.join(' ';
+        // alert(element.style.boxShadow.value)
+        const boxShadow = element.style.boxShadow.split(' ');
+        boxShadow[0] = e.target.value+'px';
+
+        element.style.boxShadow = `${e.target.value}px 0 0 0`;
+    });
+    document.getElementById('img-box-shadow-y').addEventListener('input', (e) => {
+        // element.style.boxShadow = `0 ${e.target.value}px 0 0`;                
+        const boxShadow = element.style.boxShadow.split(' ');
+        boxShadow[1] = e.target.value+'px';
+        element.style.boxShadow = boxShadow.join(' ');
+    });
+    document.getElementById('img-box-shadow-blur').addEventListener('input', (e) => {
+        // element.style.boxShadow = `0 0 ${e.target.value}px 0`;
+        const boxShadow = element.style.boxShadow.split(' ');
+        boxShadow[2] = e.target.value+'px';
+        element.style.boxShadow = boxShadow.join(' ');
+   
+    });
+    document.getElementById('img-box-shadow-spread').addEventListener('input', (e) => {
+        // element.style.boxShadow = `0 0 0 ${e.target.value}px`;
+        const boxShadow = element.style.boxShadow.split(' ');
+        boxShadow[3] = e.target.value+'px';
+        element.style.boxShadow = boxShadow.join(' ');
+   
+    });
+    document.getElementById('img-box-shadow-color').addEventListener('input', (e) => {
+        // element.style.boxShadow = `0 0 0 0 ${e.target.value}`;
+        const boxShadow = element.style.boxShadow.split(' ');
+        boxShadow[4] = e.target.value;
+        element.style.boxShadow = boxShadow.join(' ');
+    });
+        // Transform
+        document.getElementById('img-rotate').addEventListener('input', (e) => {
+            element.style.transform = `rotate(${e.target.value}deg)`;
+        });
+    
+        document.getElementById('img-scale').addEventListener('input', (e) => {
+            element.style.transform = `scale(${e.target.value})`;
+        });
+    
+        document.getElementById('img-translate-x').addEventListener('input', (e) => {
+            const transform = element.style.transform || '';
+            const translateY = transform.match(/translateY\(([^)]+)\)/)?.[1] || '0px';
+            element.style.transform = `translateX(${e.target.value}px) translateY(${translateY})`;
+        });
+    
+        document.getElementById('img-translate-y').addEventListener('input', (e) => {
+            const transform = element.style.transform || '';
+            const translateX = transform.match(/translateX\(([^)]+)\)/)?.[1] || '0px';
+            element.style.transform = `translateX(${translateX}) translateY(${e.target.value}px)`;
+        });
+    
+        // Remove item
+        document.getElementById('remove-item').addEventListener('click', () => {
+            element.remove();
+            customizationPanel.innerHTML = '';
+        });
+    
+}
+
+function commonControls(element){
+    // <button onclick="document.querySelector('.text').style.display = 'block'">Text</button>
+    customizationHTML = `
+    <div class="customization-card">
+    <button 
+        onclick="document.querySelector('.text').classList.toggle('show');
+        document.querySelector('.design').classList.remove('show')" >
+            Text
+    </button>
+
+        <button 
+            onclick="document.querySelector('.text').classList.remove('show'); 
+             document.querySelector('.design').classList.toggle('show')">
+            Design
+        </button>
+
+        </br>
+        </br>
+    <div class="text">
+    <h4>Text Customization</h4>
+        <div class="two-column-grid"> 
+            <!-- Row 1 -->
+            <div>
+                <label for="text"><i class="fas fa-font"></i> Text:</label>
+                <input type="text" id="text" value="${element.textContent || ''}">
+            </div>
+            <div>
+                <label for="font-size"><i class="fas fa-text-height"></i> Font Size:</label>
+                <input type="number" id="font-size" value="16">
+            </div>
+            <!-- Row 2 -->
+            <div>
+                <label for="text-color"><i class="fas fa-palette"></i> Text Color:</label>
+                <input type="color" id="text-color">
+            </div>
+            <div>
+                <label for="bg-color"><i class="fas fa-fill-drip"></i> Background Color:</label>
+                <input type="color" id="bg-color">
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="design">
+    <div class="customization-card">
+        <h4>Font Customization</h4>
+        <div class="two-column-grid">
+            <!-- Row 1 -->
+            <div>
+                <label for="font-family"><i class="fas fa-font"></i> Font Family:</label>
+                <select id="font-family">
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Sans-serif">Sans-serif</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Helvetica">Helvetica</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Tahoma">Tahoma</option>
+                </select>
+            </div>
+            <div>
+                <label for="line-height"><i class="fas fa-text-height"></i> Line Height:</label>
+                <input type="number" id="line-height" value="1">
+            </div>
+            <!-- Row 2 -->
+            <div>
+                <label for="font-weight"><i class="fas fa-bold"></i> Font Weight:</label>
+                <select id="font-weight">
+                    <option value="normal">Normal</option>
+                    <option value="bold">Bold</option>
+                    <option value="300">Light</option>
+                    <option value="500">Medium</option>
+                    <option value="700">Semi-Bold</option>
+                    <option value="900">Extra-Bold</option>
+                </select>
+            </div>
+            <div>
+                <label for="text-transform"><i class="fas fa-text-transform"></i> Text Transform:</label>
+                <select id="text-transform">
+                    <option value="none">None</option>
+                    <option value="uppercase">Uppercase</option>
+                    <option value="lowercase">Lowercase</option>
+                    <option value="capitalize">Capitalize</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="customization-card">
+        <h4>Border Customization</h4>
+        <div class="two-column-grid">
+        
+            <!-- Row 1 -->
+            <div>
+                <label for="border-style"><i class="fas fa-border-style"></i> Border Style:</label>
+                <select id="border-style">
+                    <option value="solid">Solid</option>
+                    <option value="dashed">Dashed</option>
+                    <option value="dotted">Dotted</option>
+                    <option value="double">Double</option>
+                    <option value="groove">Groove</option>
+                    <option value="ridge">Ridge</option>
+                    <option value="inset">Inset</option>
+                    <option value="outset">Outset</option>
+                </select>
+            </div>
+            <div>
+                <label for="border-color"><i class="fas fa-palette"></i> Border Color:</label>
+                <input type="color" id="border-color">
+            </div>
+            <div>
+                <label for="border-size"><i class="fas fa-border-all"></i> Border Size:</label>
+                <input type="number" id="border-size" min="0" max="100">
+            </div>
+            <!-- Row 2 -->
+            <div>
+                <label for="border-radius"><i class="fas fa-circle"></i> Border Radius:</label>
+                <input type="number" id="border-radius" min="0" max="100">
+            </div>
+
+            <div>
+                <label for="outline-style"><i class="fas fa-border-style"></i> Outline Style:</label>
+                <select id="outline-style">
+                    <option value="">None</option>
+                    <option value="solid">Solid</option>
+                    <option value="dotted">Dotted</option>
+                    <option value="dashed">Dashed</option>
+                    <option value="double">Double</option>
+                </select>
+            </div>
+            <!-- Row 3 -->
+            <div>
+                <label for="outline-color"><i class="fas fa-palette"></i> Outline Color:</label>
+                <input type="color" id="outline-color">
+            </div>
+            <div>
+                <label for="outline-width"><i class="fas fa-border-all"></i> Outline Width:</label>
+                <input type="number" id="outline-width" min="0" max="100">
+            </div>
+        </div>
+    </div>
+
+    <div class="customization-card">
+        <h4>Spacing Customization</h4>
+        <div class="two-column-grid">
+            <!-- Row 1 -->
+            <div>
+                <label for="padding"><i class="fas fa-arrows-alt"></i> Padding:</label>
+                <input type="number" id="padding" value="0">
+            </div>
+            <div>
+                <label for="margin"><i class="fas fa-arrows-alt"></i> Margin:</label>
+                <input type="number" id="margin" value="0">
+            </div>
+        </div>
+    </div>
+
+    <div class="customization-card">
+        <h4>Transform Customization</h4>
+        <div class="two-column-grid">
+            <!-- Row 1 -->
+            <div>
+                <label for="rotate"><i class="fas fa-sync-alt"></i> Rotate (degrees):</label>
+                <input type="number" id="rotate" value="0">
+            </div>
+            <div>
+                <label for="skew"><i class="fas fa-slash"></i> Skew (degrees):</label>
+                <input type="number" id="skew" value="0">
+            </div>
+        </div>
+        <div class="two-column-grid">
+            <!-- Row 2 -->
+            <div>
+                <label for="translate-x"><i class="fas fa-sync-alt"></i> Translate X (px):</label>
+                <input type="number" id="translate-x" value="0">
+            </div>
+            <div>
+                <label for="translate-y"><i class="fas fa-slash"></i> Translate Y (px):</label>
+                <input type="number" id="translate-y" value="0">
+            </div>
+        </div>
+        <div class="two-column-grid">
+            <!-- Row 2 -->
+            <div>
+                <label for="scale"><i class="fas fa-sync-alt"></i> Scale (px):</label>
+                <input type="number" id="scale" value="0">
+            </div>
+        </div>
+    </div>
+
+    <div class="customization-card">
+        <h4>Box Shadow Customization</h4>
+        <div class="two-column-grid">
+            <!-- Row 1 -->
+            <div>
+                <label for="box-shadow-x"><i class="fas fa-arrows-alt-h"></i> Horizontal Offset:</label>
+                <input type="number" id="box-shadow-x" value="0">
+            </div>
+            <div>
+                <label for="box-shadow-y"><i class="fas fa-arrows-alt-v"></i> Vertical Offset:</label>
+                <input type="number" id="box-shadow-y" value="0">
+            </div>
+            <!-- Row 2 -->
+            <div>
+                <label for="box-shadow-blur"><i class="fas fa-blur"></i> Blur:</label>
+                <input type="number" id="box-shadow-blur" value="0">
+            </div>
+            <div>
+                <label for="box-shadow-spread"><i class="fas fa-expand"></i> Spread:</label>
+                <input type="number" id="box-shadow-spread" value="0">
+            </div>
+            <!-- Row 3 -->
+            <div>
+                <label for="box-shadow-color"><i class="fas fa-palette"></i> Color:</label>
+                <input type="color" id="box-shadow-color">
+            </div>
+        </div>
+    </div>
+
+    <div class="customization-card">
+        <h4>Transition Customization</h4>
+        <div class="two-column-grid">
+            <!-- Row 1 -->
+            <div>
+                <label for="transition-duration"><i class="fas fa-clock"></i> Duration:</label>
+                <input type="number" id="transition-duration" value="0">
+            </div>
+            <div>
+                <label for="transition-delay"><i class="fas fa-clock"></i> Delay:</label>
+                <input type="number" id="transition-delay" value="0">
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="customization-card">
+        <h4>Actions</h4>
+        <button id="remove-item"><i class="fas fa-trash"></i> Remove Item</button>
+    </div>
+`;
+
+
+    // Set the inner HTML of the customization panel
+customizationPanel.innerHTML = customizationHTML;
+
+
+        
+    // Event listeners for common options
+    document.getElementById('text').addEventListener('input', (e) => {
+        element.textContent = e.target.value;
+    });
+    document.getElementById('font-size').addEventListener('input', (e) => {
+        element.style.fontSize = e.target.value + 'px';
+    });
+    document.getElementById('text-color').addEventListener('input', (e) => {
+        element.style.color = e.target.value;
+    });
+    document.getElementById('bg-color').addEventListener('input', (e) => {
+        element.style.backgroundColor = e.target.value;
+    });
+    document.getElementById('font-family').addEventListener('input', (e) => {
+        element.style.fontFamily = e.target.value;
+    });
+    document.getElementById('border-color').addEventListener('input', (e) => {
+        element.style.borderColor = e.target.value;
+    });
+    document.getElementById('border-radius').addEventListener('input', (e) => {
+        element.style.borderRadius = e.target.value + 'px';
+    });
+    document.getElementById('border-size').addEventListener('input', (e) => {
+        element.style.borderWidth = e.target.value + 'px';
+});
+    document.getElementById('outline-style').addEventListener('input', (e) => {
+        element.style.outlineStyle = e.target.value;
+    });
+    document.getElementById('outline-color').addEventListener('input', (e) => {
+        element.style.outlineColor = e.target.value;
+    });
+    document.getElementById('outline-width').addEventListener('input', (e) => {
+        element.style.outlineWidth = e.target.value + 'px';
+    });
+    document.getElementById('padding').addEventListener('input', (e) => {
+        element.style.padding = `${e.target.value}px ${e.target.value}px ${e.target.value}px ${e.target.value}px`;   
+    });
+    document.getElementById('line-height').addEventListener('input', (e) => {
+        element.style.lineHeight = e.target.value+'px';
+    });
+    document.getElementById('margin').addEventListener('input', (e) => {
+        element.style.margin = e.target.value+'px';
+    });
+    document.getElementById('rotate').addEventListener('input', (e) => {
+        element.style.transform = `rotate(${e.target.value}deg)`;
+    });
+    document.getElementById('scale').addEventListener('input', (e) => {
+        element.style.transform = `scale(${e.target.value})`;
+    });
+    document.getElementById('translate-x').addEventListener('input', (e) => {
+        const transform = element.style.transform.split(' ');
+        let translateY = '0px'; // Default translateY value
+    
+        // Check if translateY exists in the transform property
+        if (transform.length > 1 && transform[1].includes('translateY')) {
+            translateY = transform[1].match(/translateY\(([^)]+)\)/)[1];
+        }
+    
+        // Update the transform property with the new translateX and existing translateY
+        element.style.transform = `translateX(${e.target.value}px) translateY(${translateY})`;
+    });
+    
+    document.getElementById('translate-y').addEventListener('input', (e) => {
+        const transform = element.style.transform.split(' ');
+        let translateX = '0px'; // Default translateX value
+    
+        // Check if translateX exists in the transform property
+        if (transform.length > 0 && transform[0].includes('translateX')) {
+            translateX = transform[0].match(/translateX\(([^)]+)\)/)[1];
+        }
+    
+        // Update the transform property with the existing translateX and new translateY
+        element.style.transform = `translateX(${translateX}) translateY(${e.target.value}px)`;
+    });
+    document.getElementById('skew').addEventListener('input', (e) => {
+        element.style.transform = `skew(${e.target.value}deg)`;
+    });
+    document.getElementById('box-shadow-x').addEventListener('input', (e) => {
+        // element.style.boxShadow = boxShadow.join(' ';
+        // alert(element.style.boxShadow.value)
+        const boxShadow = element.style.boxShadow.split(' ');
+        boxShadow[0] = e.target.value+'px';
+
+        element.style.boxShadow = `${e.target.value}px 0 0 0`;
+    });
+    document.getElementById('box-shadow-y').addEventListener('input', (e) => {
+        // element.style.boxShadow = `0 ${e.target.value}px 0 0`;                
+        const boxShadow = element.style.boxShadow.split(' ');
+        boxShadow[1] = e.target.value+'px';
+        element.style.boxShadow = boxShadow.join(' ');
+    });
+    document.getElementById('box-shadow-blur').addEventListener('input', (e) => {
+        // element.style.boxShadow = `0 0 ${e.target.value}px 0`;
+        const boxShadow = element.style.boxShadow.split(' ');
+        boxShadow[2] = e.target.value+'px';
+        element.style.boxShadow = boxShadow.join(' ');
+   
+    });
+    document.getElementById('box-shadow-spread').addEventListener('input', (e) => {
+        // element.style.boxShadow = `0 0 0 ${e.target.value}px`;
+        const boxShadow = element.style.boxShadow.split(' ');
+        boxShadow[3] = e.target.value+'px';
+        element.style.boxShadow = boxShadow.join(' ');
+   
+    });
+    document.getElementById('box-shadow-color').addEventListener('input', (e) => {
+        // element.style.boxShadow = `0 0 0 0 ${e.target.value}`;
+        const boxShadow = element.style.boxShadow.split(' ');
+        boxShadow[4] = e.target.value;
+        element.style.boxShadow = boxShadow.join(' ');
+    });
+    document.getElementById('transition-duration').addEventListener('input', (e) => {
+        if (!element.style.transition) {
+            element.style.transition = 'all 0s ease-in-out'; // Initialize if not set
+        }
+        const transitionParts = element.style.transition.split(' ');
+        transitionParts[1] = `${e.target.value}s`; // Update duration
+        element.style.transition = transitionParts.join(' ');
+        console.log('Updated transition:', element.style.transition); // Debugging
+    });
+    document.getElementById('transition-delay').addEventListener('input', (e) => {
+        element.style.transitionDelay = `${e.target.value}s`;
+    });
+
+    document.getElementById('text-transform').addEventListener('input', (e) => {
+        element.style.textTransform = e.target.value;
+    });
+    document.getElementById('font-weight').addEventListener('input', (e) => {
+        element.style.fontStyle = e.target.value;
+    });
+
+
+}
     // Function to Create Elements
   // Function to Create Elements
      // Function to Create Elements
    
 
     // Function to Show Customization Options
-    function showCustomizationOptions(element) {
+function showCustomizationOptions(element) {
         customizationPanel.innerHTML = '';
-        element.style.border = '1px solid transparent';
+        if (element.style.border) {
+            element.style.border = '1px solid transparent';
+        }
    
         // Customization options for images
         if (element.tagName === 'IMG') {
-            customizationPanel.innerHTML = `
-                <div class="customization-card">
-                    <h4>Image Customization</h4>
-                    <div class="two-column-grid">
-                        <!-- Row 1 -->
-                        <div>
-                            <label for="img-url"><i class="fas fa-image"></i> Image URL:</label>
-                            <input type="text" id="img-url" value="${element.src}">
-                        </div>
-                        <div>
-                            <label for="img-alt"><i class="fas fa-font"></i> Alt Text:</label>
-                            <input type="text" id="img-alt" value="${element.alt}">
-                        </div>
-                        <!-- Row 2 -->
-                        <div>
-                            <label for="img-height"><i class="fas fa-arrows-alt-v"></i> Height:</label>
-                            <input type="number" id="img-height" value="${element.height}">
-                        </div>
-                        <div>
-                            <label for="img-width"><i class="fas fa-arrows-alt-h"></i> Width:</label>
-                            <input type="number" id="img-width" value="${element.width}">
-                        </div>
-                        <!-- Row 3 -->
-                        <div>
-                            <label for="img-object-fit"><i class="fas fa-expand"></i> Object Fit:</label>
-                            <select id="img-object-fit">
-                                <option value="fill" ${element.style.objectFit === 'fill' ? 'selected' : ''}>Fill</option>
-                                <option value="contain" ${element.style.objectFit === 'contain' ? 'selected' : ''}>Contain</option>
-                                <option value="cover" ${element.style.objectFit === 'cover' ? 'selected' : ''}>Cover</option>
-                                <option value="none" ${element.style.objectFit === 'none' ? 'selected' : ''}>None</option>
-                                <option value="scale-down" ${element.style.objectFit === 'scale-down' ? 'selected' : ''}>Scale Down</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="img-object-position"><i class="fas fa-crosshairs"></i> Object Position:</label>
-                            <input type="text" id="img-object-position" value="${element.style.objectPosition || '50% 50%'}">
-                        </div>
-                    </div>
-                </div>
-        
-                <div class="customization-card">
-                    <h4>Border Customization</h4>
-                    <div class="two-column-grid">
-                        <!-- Row 1 -->
-                        <div>
-                            <label for="img-border-color"><i class="fas fa-palette"></i> Border Color:</label>
-                            <input type="color" id="img-border-color" value="${getComputedStyle(element).borderColor}">
-                        </div>
-                        <div>
-                            <label for="img-border-size"><i class="fas fa-border-all"></i> Border Size:</label>
-                            <input type="number" id="img-border-size" value="${parseInt(getComputedStyle(element).borderWidth)}">
-                        </div>
-                        <!-- Row 2 -->
-                        <div>
-                            <label for="img-border-style"><i class="fas fa-border-style"></i> Border Style:</label>
-                            <select id="img-border-style">
-                                <option value="none" ${getComputedStyle(element).borderStyle === 'none' ? 'selected' : ''}>None</option>
-                                <option value="solid" ${getComputedStyle(element).borderStyle === 'solid' ? 'selected' : ''}>Solid</option>
-                                <option value="dotted" ${getComputedStyle(element).borderStyle === 'dotted' ? 'selected' : ''}>Dotted</option>
-                                <option value="dashed" ${getComputedStyle(element).borderStyle === 'dashed' ? 'selected' : ''}>Dashed</option>
-                                <option value="double" ${getComputedStyle(element).borderStyle === 'double' ? 'selected' : ''}>Double</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="img-border-radius"><i class="fas fa-circle"></i> Border Radius:</label>
-                            <input type="number" id="img-border-radius" value="${parseInt(getComputedStyle(element).borderRadius)}">
-                        </div>
-                    </div>
-                </div>
-        
-                <div class="customization-card">
-                    <h4>Spacing Customization</h4>
-                    <div class="two-column-grid">
-                        <!-- Row 1 -->
-                        <div>
-                            <label for="img-padding"><i class="fas fa-spacing"></i> Padding:</label>
-                            <input type="number" id="img-padding" value="${parseInt(getComputedStyle(element).padding)}">
-                        </div>
-                        <div>
-                            <label for="img-margin"><i class="fas fa-spacing"></i> Margin:</label>
-                            <input type="number" id="img-margin" value="${parseInt(getComputedStyle(element).margin)}">
-                        </div>
-                        <!-- Row 2 -->
-                     
-                    </div>
-                </div>
-        
-                <div class="customization-card">
-                    <h4>Box Shadow Customization</h4>
-                    <div class="two-column-grid">
-                        <!-- Row 1 -->
-                        <div>
-                            <label for="img-box-shadow-x"><i class="fas fa-arrows-alt-h"></i> Horizontal Offset:</label>
-                            <input type="number" id="img-box-shadow-x" value="0">
-                        </div>
-                        <div>
-                            <label for="img-box-shadow-y"><i class="fas fa-arrows-alt-v"></i> Vertical Offset:</label>
-                            <input type="number" id="img-box-shadow-y" value="0">
-                        </div>
-                        <!-- Row 2 -->
-                        <div>
-                            <label for="img-box-shadow-blur"><i class="fas fa-blur"></i> Blur:</label>
-                            <input type="number" id="img-box-shadow-blur" value="0">
-                        </div>
-                        <div>
-                            <label for="img-box-shadow-spread"><i class="fas fa-expand"></i> Spread:</label>
-                            <input type="number" id="img-box-shadow-spread" value="0">
-                        </div>
-                        <!-- Row 3 -->
-                        <div>
-                            <label for="img-box-shadow-color"><i class="fas fa-palette"></i> Color:</label>
-                            <input type="color" id="img-box-shadow-color" value="#000000">
-                        </div>
-                    </div>
-                </div>
-        
-                <div class="customization-card">
-                    <h4>Transform Customization</h4>
-                    <div class="two-column-grid">
-                        <!-- Row 1 -->
-                        <div>
-                            <label for="img-rotate"><i class="fas fa-sync-alt"></i> Rotate (degrees):</label>
-                            <input type="number" id="img-rotate" value="0">
-                        </div>
-                        <div>
-                            <label for="img-scale"><i class="fas fa-expand"></i> Scale:</label>
-                            <input type="number" id="img-scale" value="1" step="0.1">
-                        </div>
-                        <!-- Row 2 -->
-                        <div>
-                            <label for="img-translate-x"><i class="fas fa-arrows-alt-h"></i> Translate X (px):</label>
-                            <input type="number" id="img-translate-x" value="0">
-                        </div>
-                        <div>
-                            <label for="img-translate-y"><i class="fas fa-arrows-alt-v"></i> Translate Y (px):</label>
-                            <input type="number" id="img-translate-y" value="0">
-                        </div>
-                    </div>
-                </div>
-        
-                <div class="customization-card">
-                    <h4>Actions</h4>
-                    <button id="remove-item"><i class="fas fa-trash"></i> Remove Item</button>
-                </div>
-            `;
-        
-            // Event listeners for image-specific options
-            document.getElementById('img-url').addEventListener('click', (e) => {
-                const fileInput = document.createElement('input');
-                fileInput.type = 'file';
-                fileInput.accept = 'image/*';
-        
-                fileInput.addEventListener('change', (event) => {
-                    const file = event.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            element.src = e.target.result;
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                });
-        
-                fileInput.click();
-                e.preventDefault();
-            });
-        
-            document.getElementById('img-alt').addEventListener('input', (e) => {
-                element.alt = e.target.value;
-            });
-        
-            document.getElementById('img-height').addEventListener('input', (e) => {
-                element.height = e.target.value;
-            });
-        
-            document.getElementById('img-width').addEventListener('input', (e) => {
-                element.width = e.target.value;
-            });
-        
-            document.getElementById('img-object-fit').addEventListener('change', (e) => {
-                element.style.objectFit = e.target.value;
-            });
-        
-            document.getElementById('img-object-position').addEventListener('input', (e) => {
-                element.style.objectPosition = e.target.value;
-            });
-        
-            document.getElementById('img-border-color').addEventListener('input', (e) => {
-                element.style.borderColor = e.target.value;
-            });
-        
-            document.getElementById('img-border-size').addEventListener('input', (e) => {
-                element.style.borderWidth = e.target.value + 'px';
-            });
-        
-            document.getElementById('img-border-radius').addEventListener('input', (e) => {
-                element.style.borderRadius = e.target.value + 'px';
-            });
-        
-            document.getElementById('img-border-style').addEventListener('change', (e) => {
-                element.style.borderStyle = e.target.value;
-            });
-        
-            // Padding
-            document.getElementById('img-padding').addEventListener('input', (e) => {
-                element.style.padding = e.target.value + 'px';
-            });
-        
-            // Margin
-            document.getElementById('img-margin').addEventListener('input', (e) => {
-                element.style.margin = e.target.value + 'px';
-            });
-        
-        
-            // Box Shadow
-            
-        // new  
-        
-        document.getElementById('img-box-shadow-x').addEventListener('input', (e) => {
-            // element.style.boxShadow = boxShadow.join(' ';
-            // alert(element.style.boxShadow.value)
-            const boxShadow = element.style.boxShadow.split(' ');
-            boxShadow[0] = e.target.value+'px';
-
-            element.style.boxShadow = `${e.target.value}px 0 0 0`;
-        });
-        document.getElementById('img-box-shadow-y').addEventListener('input', (e) => {
-            // element.style.boxShadow = `0 ${e.target.value}px 0 0`;                
-            const boxShadow = element.style.boxShadow.split(' ');
-            boxShadow[1] = e.target.value+'px';
-            element.style.boxShadow = boxShadow.join(' ');
-        });
-        document.getElementById('img-box-shadow-blur').addEventListener('input', (e) => {
-            // element.style.boxShadow = `0 0 ${e.target.value}px 0`;
-            const boxShadow = element.style.boxShadow.split(' ');
-            boxShadow[2] = e.target.value+'px';
-            element.style.boxShadow = boxShadow.join(' ');
-       
-        });
-        document.getElementById('img-box-shadow-spread').addEventListener('input', (e) => {
-            // element.style.boxShadow = `0 0 0 ${e.target.value}px`;
-            const boxShadow = element.style.boxShadow.split(' ');
-            boxShadow[3] = e.target.value+'px';
-            element.style.boxShadow = boxShadow.join(' ');
-       
-        });
-        document.getElementById('img-box-shadow-color').addEventListener('input', (e) => {
-            // element.style.boxShadow = `0 0 0 0 ${e.target.value}`;
-            const boxShadow = element.style.boxShadow.split(' ');
-            boxShadow[4] = e.target.value;
-            element.style.boxShadow = boxShadow.join(' ');
-        });
-            // Transform
-            document.getElementById('img-rotate').addEventListener('input', (e) => {
-                element.style.transform = `rotate(${e.target.value}deg)`;
-            });
-        
-            document.getElementById('img-scale').addEventListener('input', (e) => {
-                element.style.transform = `scale(${e.target.value})`;
-            });
-        
-            document.getElementById('img-translate-x').addEventListener('input', (e) => {
-                const transform = element.style.transform || '';
-                const translateY = transform.match(/translateY\(([^)]+)\)/)?.[1] || '0px';
-                element.style.transform = `translateX(${e.target.value}px) translateY(${translateY})`;
-            });
-        
-            document.getElementById('img-translate-y').addEventListener('input', (e) => {
-                const transform = element.style.transform || '';
-                const translateX = transform.match(/translateX\(([^)]+)\)/)?.[1] || '0px';
-                element.style.transform = `translateX(${translateX}) translateY(${e.target.value}px)`;
-            });
-        
-            // Remove item
-            document.getElementById('remove-item').addEventListener('click', () => {
-                element.remove();
-                customizationPanel.innerHTML = '';
-            });
+            imgcontrols(element);
         }
         else if (element.classList.contains('one-product')) {
             // Get the product elements
@@ -1060,7 +1447,512 @@ setInterval(checkSEOAndUX, 1000);
           element.style.margin = e.target.value + 'px';
       });
   }
-  
+  // In your customization panel generation code
+  else if (element.classList.contains('klaviyo-form')) {
+    // Get current styles
+    const currentStyles = getComputedStyle(element);
+    const formContainer = element.querySelector('.klaviyo-form-container') || element;
+    const formStyles = getComputedStyle(formContainer);
+    
+    // Parse current box shadow if exists
+    let boxShadowValues = {
+        x: '0',
+        y: '0',
+        blur: '0',
+        spread: '0',
+        color: '#000000'
+    };
+    
+    if (formStyles.boxShadow && formStyles.boxShadow !== 'none') {
+        const parts = formStyles.boxShadow.split(' ');
+        boxShadowValues = {
+            x: parts[0].replace('px', ''),
+            y: parts[1].replace('px', ''),
+            blur: parts[2].replace('px', ''),
+            spread: parts[3].replace('px', ''),
+            color: parts[4] || '#000000'
+        };
+    }
+    
+    // Parse current border if exists
+    let borderValues = {
+        width: formStyles.borderWidth || '1px',
+        style: formStyles.borderStyle || 'solid',
+        color: formStyles.borderColor || '#000000'
+    };
+
+    customizationPanel.innerHTML = `
+        <div class="customization-card">
+            <h4>Form Structure</h4>
+            <div id="form-fields-container">
+                ${Array.from(element.querySelectorAll('.form-group')).map((group, index) => {
+                    const label = group.querySelector('label');
+                    const labelStyles = label ? getComputedStyle(label) : {};
+                    return `
+                    <div class="field-group" data-index="${index}">
+                        <div class="two-column-grid">
+                            <div>
+                                <label><i class="fas fa-tag"></i> Field ${index + 1} Type:</label>
+                                <select class="field-type">
+                                    <option value="text" ${group.querySelector('input[type="text"]') ? 'selected' : ''}>Text</option>
+                                    <option value="email" ${group.querySelector('input[type="email"]') ? 'selected' : ''}>Email</option>
+                                    <option value="number" ${group.querySelector('input[type="number"]') ? 'selected' : ''}>Number</option>
+                                    <option value="color" ${group.querySelector('input[type="color"]') ? 'selected' : ''}>Color</option>
+                                    <option value="checkbox" ${group.querySelector('input[type="checkbox"]') ? 'selected' : ''}>Checkbox</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label><i class="fas fa-font"></i> Label:</label>
+                                <input type="text" class="field-label" value="${label?.textContent || ''}">
+                            </div>
+                            <div>
+                                <label><i class="fas fa-text-width"></i> Placeholder:</label>
+                                <input type="text" class="field-placeholder" value="${group.querySelector('input')?.placeholder || ''}">
+                            </div>
+                            <div>
+                                <button class="remove-field"><i class="fas fa-trash"></i> Remove</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Label Styling Section -->
+                        <div class="label-styling-section" style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+                            <h5><i class="fas fa-font"></i> Label Styling</h5>
+                            <div class="two-column-grid">
+                                <div>
+                                    <label><i class="fas fa-text-height"></i> Font Size:</label>
+                                    <input type="text" class="label-font-size" value="${labelStyles.fontSize || '16px'}">
+                                </div>
+                                <div>
+                                    <label><i class="fas fa-palette"></i> Color:</label>
+                                    <input type="color" class="label-color" value="${rgbToHex(labelStyles.color || '#000000')}">
+                                </div>
+                                <div>
+                                    <label><i class="fas fa-bold"></i> Font Weight:</label>
+                                    <select class="label-font-weight">
+                                        <option value="normal" ${labelStyles.fontWeight === 'normal' ? 'selected' : ''}>Normal</option>
+                                        <option value="bold" ${labelStyles.fontWeight === 'bold' ? 'selected' : ''}>Bold</option>
+                                        <option value="lighter" ${labelStyles.fontWeight === 'lighter' ? 'selected' : ''}>Lighter</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label><i class="fas fa-italic"></i> Font Style:</label>
+                                    <select class="label-font-style">
+                                        <option value="normal" ${labelStyles.fontStyle === 'normal' ? 'selected' : ''}>Normal</option>
+                                        <option value="italic" ${labelStyles.fontStyle === 'italic' ? 'selected' : ''}>Italic</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label><i class="fas fa-arrows-alt"></i> Margin:</label>
+                                    <input type="text" class="label-margin" value="${labelStyles.margin || '0 0 5px 0'}">
+                                </div>
+                                <div>
+                                    <label><i class="fas fa-arrows-alt"></i> Padding:</label>
+                                    <input type="text" class="label-padding" value="${labelStyles.padding || '0'}">
+                                </div>
+                                <div>
+                                    <label><i class="fas fa-eye"></i> Opacity:</label>
+                                    <input type="range" class="label-opacity" min="0" max="1" step="0.1" value="${labelStyles.opacity || '1'}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }).join('')}
+            </div>
+            <button id="add-field" class="btn-success"><i class="fas fa-plus"></i> Add Field</button>
+        </div>
+
+        <div class="customization-card">
+            <h4>Form Content</h4>
+            <div class="two-column-grid">
+                <div>
+                    <label for="form-title"><i class="fas fa-heading"></i> Title:</label>
+                    <input type="text" id="form-title" value="${element.querySelector('h3')?.textContent || 'Subscribe to our newsletter'}">
+                </div>
+                <div>
+                    <label for="form-button-text"><i class="fas fa-font"></i> Button Text:</label>
+                    <input type="text" id="form-button-text" value="${element.querySelector('button')?.textContent || 'Subscribe'}">
+                </div>
+            </div>
+        </div>
+
+        <div class="customization-card">
+            <h4>Form Styling</h4>
+            <div class="two-column-grid">
+                <div>
+                    <label for="form-bg-color"><i class="fas fa-palette"></i> Background:</label>
+                    <input type="color" id="form-bg-color" value="${rgbToHex(formStyles.backgroundColor)}">
+                </div>
+                <div>
+                    <label for="form-text-color"><i class="fas fa-palette"></i> Text Color:</label>
+                    <input type="color" id="form-text-color" value="${rgbToHex(formStyles.color)}">
+                </div>
+                <div>
+                    <label for="form-padding"><i class="fas fa-arrows-alt"></i> Padding:</label>
+                    <input type="text" id="form-padding" value="${formStyles.padding}">
+                </div>
+                <div>
+                    <label for="form-margin"><i class="fas fa-arrows-alt"></i> Margin:</label>
+                    <input type="text" id="form-margin" value="${formStyles.margin}">
+                </div>
+            </div>
+        </div>
+
+        <div class="customization-card">
+            <h4>Border Settings</h4>
+            <div class="two-column-grid">
+                <div>
+                    <label><i class="fas fa-border-style"></i> Border Width:</label>
+                    <input type="text" id="form-border-width" value="${borderValues.width}">
+                </div>
+                <div>
+                    <label><i class="fas fa-border-style"></i> Border Style:</label>
+                    <select id="form-border-style">
+                        <option value="none" ${borderValues.style === 'none' ? 'selected' : ''}>None</option>
+                        <option value="solid" ${borderValues.style === 'solid' ? 'selected' : ''}>Solid</option>
+                        <option value="dashed" ${borderValues.style === 'dashed' ? 'selected' : ''}>Dashed</option>
+                        <option value="dotted" ${borderValues.style === 'dotted' ? 'selected' : ''}>Dotted</option>
+                        <option value="double" ${borderValues.style === 'double' ? 'selected' : ''}>Double</option>
+                        <option value="groove" ${borderValues.style === 'groove' ? 'selected' : ''}>Groove</option>
+                    </select>
+                </div>
+                <div>
+                    <label><i class="fas fa-palette"></i> Border Color:</label>
+                    <input type="color" id="form-border-color" value="${rgbToHex(borderValues.color)}">
+                </div>
+                <div>
+                    <label><i class="fas fa-circle"></i> Border Radius:</label>
+                    <input type="text" id="form-border-radius" value="${formStyles.borderRadius}">
+                </div>
+            </div>
+        </div>
+
+        <div class="customization-card">
+            <h4>Box Shadow</h4>
+            <div class="two-column-grid">
+                <div>
+                    <label><i class="fas fa-arrows-alt-h"></i> X Offset:</label>
+                    <input type="number" id="form-box-shadow-x" value="${boxShadowValues.x}" step="1">
+                </div>
+                <div>
+                    <label><i class="fas fa-arrows-alt-v"></i> Y Offset:</label>
+                    <input type="number" id="form-box-shadow-y" value="${boxShadowValues.y}" step="1">
+                </div>
+                <div>
+                    <label><i class="fas fa-blur"></i> Blur:</label>
+                    <input type="number" id="form-box-shadow-blur" value="${boxShadowValues.blur}" step="1">
+                </div>
+                <div>
+                    <label><i class="fas fa-expand"></i> Spread:</label>
+                    <input type="number" id="form-box-shadow-spread" value="${boxShadowValues.spread}" step="1">
+                </div>
+                <div>
+                    <label><i class="fas fa-palette"></i> Color:</label>
+                    <input type="color" id="form-box-shadow-color" value="${boxShadowValues.color}">
+                </div>
+            </div>
+        </div>
+
+        <div class="customization-card">
+            <h4>Button Styling</h4>
+            <div class="two-column-grid">
+                <div>
+                    <label for="btn-bg-color"><i class="fas fa-palette"></i> Background:</label>
+                    <input type="color" id="btn-bg-color" value="${rgbToHex(element.querySelector('button')?.style.backgroundColor || '#a777e3')}">
+                </div>
+                <div>
+                    <label for="btn-text-color"><i class="fas fa-palette"></i> Text Color:</label>
+                    <input type="color" id="btn-text-color" value="${rgbToHex(element.querySelector('button')?.style.color || '#ffffff')}">
+                </div>
+                <div>
+                    <label for="btn-hover-bg"><i class="fas fa-palette"></i> Hover BG:</label>
+                    <input type="color" id="btn-hover-bg" value="${element.querySelector('button')?.getAttribute('data-hover-bg') || '#8e5fd5'}">
+                </div>
+                <div>
+                    <label for="btn-hover-text"><i class="fas fa-palette"></i> Hover Text:</label>
+                    <input type="color" id="btn-hover-text" value="${element.querySelector('button')?.getAttribute('data-hover-text') || '#ffffff'}">
+                </div>
+                <div>
+                    <label for="btn-padding"><i class="fas fa-arrows-alt"></i> Padding:</label>
+                    <input type="text" id="btn-padding" value="${element.querySelector('button')?.style.padding || '10px 15px'}">
+                </div>
+                <div>
+                    <label for="btn-border-radius"><i class="fas fa-circle"></i> Border Radius:</label>
+                    <input type="text" id="btn-border-radius" value="${element.querySelector('button')?.style.borderRadius || '4px'}">
+                </div>
+            </div>
+        </div>
+
+        <div class="customization-card">
+            <h4>Transform Effects</h4>
+            <div class="two-column-grid">
+                <div>
+                    <label for="form-rotate"><i class="fas fa-redo"></i> Rotate (deg):</label>
+                    <input type="number" id="form-rotate" value="0">
+                </div>
+                <div>
+                    <label for="form-scale"><i class="fas fa-expand"></i> Scale:</label>
+                    <input type="number" id="form-scale" value="1" step="0.1">
+                </div>
+            </div>
+        </div>
+
+        <div class="customization-card">
+            <h4>Actions</h4>
+            <button id="remove-form"><i class="fas fa-trash"></i> Remove Form</button>
+            <div> </div>
+            <button id="reset-form-styles"><i class="fas fa-undo"></i> Reset Styles</button>
+        </div>
+    `;
+
+   // Helper function to convert RGB to HEX
+   function rgbToHex(rgb) {
+    if (!rgb || rgb === 'rgba(0, 0, 0, 0)') return '#000000';
+    const parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+    if (!parts) return rgb;
+    const hex = (x) => ("0" + parseInt(x).toString(16)).slice(-2);
+    return "#" + hex(parts[1]) + hex(parts[2]) + hex(parts[3]);
+}
+
+// Field management using event delegation
+document.getElementById('form-fields-container').addEventListener('input', (e) => {
+    const fieldGroup = e.target.closest('.field-group');
+    if (!fieldGroup) return;
+    
+    const index = fieldGroup.dataset.index;
+    const group = element.querySelectorAll('.form-group')[index];
+    if (!group) return;
+    
+    const label = group.querySelector('label');
+    
+    // Label update
+    if (e.target.classList.contains('field-label')) {
+        if (label) label.textContent = e.target.value;
+    }
+    
+    // Placeholder update
+    if (e.target.classList.contains('field-placeholder')) {
+        const input = group.querySelector('input');
+        if (input) input.placeholder = e.target.value;
+    }
+    
+    // Label styling updates
+    if (label) {
+        if (e.target.classList.contains('label-font-size')) {
+            label.style.fontSize = e.target.value;
+        }
+        if (e.target.classList.contains('label-color')) {
+            label.style.color = e.target.value;
+        }
+        if (e.target.classList.contains('label-margin')) {
+            label.style.margin = e.target.value;
+        }
+        if (e.target.classList.contains('label-padding')) {
+            label.style.padding = e.target.value;
+        }
+        if (e.target.classList.contains('label-opacity')) {
+            label.style.opacity = e.target.value;
+        }
+    }
+});
+
+document.getElementById('form-fields-container').addEventListener('change', (e) => {
+    const fieldGroup = e.target.closest('.field-group');
+    if (!fieldGroup) return;
+    
+    const index = fieldGroup.dataset.index;
+    const group = element.querySelectorAll('.form-group')[index];
+    if (!group) return;
+    
+    const label = group.querySelector('label');
+    
+    // Field type change
+    if (e.target.classList.contains('field-type')) {
+        const labelText = label?.textContent || '';
+        const placeholder = group.querySelector('input')?.placeholder || '';
+        
+        if (e.target.value === 'select') {
+            group.innerHTML = `
+                <label>${labelText}</label>
+                <select>
+                    <option>Option 1</option>
+                    <option>Option 2</option>
+                </select>
+            `;
+        } else if (e.target.value === 'checkbox') {
+            group.innerHTML = `
+                <label>
+                    <input type="checkbox"> ${labelText}
+                </label>
+            `;
+        } else {
+            group.innerHTML = `
+                <label>${labelText}</label>
+                <input type="${e.target.value}" placeholder="${placeholder}">
+            `;
+        }
+    }
+    
+    // Label styling changes
+    if (label) {
+        if (e.target.classList.contains('label-font-weight')) {
+            label.style.fontWeight = e.target.value;
+        }
+        if (e.target.classList.contains('label-font-style')) {
+            label.style.fontStyle = e.target.value;
+        }
+    }
+});
+
+// Remove field
+document.getElementById('form-fields-container').addEventListener('click', (e) => {
+    if (e.target.classList.contains('remove-field')) {
+        const fieldGroup = e.target.closest('.field-group');
+        if (!fieldGroup) return;
+        
+        const index = fieldGroup.dataset.index;
+        element.querySelectorAll('.form-group')[index]?.remove();
+        checkSEOAndUX();
+    }
+});
+
+// Add field
+document.getElementById('add-field').addEventListener('click', () => {
+    const index = element.querySelectorAll('.form-group').length;
+    const fieldGroup = document.createElement('div');
+    fieldGroup.className = 'form-group';
+    fieldGroup.innerHTML = `
+        <label style="display: block; margin-bottom: 5px;">New Field</label>
+        <input type="text" placeholder="Enter value">
+    `;
+    element.querySelector('.klaviyo-form-container').appendChild(fieldGroup);
+    checkSEOAndUX();
+});
+
+    // Form content updates
+    document.getElementById('form-title').addEventListener('input', (e) => {
+        let title = element.querySelector('h3');
+        if (!title) {
+            title = document.createElement('h3');
+            element.querySelector('.klaviyo-form-container').prepend(title);
+        }
+        title.textContent = e.target.value;
+    });
+
+    document.getElementById('form-button-text').addEventListener('input', (e) => {
+        const button = element.querySelector('button');
+        if (button) button.textContent = e.target.value;
+    });
+
+    // Form styling
+    document.getElementById('form-bg-color').addEventListener('input', (e) => {
+        formContainer.style.backgroundColor = e.target.value;
+    });
+
+    document.getElementById('form-text-color').addEventListener('input', (e) => {
+        formContainer.style.color = e.target.value;
+    });
+
+    document.getElementById('form-padding').addEventListener('input', (e) => {
+        formContainer.style.padding = e.target.value;
+    });
+
+    document.getElementById('form-margin').addEventListener('input', (e) => {
+        formContainer.style.margin = e.target.value;
+    });
+
+    // Border settings
+    document.getElementById('form-border-width').addEventListener('input', (e) => {
+        formContainer.style.borderWidth = e.target.value;
+    });
+
+    document.getElementById('form-border-style').addEventListener('change', (e) => {
+        formContainer.style.borderStyle = e.target.value;
+    });
+
+    document.getElementById('form-border-color').addEventListener('input', (e) => {
+        formContainer.style.borderColor = e.target.value;
+    });
+
+    document.getElementById('form-border-radius').addEventListener('input', (e) => {
+        formContainer.style.borderRadius = e.target.value;
+    });
+
+    // Box shadow controls
+    function updateBoxShadow() {
+        const x = document.getElementById('form-box-shadow-x').value;
+        const y = document.getElementById('form-box-shadow-y').value;
+        const blur = document.getElementById('form-box-shadow-blur').value;
+        const spread = document.getElementById('form-box-shadow-spread').value;
+        const color = document.getElementById('form-box-shadow-color').value;
+        
+        formContainer.style.boxShadow = `${x}px ${y}px ${blur}px ${spread}px ${color}`;
+    }
+
+    document.getElementById('form-box-shadow-x').addEventListener('input', updateBoxShadow);
+    document.getElementById('form-box-shadow-y').addEventListener('input', updateBoxShadow);
+    document.getElementById('form-box-shadow-blur').addEventListener('input', updateBoxShadow);
+    document.getElementById('form-box-shadow-spread').addEventListener('input', updateBoxShadow);
+    document.getElementById('form-box-shadow-color').addEventListener('input', updateBoxShadow);
+
+    // Button styling
+    document.getElementById('btn-bg-color').addEventListener('input', (e) => {
+        const button = element.querySelector('button');
+        if (button) button.style.backgroundColor = e.target.value;
+    });
+
+    document.getElementById('btn-text-color').addEventListener('input', (e) => {
+        const button = element.querySelector('button');
+        if (button) button.style.color = e.target.value;
+    });
+
+    document.getElementById('btn-hover-bg').addEventListener('input', (e) => {
+        const button = element.querySelector('button');
+        if (button) {
+            button.setAttribute('data-hover-bg', e.target.value);
+            button.style.setProperty('--hover-bg', e.target.value);
+        }
+    });
+
+    document.getElementById('btn-hover-text').addEventListener('input', (e) => {
+        const button = element.querySelector('button');
+        if (button) {
+            button.setAttribute('data-hover-text', e.target.value);
+            button.style.setProperty('--hover-text', e.target.value);
+        }
+    });
+
+    document.getElementById('btn-padding').addEventListener('input', (e) => {
+        const button = element.querySelector('button');
+        if (button) button.style.padding = e.target.value;
+    });
+
+    document.getElementById('btn-border-radius').addEventListener('input', (e) => {
+        const button = element.querySelector('button');
+        if (button) button.style.borderRadius = e.target.value;
+    });
+
+    // Transform effects
+    document.getElementById('form-rotate').addEventListener('input', (e) => {
+        formContainer.style.transform = `rotate(${e.target.value}deg)`;
+    });
+
+    document.getElementById('form-scale').addEventListener('input', (e) => {
+        formContainer.style.transform = `scale(${e.target.value})`;
+    });
+
+    // Actions
+    document.getElementById('remove-form').addEventListener('click', () => {
+        element.remove();
+        customizationPanel.innerHTML = '';
+    });
+
+    document.getElementById('reset-form-styles').addEventListener('click', () => {
+        formContainer.removeAttribute('style');
+        element.querySelector('button')?.removeAttribute('style');
+        checkSEOAndUX();
+    });
+}
         // Customization options for text-image and text-video elements
         else if (element.classList.contains('text-image')) {
             customizationPanel.innerHTML = `
@@ -1798,7 +2690,6 @@ setInterval(checkSEOAndUX, 1000);
                     <button id="remove-list"><i class="fas fa-trash"></i> Remove List</button>
                 </div>
             `;
-        
             // Event listeners for list customization
             document.getElementById('list-style-type').addEventListener('change', (e) => {
                 element.style.listStyleType = e.target.value;
@@ -2305,7 +3196,7 @@ setInterval(checkSEOAndUX, 1000);
                 })
                 .join('');
         
-            customizationPanel.innerHTML = `
+            customizationPanel.innerHTML += `
                 <div class="customization-card">
                     <h4>FAQ Container Customization</h4>
                     <div class="two-column-grid">
@@ -2847,7 +3738,448 @@ document.getElementById('box-shadow-color').addEventListener('input', (e) => upd
         customizationPanel.innerHTML = '';
     });
          }
-
+         else if (element.classList.contains('recipe-header-container')) {
+            const background = element.querySelector('.recipe-header-background');
+            const bgStyles = getComputedStyle(background);
+            const textElements = element.querySelectorAll('.recipe-header-text');
+            
+            // Store all text elements data
+            const textElementsData = Array.from(textElements).map((textEl, index) => {
+                const styles = getComputedStyle(textEl);
+                return {
+                    element: textEl,
+                    index: index,
+                    content: textEl.textContent,
+                    styles: {
+                        top: styles.top,
+                        left: styles.left,
+                        right: styles.right,
+                        bottom: styles.bottom,
+                        color: styles.color,
+                        fontSize: styles.fontSize,
+                        fontWeight: styles.fontWeight,
+                        fontStyle: styles.fontStyle,
+                        textShadow: styles.textShadow,
+                        opacity: styles.opacity,
+                        transform: styles.transform,
+                        margin: styles.margin,
+                        padding: styles.padding,
+                        border: styles.border,
+                        borderRadius: styles.borderRadius,
+                        boxShadow: styles.boxShadow
+                    }
+                };
+            });
+        
+            customizationPanel.innerHTML = `
+                <div class="customization-card">
+                    <h4>Background Settings</h4>
+                    <div class="two-column-grid">
+                        <div>
+                            <label><i class="fas fa-image"></i> Image URL:</label>
+                            <input type="text" id="recipe-bg-url" value="${bgStyles.backgroundImage.replace(/url\(["']?(.*?)["']?\)/, '$1')}">
+                        </div>
+                        <div>
+                            <label><i class="fas fa-eye"></i> Background Opacity:</label>
+                            <input type="range" id="recipe-bg-opacity" min="0" max="1" step="0.1" value="${bgStyles.opacity}">
+                        </div>
+                        <div>
+                            <label><i class="fas fa-expand"></i> Background Size:</label>
+                            <select id="recipe-bg-size">
+                                <option value="cover" ${bgStyles.backgroundSize === 'cover' ? 'selected' : ''}>Cover</option>
+                                <option value="contain" ${bgStyles.backgroundSize === 'contain' ? 'selected' : ''}>Contain</option>
+                                <option value="auto" ${bgStyles.backgroundSize === 'auto' ? 'selected' : ''}>Auto</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label><i class="fas fa-arrows-alt"></i> Background Position:</label>
+                            <select id="recipe-bg-position">
+                                <option value="center" ${bgStyles.backgroundPosition.includes('center') ? 'selected' : ''}>Center</option>
+                                <option value="top" ${bgStyles.backgroundPosition.includes('top') ? 'selected' : ''}>Top</option>
+                                <option value="bottom" ${bgStyles.backgroundPosition.includes('bottom') ? 'selected' : ''}>Bottom</option>
+                                <option value="left" ${bgStyles.backgroundPosition.includes('left') ? 'selected' : ''}>Left</option>
+                                <option value="right" ${bgStyles.backgroundPosition.includes('right') ? 'selected' : ''}>Right</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label><i class="fas fa-palette"></i> Overlay Color:</label>
+                            <input type="color" id="recipe-bg-overlay" value="#000000">
+                        </div>
+                        <div>
+                            <label><i class="fas fa-eye"></i> Overlay Opacity:</label>
+                            <input type="range" id="recipe-bg-overlay-opacity" min="0" max="1" step="0.1" value="0">
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="customization-card">
+                    <h4>Text Elements</h4>
+                    <div id="recipe-text-elements">
+                        ${textElementsData.map(textData => `
+                            <div class="text-element-group" data-index="${textData.index}">
+                                <div class="text-element-header">
+                                    <h5>Text Element ${textData.index + 1}</h5>
+                                    <button class="remove-text-element"><i class="fas fa-trash"></i></button>
+                                </div>
+                                <div class="two-column-grid">
+                                    <div>
+                                        <label><i class="fas fa-font"></i> Text Content:</label>
+                                        <input type="text" class="text-content" value="${textData.content}">
+                                    </div>
+                                    <div>
+                                        <label><i class="fas fa-eye"></i> Text Opacity:</label>
+                                        <input type="range" class="text-opacity" min="0" max="1" step="0.1" value="${textData.styles.opacity}">
+                                    </div>
+                                </div>
+                                
+                                <h6>Position</h6>
+                                <div class="two-column-grid">
+                                    <div>
+                                        <label><i class="fas fa-arrow-up"></i> Top:</label>
+                                        <input type="text" class="text-position-top" value="${textData.styles.top}">
+                                    </div>
+                                    <div>
+                                        <label><i class="fas fa-arrow-down"></i> Bottom:</label>
+                                        <input type="text" class="text-position-bottom" value="${textData.styles.bottom}">
+                                    </div>
+                                    <div>
+                                        <label><i class="fas fa-arrow-left"></i> Left:</label>
+                                        <input type="text" class="text-position-left" value="${textData.styles.left}">
+                                    </div>
+                                    <div>
+                                        <label><i class="fas fa-arrow-right"></i> Right:</label>
+                                        <input type="text" class="text-position-right" value="${textData.styles.right}">
+                                    </div>
+                                </div>
+                                
+                                <h6>Typography</h6>
+                                <div class="two-column-grid">
+                                    <div>
+                                        <label><i class="fas fa-text-height"></i> Font Size:</label>
+                                        <input type="text" class="text-font-size" value="${textData.styles.fontSize}">
+                                    </div>
+                                    <div>
+                                        <label><i class="fas fa-palette"></i> Color:</label>
+                                        <input type="color" class="text-color" value="${rgbToHex(textData.styles.color)}">
+                                    </div>
+                                    <div>
+                                        <label><i class="fas fa-bold"></i> Font Weight:</label>
+                                        <select class="text-font-weight">
+                                            <option value="normal" ${textData.styles.fontWeight === 'normal' ? 'selected' : ''}>Normal</option>
+                                            <option value="bold" ${textData.styles.fontWeight === 'bold' ? 'selected' : ''}>Bold</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label><i class="fas fa-italic"></i> Font Style:</label>
+                                        <select class="text-font-style">
+                                            <option value="normal" ${textData.styles.fontStyle === 'normal' ? 'selected' : ''}>Normal</option>
+                                            <option value="italic" ${textData.styles.fontStyle === 'italic' ? 'selected' : ''}>Italic</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label><i class="fas fa-shadow"></i> Text Shadow:</label>
+                                        <input type="text" class="text-shadow" value="${textData.styles.textShadow}">
+                                    </div>
+                                </div>
+                                
+                                <h6>Advanced Styling</h6>
+                                <div class="two-column-grid">
+                                    <div>
+                                        <label><i class="fas fa-arrows-alt"></i> Margin:</label>
+                                        <input type="text" class="text-margin" value="${textData.styles.margin}">
+                                    </div>
+                                    <div>
+                                        <label><i class="fas fa-arrows-alt"></i> Padding:</label>
+                                        <input type="text" class="text-padding" value="${textData.styles.padding}">
+                                    </div>
+                                    <div>
+                                        <label><i class="fas fa-border-style"></i> Border:</label>
+                                        <input type="text" class="text-border" value="${textData.styles.border}">
+                                    </div>
+                                    <div>
+                                        <label><i class="fas fa-circle"></i> Border Radius:</label>
+                                        <input type="text" class="text-border-radius" value="${textData.styles.borderRadius}">
+                                    </div>
+                                    <div>
+                                        <label><i class="fas fa-shadow"></i> Box Shadow:</label>
+                                        <input type="text" class="text-box-shadow" value="${textData.styles.boxShadow}">
+                                    </div>
+                                </div>
+                                
+                                <h6>Transform Effects</h6>
+                                <div class="two-column-grid">
+                                    <div>
+                                        <label><i class="fas fa-redo"></i> Rotate (deg):</label>
+                                        <input type="number" class="text-rotate" value="0">
+                                    </div>
+                                    <div>
+                                        <label><i class="fas fa-arrows-alt-h"></i> Skew X (deg):</label>
+                                        <input type="number" class="text-skew-x" value="0">
+                                    </div>
+                                    <div>
+                                        <label><i class="fas fa-arrows-alt-v"></i> Skew Y (deg):</label>
+                                        <input type="number" class="text-skew-y" value="0">
+                                    </div>
+                                    <div>
+                                        <label><i class="fas fa-arrow-right"></i> Translate X (px):</label>
+                                        <input type="number" class="text-translate-x" value="0">
+                                    </div>
+                                    <div>
+                                        <label><i class="fas fa-arrow-down"></i> Translate Y (px):</label>
+                                        <input type="number" class="text-translate-y" value="0">
+                                    </div>
+                                    <div>
+                                        <label><i class="fas fa-expand"></i> Scale:</label>
+                                        <input type="number" class="text-scale" value="1" step="0.1">
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button id="add-text-element" class="btn-success"><i class="fas fa-plus"></i> Add Text Element</button>
+                </div>
+        
+                <div class="customization-card">
+                    <h4>Actions</h4>
+                    <button id="remove-recipe-header"><i class="fas fa-trash"></i> Remove Header</button>
+                    <button id="reset-recipe-header"><i class="fas fa-undo"></i> Reset Styles</button>
+                </div>
+            `;
+        
+            // Background customization
+            document.getElementById('recipe-bg-url').addEventListener('input', (e) => {
+                background.style.backgroundImage = `url('${e.target.value}')`;
+            });
+        
+            document.getElementById('recipe-bg-opacity').addEventListener('input', (e) => {
+                background.style.opacity = e.target.value;
+            });
+        
+            document.getElementById('recipe-bg-size').addEventListener('change', (e) => {
+                background.style.backgroundSize = e.target.value;
+            });
+        
+            document.getElementById('recipe-bg-position').addEventListener('change', (e) => {
+                background.style.backgroundPosition = e.target.value;
+            });
+        
+            document.getElementById('recipe-bg-overlay').addEventListener('input', (e) => {
+                // Create or update overlay div
+                let overlay = background.querySelector('.recipe-header-overlay');
+                if (!overlay) {
+                    overlay = document.createElement('div');
+                    overlay.className = 'recipe-header-overlay';
+                    overlay.style.position = 'absolute';
+                    overlay.style.top = '0';
+                    overlay.style.left = '0';
+                    overlay.style.width = '100%';
+                    overlay.style.height = '100%';
+                    background.prepend(overlay);
+                }
+                overlay.style.backgroundColor = e.target.value;
+            });
+        
+            document.getElementById('recipe-bg-overlay-opacity').addEventListener('input', (e) => {
+                const overlay = background.querySelector('.recipe-header-overlay');
+                if (overlay) {
+                    overlay.style.opacity = e.target.value;
+                }
+            });
+        
+            // Text elements management
+            document.getElementById('add-text-element').addEventListener('click', () => {
+                const newTextElement = document.createElement('span');
+                newTextElement.className = 'recipe-header-text';
+                newTextElement.style.position = 'absolute';
+                newTextElement.style.top = '50%';
+                newTextElement.style.left = '50%';
+                newTextElement.style.transform = 'translate(-50%, -50%)';
+                newTextElement.style.color = 'white';
+                newTextElement.style.fontSize = '1rem';
+                newTextElement.textContent = 'New Text';
+                background.appendChild(newTextElement);
+                checkSEOAndUX();
+            });
+        
+            // Text elements customization using event delegation
+            document.getElementById('recipe-text-elements').addEventListener('input', (e) => {
+                const textGroup = e.target.closest('.text-element-group');
+                if (!textGroup) return;
+                
+                const index = textGroup.dataset.index;
+                const textElement = textElements[index];
+                if (!textElement) return;
+                
+                // Content
+                if (e.target.classList.contains('text-content')) {
+                    textElement.textContent = e.target.value;
+                }
+                
+                // Opacity
+                if (e.target.classList.contains('text-opacity')) {
+                    textElement.style.opacity = e.target.value;
+                }
+                
+                // Position
+                if (e.target.classList.contains('text-position-top')) {
+                    textElement.style.top = e.target.value;
+                    textElement.style.bottom = '';
+                }
+                if (e.target.classList.contains('text-position-bottom')) {
+                    textElement.style.bottom = e.target.value;
+                    textElement.style.top = '';
+                }
+                if (e.target.classList.contains('text-position-left')) {
+                    textElement.style.left = e.target.value;
+                    textElement.style.right = '';
+                }
+                if (e.target.classList.contains('text-position-right')) {
+                    textElement.style.right = e.target.value;
+                    textElement.style.left = '';
+                }
+                
+                // Typography
+                if (e.target.classList.contains('text-font-size')) {
+                    textElement.style.fontSize = e.target.value;
+                }
+                if (e.target.classList.contains('text-color')) {
+                    textElement.style.color = e.target.value;
+                }
+                if (e.target.classList.contains('text-shadow')) {
+                    textElement.style.textShadow = e.target.value;
+                }
+                
+                // Advanced styling
+                if (e.target.classList.contains('text-margin')) {
+                    textElement.style.margin = e.target.value;
+                }
+                if (e.target.classList.contains('text-padding')) {
+                    textElement.style.padding = e.target.value;
+                }
+                if (e.target.classList.contains('text-border')) {
+                    textElement.style.border = e.target.value;
+                }
+                if (e.target.classList.contains('text-border-radius')) {
+                    textElement.style.borderRadius = e.target.value;
+                }
+                if (e.target.classList.contains('text-box-shadow')) {
+                    textElement.style.boxShadow = e.target.value;
+                }
+            });
+        
+            document.getElementById('recipe-text-elements').addEventListener('change', (e) => {
+                const textGroup = e.target.closest('.text-element-group');
+                if (!textGroup) return;
+                
+                const index = textGroup.dataset.index;
+                const textElement = textElements[index];
+                if (!textElement) return;
+                
+                // Font weight
+                if (e.target.classList.contains('text-font-weight')) {
+                    textElement.style.fontWeight = e.target.value;
+                }
+                
+                // Font style
+                if (e.target.classList.contains('text-font-style')) {
+                    textElement.style.fontStyle = e.target.value;
+                }
+                
+                // Transform effects
+                const rotate = textGroup.querySelector('.text-rotate').value;
+                const skewX = textGroup.querySelector('.text-skew-x').value;
+                const skewY = textGroup.querySelector('.text-skew-y').value;
+                const translateX = textGroup.querySelector('.text-translate-x').value;
+                const translateY = textGroup.querySelector('.text-translate-y').value;
+                const scale = textGroup.querySelector('.text-scale').value;
+                
+                const transform = `
+                    rotate(${rotate}deg)
+                    skewX(${skewX}deg)
+                    skewY(${skewY}deg)
+                    translateX(${translateX}px)
+                    translateY(${translateY}px)
+                    scale(${scale})
+                `;
+                textElement.style.transform = transform;
+            });
+        
+            // Remove text element
+            document.getElementById('recipe-text-elements').addEventListener('click', (e) => {
+                if (e.target.classList.contains('remove-text-element')) {
+                    const textGroup = e.target.closest('.text-element-group');
+                    if (!textGroup) return;
+                    
+                    const index = textGroup.dataset.index;
+                    const textElement = textElements[index];
+                    if (textElement) textElement.remove();
+                    
+                    checkSEOAndUX();
+                }
+            });
+        
+            // Actions
+            document.getElementById('remove-recipe-header').addEventListener('click', () => {
+                element.remove();
+                customizationPanel.innerHTML = '';
+            });
+        
+            document.getElementById('reset-recipe-header').addEventListener('click', () => {
+                // Reset background
+                background.removeAttribute('style');
+                background.style.backgroundImage = 'url("https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800")';
+                background.style.backgroundSize = 'cover';
+                background.style.backgroundPosition = 'center';
+                background.style.position = 'relative';
+                background.style.minHeight = '300px';
+                background.style.opacity = '1';
+                
+                // Remove overlay if exists
+                const overlay = background.querySelector('.recipe-header-overlay');
+                if (overlay) overlay.remove();
+                
+                // Reset text elements
+                textElements.forEach((textEl, index) => {
+                    textEl.removeAttribute('style');
+                    textEl.style.position = 'absolute';
+                    textEl.style.color = 'white';
+                    textEl.style.opacity = '1';
+                    
+                    if (index === 0) {
+                        textEl.style.top = '20%';
+                        textEl.style.left = '10%';
+                        textEl.style.fontSize = '2.5rem';
+                        textEl.style.fontWeight = 'bold';
+                        textEl.style.textShadow = '2px 2px 4px rgba(0,0,0,0.5)';
+                        textEl.textContent = 'Recipe Title';
+                    } else if (index === 1) {
+                        textEl.style.bottom = '20%';
+                        textEl.style.right = '10%';
+                        textEl.style.fontSize = '1.5rem';
+                        textEl.style.fontStyle = 'italic';
+                        textEl.style.textShadow = '1px 1px 2px rgba(0,0,0,0.5)';
+                        textEl.textContent = 'By Chef Name';
+                    } else {
+                        textEl.style.top = '50%';
+                        textEl.style.left = '50%';
+                        textEl.style.transform = 'translate(-50%, -50%)';
+                        textEl.style.fontSize = '1rem';
+                        textEl.textContent = 'New Text';
+                    }
+                });
+                
+                checkSEOAndUX();
+            });
+        
+            // Helper function to convert RGB to HEX
+            function rgbToHex(rgb) {
+                if (!rgb || rgb === 'rgba(0, 0, 0, 0)') return '#ffffff';
+                const parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+                if (!parts) return rgb;
+                const hex = (x) => ("0" + parseInt(x).toString(16)).slice(-2);
+                return "#" + hex(parts[1]) + hex(parts[2]) + hex(parts[3]);
+            }
+        }
 // Customization for product-grid
 else if (element.classList.contains('product-grid')) {
     const gridContainer = element.querySelector('.grid-container');
@@ -3767,343 +5099,9 @@ else if (element.classList.contains('text-product')) {
         // (You might need to call this function again here)
     });
 }
-        else if (element.tagName !== 'HR' 
-            || element.classList.contains('text-image')
-            ) {
-             
-                    // Check if the element is a <details> with <summary> and <p>
-                 
-                
-    customizationHTML = `
-            <div class="customization-card">
-                <h4>Text Customization</h4>
-                <div class="two-column-grid">
-                    <!-- Row 1 -->
-                    <div>
-                        <label for="text"><i class="fas fa-font"></i> Text:</label>
-                        <input type="text" id="text" value="${element.textContent || ''}">
-                    </div>
-                    <div>
-                        <label for="font-size"><i class="fas fa-text-height"></i> Font Size:</label>
-                        <input type="number" id="font-size" value="16">
-                    </div>
-                    <!-- Row 2 -->
-                    <div>
-                        <label for="text-color"><i class="fas fa-palette"></i> Text Color:</label>
-                        <input type="color" id="text-color">
-                    </div>
-                    <div>
-                        <label for="bg-color"><i class="fas fa-fill-drip"></i> Background Color:</label>
-                        <input type="color" id="bg-color">
-                    </div>
-                </div>
-            </div>
-        
-            <div class="customization-card">
-                <h4>Font Customization</h4>
-                <div class="two-column-grid">
-                    <!-- Row 1 -->
-                    <div>
-                        <label for="font-family"><i class="fas fa-font"></i> Font Family:</label>
-                        <select id="font-family">
-                            <option value="Times New Roman">Times New Roman</option>
-                            <option value="Sans-serif">Sans-serif</option>
-                            <option value="Arial">Arial</option>
-                            <option value="Helvetica">Helvetica</option>
-                            <option value="Verdana">Verdana</option>
-                            <option value="Georgia">Georgia</option>
-                            <option value="Tahoma">Tahoma</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="line-height"><i class="fas fa-text-height"></i> Line Height:</label>
-                        <input type="number" id="line-height" value="1">
-                    </div>
-                </div>
-            </div>
-        
-            <div class="customization-card">
-                <h4>Border Customization</h4>
-                <div class="two-column-grid">
-                
-                    <!-- Row 1 -->
-                    <div>
-                        <label for="border-style"><i class="fas fa-border-style"></i> Border Style:</label>
-                        <select id="border-style">
-                            <option value="solid">Solid</option>
-                            <option value="dashed">Dashed</option>
-                            <option value="dotted">Dotted</option>
-                            <option value="double">Double</option>
-                            <option value="groove">Groove</option>
-                            <option value="ridge">Ridge</option>
-                            <option value="inset">Inset</option>
-                            <option value="outset">Outset</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="border-color"><i class="fas fa-palette"></i> Border Color:</label>
-                        <input type="color" id="border-color">
-                    </div>
-                    <div>
-                        <label for="border-size"><i class="fas fa-border-all"></i> Border Size:</label>
-                        <input type="number" id="border-size" min="0" max="100">
-                    </div>
-                    <!-- Row 2 -->
-                    <div>
-                        <label for="border-radius"><i class="fas fa-circle"></i> Border Radius:</label>
-                        <input type="number" id="border-radius" min="0" max="100">
-                    </div>
 
-                    <div>
-                        <label for="outline-style"><i class="fas fa-border-style"></i> Outline Style:</label>
-                        <select id="outline-style">
-                            <option value="">None</option>
-                            <option value="solid">Solid</option>
-                            <option value="dotted">Dotted</option>
-                            <option value="dashed">Dashed</option>
-                            <option value="double">Double</option>
-                        </select>
-                    </div>
-                    <!-- Row 3 -->
-                    <div>
-                        <label for="outline-color"><i class="fas fa-palette"></i> Outline Color:</label>
-                        <input type="color" id="outline-color">
-                    </div>
-                    <div>
-                        <label for="outline-width"><i class="fas fa-border-all"></i> Outline Width:</label>
-                        <input type="number" id="outline-width" min="0" max="100">
-                    </div>
-                </div>
-            </div>
-        
-            <div class="customization-card">
-                <h4>Spacing Customization</h4>
-                <div class="two-column-grid">
-                    <!-- Row 1 -->
-                    <div>
-                        <label for="padding"><i class="fas fa-arrows-alt"></i> Padding:</label>
-                        <input type="number" id="padding" value="0">
-                    </div>
-                    <div>
-                        <label for="margin"><i class="fas fa-arrows-alt"></i> Margin:</label>
-                        <input type="number" id="margin" value="0">
-                    </div>
-                </div>
-            </div>
-        
-            <div class="customization-card">
-                <h4>Transform Customization</h4>
-                <div class="two-column-grid">
-                    <!-- Row 1 -->
-                    <div>
-                        <label for="rotate"><i class="fas fa-sync-alt"></i> Rotate (degrees):</label>
-                        <input type="number" id="rotate" value="0">
-                    </div>
-                    <div>
-                        <label for="skew"><i class="fas fa-slash"></i> Skew (degrees):</label>
-                        <input type="number" id="skew" value="0">
-                    </div>
-                </div>
-                <div class="two-column-grid">
-                    <!-- Row 2 -->
-                    <div>
-                        <label for="translate-x"><i class="fas fa-sync-alt"></i> Translate X (px):</label>
-                        <input type="number" id="translate-x" value="0">
-                    </div>
-                    <div>
-                        <label for="translate-y"><i class="fas fa-slash"></i> Translate Y (px):</label>
-                        <input type="number" id="translate-y" value="0">
-                    </div>
-                </div>
-                <div class="two-column-grid">
-                    <!-- Row 2 -->
-                    <div>
-                        <label for="scale"><i class="fas fa-sync-alt"></i> Scale (px):</label>
-                        <input type="number" id="scale" value="0">
-                    </div>
-                </div>
-            </div>
-        
-            <div class="customization-card">
-                <h4>Box Shadow Customization</h4>
-                <div class="two-column-grid">
-                    <!-- Row 1 -->
-                    <div>
-                        <label for="box-shadow-x"><i class="fas fa-arrows-alt-h"></i> Horizontal Offset:</label>
-                        <input type="number" id="box-shadow-x" value="0">
-                    </div>
-                    <div>
-                        <label for="box-shadow-y"><i class="fas fa-arrows-alt-v"></i> Vertical Offset:</label>
-                        <input type="number" id="box-shadow-y" value="0">
-                    </div>
-                    <!-- Row 2 -->
-                    <div>
-                        <label for="box-shadow-blur"><i class="fas fa-blur"></i> Blur:</label>
-                        <input type="number" id="box-shadow-blur" value="0">
-                    </div>
-                    <div>
-                        <label for="box-shadow-spread"><i class="fas fa-expand"></i> Spread:</label>
-                        <input type="number" id="box-shadow-spread" value="0">
-                    </div>
-                    <!-- Row 3 -->
-                    <div>
-                        <label for="box-shadow-color"><i class="fas fa-palette"></i> Color:</label>
-                        <input type="color" id="box-shadow-color">
-                    </div>
-                </div>
-            </div>
-        
-            <div class="customization-card">
-                <h4>Transition Customization</h4>
-                <div class="two-column-grid">
-                    <!-- Row 1 -->
-                    <div>
-                        <label for="transition-duration"><i class="fas fa-clock"></i> Duration:</label>
-                        <input type="number" id="transition-duration" value="0">
-                    </div>
-                    <div>
-                        <label for="transition-delay"><i class="fas fa-clock"></i> Delay:</label>
-                        <input type="number" id="transition-delay" value="0">
-                    </div>
-                </div>
-            </div>
-        
-            <div class="customization-card">
-                <h4>Actions</h4>
-                <button id="remove-item"><i class="fas fa-trash"></i> Remove Item</button>
-            </div>
-        `;
-
-        
-            // Set the inner HTML of the customization panel
-    customizationPanel.innerHTML = customizationHTML;
-
- 
-                
-            // Event listeners for common options
-            document.getElementById('text').addEventListener('input', (e) => {
-                element.textContent = e.target.value;
-            });
-            document.getElementById('font-size').addEventListener('input', (e) => {
-                element.style.fontSize = e.target.value + 'px';
-            });
-            document.getElementById('text-color').addEventListener('input', (e) => {
-                element.style.color = e.target.value;
-            });
-            document.getElementById('bg-color').addEventListener('input', (e) => {
-                element.style.backgroundColor = e.target.value;
-            });
-            document.getElementById('font-family').addEventListener('input', (e) => {
-                element.style.fontFamily = e.target.value;
-            });
-            document.getElementById('border-color').addEventListener('input', (e) => {
-                element.style.borderColor = e.target.value;
-            });
-            document.getElementById('border-radius').addEventListener('input', (e) => {
-                element.style.borderRadius = e.target.value + 'px';
-            });
-            document.getElementById('border-size').addEventListener('input', (e) => {
-                element.style.borderWidth = e.target.value + 'px';
-        });
-            document.getElementById('outline-style').addEventListener('input', (e) => {
-                element.style.outlineStyle = e.target.value;
-            });
-            document.getElementById('outline-color').addEventListener('input', (e) => {
-                element.style.outlineColor = e.target.value;
-            });
-            document.getElementById('outline-width').addEventListener('input', (e) => {
-                element.style.outlineWidth = e.target.value + 'px';
-            });
-            document.getElementById('padding').addEventListener('input', (e) => {
-                element.style.padding = `${e.target.value}px ${e.target.value}px ${e.target.value}px ${e.target.value}px`;   
-            });
-            document.getElementById('line-height').addEventListener('input', (e) => {
-                element.style.lineHeight = e.target.value+'px';
-            });
-            document.getElementById('margin').addEventListener('input', (e) => {
-                element.style.margin = e.target.value+'px';
-            });
-            document.getElementById('rotate').addEventListener('input', (e) => {
-                element.style.transform = `rotate(${e.target.value}deg)`;
-            });
-            document.getElementById('scale').addEventListener('input', (e) => {
-                element.style.transform = `scale(${e.target.value})`;
-            });
-            document.getElementById('translate-x').addEventListener('input', (e) => {
-                const transform = element.style.transform.split(' ');
-                let translateY = '0px'; // Default translateY value
-            
-                // Check if translateY exists in the transform property
-                if (transform.length > 1 && transform[1].includes('translateY')) {
-                    translateY = transform[1].match(/translateY\(([^)]+)\)/)[1];
-                }
-            
-                // Update the transform property with the new translateX and existing translateY
-                element.style.transform = `translateX(${e.target.value}px) translateY(${translateY})`;
-            });
-            
-            document.getElementById('translate-y').addEventListener('input', (e) => {
-                const transform = element.style.transform.split(' ');
-                let translateX = '0px'; // Default translateX value
-            
-                // Check if translateX exists in the transform property
-                if (transform.length > 0 && transform[0].includes('translateX')) {
-                    translateX = transform[0].match(/translateX\(([^)]+)\)/)[1];
-                }
-            
-                // Update the transform property with the existing translateX and new translateY
-                element.style.transform = `translateX(${translateX}) translateY(${e.target.value}px)`;
-            });
-            document.getElementById('skew').addEventListener('input', (e) => {
-                element.style.transform = `skew(${e.target.value}deg)`;
-            });
-            document.getElementById('box-shadow-x').addEventListener('input', (e) => {
-                // element.style.boxShadow = boxShadow.join(' ';
-                // alert(element.style.boxShadow.value)
-                const boxShadow = element.style.boxShadow.split(' ');
-                boxShadow[0] = e.target.value+'px';
-
-                element.style.boxShadow = `${e.target.value}px 0 0 0`;
-            });
-            document.getElementById('box-shadow-y').addEventListener('input', (e) => {
-                // element.style.boxShadow = `0 ${e.target.value}px 0 0`;                
-                const boxShadow = element.style.boxShadow.split(' ');
-                boxShadow[1] = e.target.value+'px';
-                element.style.boxShadow = boxShadow.join(' ');
-            });
-            document.getElementById('box-shadow-blur').addEventListener('input', (e) => {
-                // element.style.boxShadow = `0 0 ${e.target.value}px 0`;
-                const boxShadow = element.style.boxShadow.split(' ');
-                boxShadow[2] = e.target.value+'px';
-                element.style.boxShadow = boxShadow.join(' ');
-           
-            });
-            document.getElementById('box-shadow-spread').addEventListener('input', (e) => {
-                // element.style.boxShadow = `0 0 0 ${e.target.value}px`;
-                const boxShadow = element.style.boxShadow.split(' ');
-                boxShadow[3] = e.target.value+'px';
-                element.style.boxShadow = boxShadow.join(' ');
-           
-            });
-            document.getElementById('box-shadow-color').addEventListener('input', (e) => {
-                // element.style.boxShadow = `0 0 0 0 ${e.target.value}`;
-                const boxShadow = element.style.boxShadow.split(' ');
-                boxShadow[4] = e.target.value;
-                element.style.boxShadow = boxShadow.join(' ');
-            });
-            document.getElementById('transition-duration').addEventListener('input', (e) => {
-                if (!element.style.transition) {
-                    element.style.transition = 'all 0s ease-in-out'; // Initialize if not set
-                }
-                const transitionParts = element.style.transition.split(' ');
-                transitionParts[1] = `${e.target.value}s`; // Update duration
-                element.style.transition = transitionParts.join(' ');
-                console.log('Updated transition:', element.style.transition); // Debugging
-            });
-            document.getElementById('transition-delay').addEventListener('input', (e) => {
-                element.style.transitionDelay = `${e.target.value}s`;
-            });
-
+        else if (element.tagName !== 'HR'   ) {
+                commonControls(element);
     }
        
         // Remove item functionality
@@ -4112,10 +5110,8 @@ else if (element.classList.contains('text-product')) {
             customizationPanel.innerHTML = '';
         });
   
+
     }
-      
-        // Common customization options for most elements
-       
     
 });
 
@@ -4167,6 +5163,33 @@ function createElement(type) {
             element = document.createElement('img');
             element.src = 'https://img.freepik.com/free-photo/businesswoman-looking-important-contact-phone_1163-4256.jpg?ga=GA1.1.572590152.1728395548&semt=ais_hybrid';
             break;
+            case 'form':
+                element = document.createElement('div');
+                element.className = 'klaviyo-form';
+                element.innerHTML = `
+                    <div class="klaviyo-form-header">
+                        <i class="fas fa-envelope-open-text form-icon"></i>
+                        <h3>Get Exclusive Updates</h3>
+                        <p>Join our newsletter for special offers</p>
+                    </div>
+                    <form class="klaviyo-form-container">
+                        <div class="form-group">
+                            <div class="input-wrapper">
+                                <i class="fas fa-envelope input-icon"></i>
+                                <input type="email" placeholder="Enter your email" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="klaviyo-submit-btn">
+                                <i class="fas fa-paper-plane"></i> Subscribe Now
+                            </button>
+                        </div>
+                        <div class="form-footer">
+                            <small><i class="fas fa-lock"></i> We respect your privacy</small>
+                        </div>
+                    </form>
+                `;
+                break;
         case 'button':
             element = document.createElement('button');
             element.textContent = 'Click Me';
@@ -4348,7 +5371,7 @@ function createElement(type) {
             
                 // Add product image
                 const productImage = document.createElement('img');
-                productImage.src = 'https://via.placeholder.com/150';
+                productImage.src = 'https://img.freepik.com/free-photo/standard-quality-control-concept-m_23-2150041859.jpg?ga=GA1.1.572590152.1728395548&semt=ais_country_boost&w=740';
                 productImage.alt = 'Product Image';
                 element.appendChild(productImage);
             
@@ -4367,21 +5390,95 @@ function createElement(type) {
                 productDescription.textContent = 'Description of the product.';
                 element.appendChild(productDescription);
                 break;
-            default:
+        case 'recipie-header':
+                    element = document.createElement('div');
+                    element.className = 'recipe-header-container';
+                    element.innerHTML = `
+                        <div class="recipe-header-background" style="
+                            background-image: url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800');
+                            background-size: cover;
+                            background-position: center;
+                            position: relative;
+                            min-height: 300px;
+                            opacity: 1;
+                        ">
+                            <span class="recipe-header-text" style="
+                                position: absolute;
+                                top: 20%;
+                                left: 10%;
+                                color: white;
+                                font-size: 2.5rem;
+                                font-weight: bold;
+                                text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+                                opacity: 1;
+                            ">Recipe Title</span>
+                            <span class="recipe-header-text" style="
+                                position: absolute;
+                                bottom: 20%;
+                                right: 10%;
+                                color: white;
+                                font-size: 1.5rem;
+                                font-style: italic;
+                                text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+                                opacity: 1;
+                            ">By Chef Name</span>
+                        </div>
+                    `;
+                    break;
+                default:
             element = document.createElement('div');
             element.textContent = `New ${type}`;
     } 
     return element;
 }
+
 // save editor 
+// document.addEventListener('DOMContentLoaded', () => {
+//     const dropZone = document.querySelector('.drop-zone');
+//     const publishButton = document.querySelector('.btn-success');
+
+//     publishButton.addEventListener('click', () => {
+//         const content = dropZone.innerHTML; // Get everything inside the editor
+//         localStorage.setItem('publishedContent', content); // Store it in localStorage
+//         window.location.href = './published.html'; // Redirect to the show page
+//     });
+// });
+
 document.addEventListener('DOMContentLoaded', () => {
     const dropZone = document.querySelector('.drop-zone');
     const publishButton = document.querySelector('.btn-success');
 
-    publishButton.addEventListener('click', () => {
-        const content = dropZone.innerHTML; // Get everything inside the editor
-        localStorage.setItem('publishedContent', content); // Store it in localStorage
-        window.location.href = './published.html'; // Redirect to the show page
+    publishButton.addEventListener('click', async () => {
+        const content = dropZone.innerHTML;
+        const title = document.querySelector('.blog-title')?.value || 'Untitled Post'; // Add a title input in your HTML
+        
+        try {
+            const response = await fetch('./apis/blogs.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    title: title,
+                    content: content
+                })
+            });
+            
+            const result = await response.json();
+            // const result = await response.text();
+            // console.warn(result);
+            // 
+            if (response.ok) {
+                // Redirect to the published page with the blog ID
+                window.location.href = `./published.html?id=${result.id}`;
+            } else {
+                console.error('Error:', result.error);
+                alert('Failed to publish blog: ' + (result.error || 'Unknown error'));
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to connect to server');
+        }
     });
 });
 
@@ -4409,3 +5506,47 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         element.classList.add('active');
     }
+
+    // search function 
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('element-search');
+        const draggableElements = document.querySelectorAll('.draggable');
+        const categoryHeaders = document.querySelectorAll('.categories h4');
+        const elementsContainer = document.querySelector('.elements-container');
+    
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            let hasMatches = false;
+            
+            // First hide all elements and headers
+            draggableElements.forEach(el => el.style.display = 'none');
+            categoryHeaders.forEach(header => header.style.display = 'none');
+            
+            if (searchTerm === '') {
+                // If search is empty, show all
+                draggableElements.forEach(el => el.style.display = '');
+                categoryHeaders.forEach(header => header.style.display = '');
+                return;
+            }
+            
+            // Show matching elements and their categories
+            draggableElements.forEach(el => {
+                const elementText = el.textContent.toLowerCase();
+                if (elementText.includes(searchTerm)) {
+                    el.style.display = '';
+                    // Show the category header for this element
+                    const categoryHeader = el.closest('.elements-container').querySelector('h4');
+                    if (categoryHeader) {
+                        categoryHeader.style.display = '';
+                    }
+                    hasMatches = true;
+                }
+            });
+            
+            if (!hasMatches) {
+                // If no matches, show all elements
+                draggableElements.forEach(el => el.style.display = '');
+                categoryHeaders.forEach(header => header.style.display = '');
+            }
+        });
+    });

@@ -72,22 +72,73 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const publishedContent = localStorage.getItem('publishedContent');
-            const dropZoneStyles = localStorage.getItem('dropZoneStyles');
-            if (publishedContent) {
-                document.querySelector('.published-content').innerHTML = publishedContent;
+            // Get the blog ID from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const blogId = urlParams.get('id');
+            
+            if (blogId) {
+                fetchBlogPost(blogId);
             } else {
-                document.querySelector('.published-content').innerHTML = '<p>No content available.</p>';
-            }
-            if (dropZoneStyles) {
-                document.querySelector('.published-content').style.backgroundColor = dropZoneStyles.backgroundColor;
-                document.querySelector('.published-content').style.backgroundImage = dropZoneStyles.backgroundImage;
-                document.querySelector('.published-content').style.backgroundRepeat = dropZoneStyles.backgroundRepeat;
-                document.querySelector('.published-content').style.backgroundSize = dropZoneStyles.backgroundSize;
-                document.querySelector('.published-content').style.backgroundAttachment = dropZoneStyles.backgroundAttachment;
+                // Fallback to localStorage if no ID found (optional)
+                const publishedContent = localStorage.getItem('publishedContent');
+                if (publishedContent) {
+                    document.querySelector('.published-content').innerHTML = publishedContent;
+                } else {
+                    document.querySelector('.published-content').innerHTML = '<p>No content available.</p>';
+                }
             }
         });
-    </script>
+        
+        async function fetchBlogPost(id) {
+            try {
+                const response = await fetch(`./apis/blogs.php?id=${id}`);
+                const blog = await response.json();
+                
+                if (response.ok) {
+                    // Display the blog content
+                    document.querySelector('.published-content').innerHTML = blog.content;
+                    
+                    // Set the title if you have a title element
+                    const titleElement = document.querySelector('.blog-title');
+                    if (titleElement) {
+                        titleElement.textContent = blog.title || 'Untitled Post';
+                    }
+                    
+                    // Display creation date if available
+                    const dateElement = document.querySelector('.blog-date');
+                    if (dateElement && blog.created_at) {
+                        dateElement.textContent = new Date(blog.created_at).toLocaleString();
+                    }
+                    
+                    // Apply styles if they exist in the database
+                    // (You might want to store styles in your database too)
+                    const dropZoneStyles = localStorage.getItem('dropZoneStyles');
+                    if (dropZoneStyles) {
+                        const contentDiv = document.querySelector('.published-content');
+                        contentDiv.style.backgroundColor = dropZoneStyles.backgroundColor;
+                        contentDiv.style.backgroundImage = dropZoneStyles.backgroundImage;
+                        contentDiv.style.backgroundRepeat = dropZoneStyles.backgroundRepeat;
+                        contentDiv.style.backgroundSize = dropZoneStyles.backgroundSize;
+                        contentDiv.style.backgroundAttachment = dropZoneStyles.backgroundAttachment;
+                    }
+                } else {
+                    console.error('Error:', blog.error);
+                    document.querySelector('.published-content').innerHTML = `
+                        <p>Error loading blog post: ${blog.error || 'Unknown error'}</p>
+                        <p>Showing locally saved version instead.</p>
+                        ${localStorage.getItem('publishedContent') || '<p>No local content available.</p>'}
+                    `;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.querySelector('.published-content').innerHTML = `
+                    <p>Failed to connect to server: ${error.message}</p>
+                    <p>Showing locally saved version instead.</p>
+                    ${localStorage.getItem('publishedContent') || '<p>No local content available.</p>'}
+                `;
+            }
+        }
+        </script>
 
 </body>
 </html>

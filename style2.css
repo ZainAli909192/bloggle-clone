@@ -9,6 +9,9 @@ font-family: calibri;
 :root{
     --primary-color:#a777e3;
     --secondory-color:#333;
+
+    /* new  */
+    
 }
 html{
     scroll-behavior: smooth;
