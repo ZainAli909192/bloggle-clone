@@ -8,8 +8,38 @@
     <link rel="stylesheet" href="style2.css">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
-<body> 
+<body>
+    <style>
+        .error-main{
+            background-color: red;
+            color: white;
+            position: absolute;
+            right: 5%;
+            bottom: 5%;
+            z-index: 9999;
+            padding: 10px;
+            border-radius: 5px;
+        display: none;
+        }
+        .error-main.warning{
+            background-color:red;
+           display: block;
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-10px); }
+            80% { transform: translateX(10px); }
+            100% { transform: translateX(0); }  
+        }
+        .error-main.success{
+            background-color: green;
+           display: block;
+        }
+    </style> 
 
      <!-- Navbar  -->
      <nav class="navbar" id="top">
@@ -18,7 +48,8 @@
         </div>
         <ul class="navbar-links">
                 <li> 
-                    <a href="https://apps.shopify.com/bloggle?utm_medium=website&utm_campaign=_&utm_source=homepage&_gl=1*11bps7*_gcl_au*MjEyMzQ1MjczMS4xNzM3NDQ1MjQy"> 
+                    <!-- <a href="https://apps.shopify.com/bloggle?utm_medium=website&utm_campaign=_&utm_source=homepage&_gl=1*11bps7*_gcl_au*MjEyMzQ1MjczMS4xNzM3NDQ1MjQy">  -->
+                    <a href="./all-blogs.html"> 
                         <i class="fas fa-box-open"></i> <!-- Products Icon -->
                         Products
                     </a>
@@ -59,7 +90,7 @@
     </nav> 
 
     <main>
-        
+        <div class="error-main"></div>
     <!-- Left Sidebar -->
     <div class="sidebar">
         <h3>Draggable Elements</h3>
@@ -124,15 +155,29 @@
     </div>
         <p>Drop your elements here     
         </p>
+        <div class="blog-title">
+
+            <label for="blog-title">Title of blog</label>
+            <input type="text" required name="blog-title" id="blog-title" placeholder="Enter blog title...">
+        </div>
         <div class="drop-zone"></div>
    
     </div>
 
     <div class="customization-panel">
-        
-        <button class="btn-success" style="margin-bottom: 1rem;">
-            <i class="fas fa-paper-plane"></i>
-            Publish blog</button>
+        <div class="buttons" id="buttons">
+            <button class="btn-success" id="blog-create" style="margin-bottom: 1rem;">
+                <i class="fas fa-paper-plane"></i>
+                + Blog</button>
+                <button class="btn-success" style="margin-bottom: 1rem;" id="create-template">
+                    <i class="fas fa-paper-plane"></i>
+                    + Template </button>
+                </div>
+                <button class="btn-success" style="margin-bottom: 1rem;" 
+                    id="update">
+                    <i class="fas fa-edit"></i>
+                    Update </button>
+                    
         <h3>Customize Element</h3>
         <div id="customization-options">
             <p>Select an element to customize</p>
