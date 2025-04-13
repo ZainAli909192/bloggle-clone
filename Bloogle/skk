@@ -1,0 +1,451 @@
+Customization Panel (Right)
+.customization-panel {
+    min-width: 250px;
+    background: #f0f0f0;
+    padding: 20px;
+    border-left: 2px solid #ddd;
+    overflow-y: auto; /* Change from 'scroll' to 'auto' */
+    position: fixed;
+    right: 0;
+    top: 14%;
+    height: calc(100vh - 14%); /* Ensure it doesn’t exceed viewport */
+}
+
+
+select, input {
+    padding: 5px;
+    cursor: pointer;
+    field-sizing: content-box;
+}
+
+.customization-panel h3 {
+    margin-bottom: 15px;
+}
+
+#customization-options label {
+    display: block;
+    margin: 5px 0;
+}
+
+#customization-options input {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.editor img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.customization-panel button:hover {
+    scale: 1.09;
+    transition: scale 0.3s ease;
+}
+.customization-panel button {
+    padding: 10px 15px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.btn-success {
+    background-color: var(--primary-color);
+    padding: 10px;
+    outline: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 1rem;
+}
+
+.editor > p {
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+/* views toggle css  */
+.view-toggle {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.view-toggle i {
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.view-toggle i:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-success {
+    background-color: var(--primary-color);
+    padding: 10px;
+    outline: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 1rem;
+}
+
+/* Responsive Views */
+.active{
+    color: white;
+    background-color: var(--primary-color);
+}
+:has(.mobile-view) {
+    .editor{ 
+        max-width: 375px;
+        height: auto;
+    }
+   
+}
+:has(.tablet-view) {
+    .editor{ 
+        max-width: 668px;
+        height: auto;
+    } 
+   
+}
+
+.desktop-view {
+    width: 100%;
+    height: auto;
+}
+
+/* new css customzation  */
+
+        /* Styling for Custom Components */
+        .text-image,
+        .text-video {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .text-image img,
+        .text-video video {
+            width: 50%;
+            height: auto;
+        }
+
+        .text-image p,
+        .text-video p {
+            width: 50%;
+        }
+
+        .two-images,
+        .three-images {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .two-images img {
+            width: 50%;
+            height: auto;
+        }
+
+        .three-images img {
+            width: 33%;
+            height: auto;
+        }
+
+        /* Customization Panel */
+        .customization-panel {
+            width: 250px;
+            padding: 15px;
+            background: #f4f4f4;
+            border-left: 2px solid #ddd;
+        }
+
+        .customization-panel input,
+        .customization-panel select {
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+        }
+.two-text-columns {
+    display: grid; /* Use grid for layout */
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    grid-template-rows: 1fr 1fr; /* Two equal rows */
+    gap: 10px; /* Adjust gap between rows and columns as needed */
+}
+
+.two-text-columns .row {
+    display: contents; /* Makes the row behave like its children in the grid */
+}
+
+.two-text-columns-two-rows .column {
+    /* Style your columns here if needed */
+    padding: 10px; /* Example padding */
+    border: 1px solid #ccc; /* Example border */
+}
+
+.two-text-columns-two-rows p {
+    margin: 0; /* Remove default paragraph margins */
+}
+
+/* new css  */
+
+#remove-item i{
+color: rgb(245, 241, 241);
+}
+#remove-item  {
+    margin-top: 1rem;
+    background: linear-gradient(135deg, #e74c3c, #c0392b); /* Red gradient */
+}
+input{
+    display: flex; 
+}
+/* .fas
+ * Sets font size of font awesome icons to 0.7rem
+ */
+.fas{
+    font-size: 0.7rem;
+}
+form i{
+    color: rgb(85, 71, 71);
+}
+h4{
+    font-size: 0.8rem;
+
+    margin-bottom:0.5rem ;
+    color: var(--primary-color);
+}
+label{
+    color: rgb(64, 62, 62);
+    font-size: 0.87rem;
+}
+.two-column-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: 15px; /* Space between columns */
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    .two-column-grid {
+        grid-template-columns: 1fr; /* Stack columns on smaller screens */
+    }
+}
+
+ .product-grid {
+    padding: 20px;
+    border: 1px solid #ccc;
+    margin: 10px;
+    background-color: #f9f9f9;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.product {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    background-color: #fff;
+}
+
+.product img {
+    max-width: 100%;
+    height: auto;
+}
+
+.product h4 {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.product p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+.one-product{
+    width: 50%;
+    width: 100%;
+}
+
+.seo-count{
+    color: white;
+    border-radius: 35%;
+    background-color: var(--primary-color);
+    padding: 2px 4px;
+    font-weight: bolder;
+    font-size: 14px;
+    width: 100%;
+}
+.ux-count{
+    color: white;
+    border-radius: 35%;
+    background-color: var(--primary-color);
+    padding: 2px 4px;
+    font-weight: bolder;
+    font-size: 14px;
+    width: 100%;
+}
+.ux-count.warning , .seo-count.warning{
+    background-color: orange;
+}
+.ux-count.danger , .seo-count.danger{
+    background-color: red;
+}
+.ux-count.success , .seo-count.success{
+    background-color: green;
+}
+.view-toggle .main{
+margin-left: 8rem; 
+    display: flex;
+    gap: 30px;   
+    transform: translateX(40px);
+    transform: translateY(10px);
+    justify-content: center;
+    cursor: pointer;
+     /* margin-bottom: 10px; */
+}
+
+
+.seo-report, .ux-report {
+    padding: 15px;
+    border-right: 1px solid var(--primary-color);
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.seo-report h3, .ux-report h3 {
+    margin-top: 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.seo-report ul, .ux-report ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.seo-report li, .ux-report li {
+    padding: 5px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+.seo-ux-wrapper {
+    margin: 20px;
+    padding: 20px;
+    /* border: 1px solid rgb(209, 198, 198); */
+    /* background: #ab1717; */
+
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    /* gap: 20px; */
+    position: absolute;
+    left: 20%;
+    top: 20%;
+    z-index: 3 !important;
+    background-color: rgb(238, 237, 237);
+    transition: all 2s ease-in-out;
+}
+
+
+/* Add to your existing CSS */
+.klaviyo-form {
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.klaviyo-form h3 {
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.klaviyo-form .form-group {
+    margin-bottom: 15px;
+}
+
+.klaviyo-form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.klaviyo-form button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.klaviyo-form button:hover {
+    opacity: 0.9;
+}
+
+/* new kalvio  */
+/* Add to your CSS */
+.klaviyo-form button {
+    transition: all 0.3s ease;
+}
+
+.klaviyo-form button:hover {
+    background-color: var(--hover-bg, #8e5fd5) !important;
+    color: var(--hover-text, #ffffff) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.field-group {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+.remove-field {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#reset-form-styles{
+    margin-top: 0.3rem; 
+}
+ 
+.klaviyo-form-container {
+    position: relative;
+    padding-bottom: 0.3rem;
+}
+.klaviyo-form-container button{
+    position: absolute;
+    bottom: -15%; 
+    width: 50%; 
+   
+}
+

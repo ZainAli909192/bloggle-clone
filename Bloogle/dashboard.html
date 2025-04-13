@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="loader.js"></script>
+
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 class="logo">BLOGS+</h2>
+            <nav class="nav-links">
+                <a href="./dashboard.html" class="active">Dashboard</a>
+                <a href="./view-blogs.html">Blog Posts</a>
+                <a href="./templates.html">Templates</a>
+                <a href="./analytics.html">Analytics</a>
+                <a href="./seo.html">SEO Optimization</a>
+                <a href="./setting.html">Settings</a>
+                <a href="./">Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <header>
+                <h1>Dashboard Overview</h1>
+            </header>
+
+            <!-- Actions Section Moved to Top -->
+            <section class="actions">
+               <a href="./editor.html">
+
+                   <button class="action-btn" onclick="window.location.href = './editor.html'">Create New Blog</button>
+               </a> 
+                <button class="action-btn" onclick="window.location.href = './view-blogs.html'">
+                    <i class="fa-solid fa-eye"></i>
+                     Blogs</button>
+                    <button class="action-btn" onclick="window.location.href = './templates.html'">
+                    <i class="fa-solid fa-eye"></i>
+                    
+                     Templates</button>
+            </section>
+
+            <section class="dashboard-widgets">
+               
+                <div class="widget blog-analytics">
+                    <h3>Blog Analytics</h3>
+                    <div class="placeholder">[Placeholder for Analytics Graph]</div>
+                    <p>Track blog views, engagement, and performance trends.</p>
+                </div>
+               
+                <div class="widget quick-stats">
+                    <h3>Quick Stats</h3>
+                    <p><strong>Total Blogs:</strong> <span class="total-blogs">25</span></p>
+                    <p><strong>SEO Health</strong></p>
+                    <div class="progress-bar"><div class="progress" style="width: 85%;"></div></div>
+                    <p><strong>Top Performing Blog:</strong> <span class="top-blog" >"Holiday Sale Tips"</span></p>
+                    <p><strong>Total views:</strong> <span class="total-views">25000</span></p>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    loadDashboardData();
+
+    async function loadDashboardData() {
+        try {
+            const response = await fetch('./apis/dashboard.php');
+            const data = await response.json();
+            console.log("API Data:", data); // Debugging line
+
+            if (response.ok) {
+                // Update quick stats
+                document.querySelector('.total-blogs').textContent = data.total_blogs;
+                
+                if (data.top_blog) {
+                    document.querySelector('.top-blog').textContent = 
+                        `"${data.top_blog.title}" (${data.top_blog.views} views)`;
+                }
+
+                // Update analytics graph
+                const analyticsContainer = document.querySelector('.blog-analytics .placeholder');
+                if (data.analytics && data.analytics.length > 0) {
+                    const maxViews = Math.max(...data.analytics.map(day => day.daily_views));
+                    const scaleFactor = maxViews > 0 ? 180 / maxViews : 1;
+                    
+                    analyticsContainer.innerHTML = `
+                        <div class="analytics-graph">
+                            ${data.analytics.map(day => `
+                                <div class="bar-container">
+                                    <div class="bar" 
+                                         style="height: ${day.daily_views * scaleFactor}px;"
+                                         title="${day.date}: ${day.daily_views} views">
+                                    </div>
+                                    <span>${formatDate(day.date)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <p class="graph-note">Last 7 days of views</p>
+                    `;
+                } else {
+                    analyticsContainer.innerHTML = '<p>No view data available for the last 7 days</p>';
+                }
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            document.querySelector('.blog-analytics .placeholder').innerHTML = 
+                '<p class="error">Could not load analytics data</p>';
+        }
+    }
+
+    function formatDate(dateString) {
+        const options = { weekday: 'short', month: 'short', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString('en-US', options);
+    }
+});
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

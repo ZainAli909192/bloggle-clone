@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile</title>
+    <link rel="stylesheet" href="settings.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="loader.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 class="logo">BLOGS+</h2>
+            <nav class="nav-links">
+                <a href="dashboard.html">Dashboard Home</a>
+                <a href="#">Templates</a>
+                <a href="#">Analytics</a>
+                <a href="#">SEO Optimization</a>
+                <a href="./setting.html">Settings</a>
+                <a href="./">Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <header>
+                <h1>Update Profile</h1>
+            </header>
+
+            <section class="profile-container">
+                <div class="profile-card">
+                    
+
+                    <form id="profileForm">
+                        <label for="fullName">Full Name:</label>
+                        <input type="text" id="fullName" >
+
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" >
+
+                        <label for="bio">Bio:</label>
+                        <textarea id="bio" rows="3" resize="none"></textarea>
+
+                        <label for="password">New Password:</label>
+                        <input type="password" id="password" >
+
+                        <button type="submit" class="action-btn">Update Profile</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+       <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const profileForm = document.getElementById('profileForm');
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    profileForm.prepend(errorDiv);
+
+    // Load the current user's profile (no need for URL parameter)
+    fetchUserProfile();
+
+    profileForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = {
+            full_name: document.getElementById('fullName').value,
+            email: document.getElementById('email').value,
+            bio: document.getElementById('bio').value,
+            password: document.getElementById('password').value
+        };
+        
+        try {
+            const response = await fetch('./apis/users.php', {
+                method: 'PUT', // Always use PUT since we're updating the logged-in user
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include', // Important for session cookies
+                body: JSON.stringify(formData)
+            });
+            
+            // const result = await response.json();
+            const result = await response.text();
+            console.warn(result);
+            
+            showMessage(result)
+            
+            if (response.ok) {
+                showMessage(result.message || 'Profile updated successfully', 'success');
+                document.getElementById('password').value = '';
+                
+                // Update the displayed data in case of changes
+                fetchUserProfile();
+            } else {
+                showMessage(result.message, 'error');
+                throw new Error(result.error || 'Failed to update profile');
+
+            }
+        } catch (error) {
+            showMessage(error.message, 'error');
+        }
+    });
+    
+    async function fetchUserProfile() {
+        try {
+            const response = await fetch('./apis/users.php', {
+                credentials: 'include' // Send session cookie
+            });
+            const user = await response.json();
+            
+            if (response.ok) {
+                document.getElementById('fullName').value = user.full_name || '';
+                document.getElementById('email').value = user.email || '';
+                document.getElementById('bio').value = user.bio || '';
+            } else {
+                throw new Error(user.error || 'Failed to load profile');
+            }
+        } catch (error) {
+            showMessage(error.message, 'error');
+            
+            // If unauthorized, redirect to login
+            if (error.message.includes('Unauthorized')) {
+                window.location.href = 'login.html';
+            }
+        }
+    }
+    
+    function showMessage(message, type) {
+        errorDiv.textContent = message;
+        // errorDiv.className = `error-message ${type}`;
+        errorDiv.classList.add("error-message")
+        errorDiv.style.display="block"
+        setTimeout(() => {
+            // errorDiv.className = 'error-message';
+            errorDiv.textContent = '';
+            errorDiv.classList.remove("error-message")
+        }, 3000);
+    }
+});
+       </script>
+       
+       <script src="script.js"></script>
+</body>
+</html>

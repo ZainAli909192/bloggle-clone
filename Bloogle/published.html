@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Published Blog</title>
+    <link rel="stylesheet" href="editor.css">
+    <link rel="stylesheet" href="style2.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="loader.js"></script>
+
+    <!-- <link rel="stylesheet" href="editor.css"> -->
+</head>
+<body>
+    <style>
+        .published-content, .blog-title{
+            padding: 20px;
+            border-radius: 4px;
+            margin: 0% 10%;
+        }
+        body{
+            display: block;
+        }
+    </style>
+  <!-- Navbar  -->
+  <nav class="navbar" id="top">
+    <div class="navbar-logo">
+        <img src="./img/logo.png" alt=" logo">
+    </div>
+    <ul class="navbar-links">
+            <li> 
+                <a href="./all-blogs.html"> 
+                    <i class="fas fa-box-open"></i> <!-- Products Icon -->
+                    Products
+                </a>
+            </li>
+            <li> 
+                <a href="./.#pricing"> 
+                    <i class="fas fa-tags"></i> <!-- Pricing Icon -->
+                    Pricing
+                </a>
+            </li>
+            <li>                
+                <a href="https://bloggle.app/"> 
+                    <i class="fas fa-users"></i> <!-- Clients Icon -->
+                    Clients 
+                </a>
+            </li>                
+            <li>
+                <a href="./">
+                    <i class="fas fa-book-open"></i> <!-- Resources Icon -->
+                    Resources
+                </a>
+            </li> 
+            <li>
+                <a href="#watch-demo">
+                    <i class="fas fa-play-circle"></i> <!-- Watch Demo Icon -->
+                    Watch Demo
+                </a>
+            </li>  
+        
+    </ul>
+    <div></div>
+   
+    <div class="navbar-toggle">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+</nav>
+<div class="blog-title"></div>
+    <div class="published-content"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const blogId = urlParams.get('id');
+            
+            if (blogId) {
+                fetchBlogPost(blogId);
+            } else {
+                // Fallback to localStorage if no ID found
+                const publishedContent = localStorage.getItem('publishedContent');
+                document.querySelector('.published-content').innerHTML = 
+                    publishedContent || '<p>No content available. Blog id not valid</p>';
+            }
+        });
+        
+        async function fetchBlogPost(id) {
+            try {
+                const response = await fetch(`./apis/blogs.php?id=${id}`);
+                
+                // First check if response is OK
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+                    throw new Error(errorData.error || `Server returned ${response.status}`);
+                }
+                
+                // Get response as text first for debugging
+                const responseText = await response.text();
+                
+                // Try to parse JSON
+                let blog;
+                try {
+                    blog = JSON.parse(responseText);
+                } catch (e) {
+                    console.error('JSON parse error:', e, 'Response:', responseText);
+                    throw new Error('Invalid data received from server');
+                }
+                
+                console.log('Blog data:', blog);
+        
+                // Display the blog content
+                if (blog.content) {
+                    document.querySelector('.published-content').innerHTML = blog.content;
+                } else {
+                    throw new Error('No content found in blog post');
+                }
+                
+                // Set the title if you have a title element
+                const titleElement = document.querySelector('.blog-title');
+                if (titleElement) {
+                    titleElement.textContent = `Title of blog: ${blog.title} ` || 'Untitled Post';
+                }
+                
+                // Display creation date if available
+                const dateElement = document.querySelector('.blog-date');
+                if (dateElement && blog.created_at) {
+                    dateElement.textContent = new Date(blog.created_at).toLocaleString();
+                }
+                
+                // Apply styles if they exist in localStorage
+                const dropZoneStyles = localStorage.getItem('dropZoneStyles');
+                if (dropZoneStyles) {
+                    try {
+                        const styles = JSON.parse(dropZoneStyles);
+                        const contentDiv = document.querySelector('.published-content');
+                        if (styles.backgroundColor) contentDiv.style.backgroundColor = styles.backgroundColor;
+                        if (styles.backgroundImage) contentDiv.style.backgroundImage = styles.backgroundImage;
+                        if (styles.backgroundRepeat) contentDiv.style.backgroundRepeat = styles.backgroundRepeat;
+                        if (styles.backgroundSize) contentDiv.style.backgroundSize = styles.backgroundSize;
+                        if (styles.backgroundAttachment) contentDiv.style.backgroundAttachment = styles.backgroundAttachment;
+                    } catch (e) {
+                        console.error('Error parsing styles:', e);
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                const localContent = localStorage.getItem('publishedContent');
+                document.querySelector('.published-content').innerHTML = `
+                    <div class="error-message">
+                        <p>Error loading blog post: ${error.message}</p>
+                        ${localContent ? '<p>Showing locally saved version instead.</p>' + localContent : '<p>No local content available.</p>'}
+                    </div>
+                `;
+            }
+        }
+        </script>
+
+</body>
+</html>

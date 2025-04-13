@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor</title>
+    <link rel="stylesheet" href="editor.css">
+    <link rel="stylesheet" href="style2.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="loader.js"></script>
+
+</head>
+<body>
+    <style>
+        .error-main{
+            background-color: red;
+            color: white;
+            position: absolute;
+            right: 5%;
+            bottom: 5%;
+            z-index: 9999;
+            padding: 10px;
+            border-radius: 5px;
+        display: none;
+        }
+        .error-main.warning{
+            background-color:red;
+           display: block;
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-10px); }
+            80% { transform: translateX(10px); }
+            100% { transform: translateX(0); }  
+        }
+        .error-main.success{
+            background-color: green;
+           display: block;
+        }
+    </style> 
+
+     <!-- Navbar  -->
+     <nav class="navbar" id="top">
+        <div class="navbar-logo">
+            <img src="./img/logo.png" alt=" logo">
+        </div>
+        <ul class="navbar-links">
+                <li> 
+                    <!-- <a href="https://apps.shopify.com/bloggle?utm_medium=website&utm_campaign=_&utm_source=homepage&_gl=1*11bps7*_gcl_au*MjEyMzQ1MjczMS4xNzM3NDQ1MjQy">  -->
+                    <a href="./all-blogs.html"> 
+                        <i class="fas fa-box-open"></i> <!-- Products Icon -->
+                        Products
+                    </a>
+                </li>
+                <li> 
+                    <a href="./.#pricing"> 
+                        <i class="fas fa-tags"></i> <!-- Pricing Icon -->
+                        Pricing
+                    </a>
+                </li>
+                <li>                
+                    <a href="https://bloggle.app/"> 
+                        <i class="fas fa-users"></i> <!-- Clients Icon -->
+                        Clients 
+                    </a>
+                </li>                
+                <li>
+                    <a href="./">
+                        <i class="fas fa-book-open"></i> <!-- Resources Icon -->
+                        Resources
+                    </a>
+                </li> 
+                <li>
+                    <a href="#watch-demo">
+                        <i class="fas fa-play-circle"></i> <!-- Watch Demo Icon -->
+                        Watch Demo
+                    </a>
+                </li>  
+            
+        </ul>
+        <div></div>
+       
+        <div class="navbar-toggle">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </nav> 
+
+    <main>
+        <div class="error-main"></div>
+    <!-- Left Sidebar -->
+    <div class="sidebar">
+        <h3>Draggable Elements</h3>
+    <div class="categories">
+        <input type="search" placeholder="Search element..." id="element-search" class="search-input">
+        <div class="elements-container">
+            <h4>Content</h4>
+            <div class="draggable" draggable="true" data-type="heading"><i class="fas fa-heading"></i>  Heading</div>
+            <div class="draggable" draggable="true" data-type="paragraph"><i class="fas fa-paragraph"></i> Paragraph</div>
+            <div class="draggable" draggable="true" data-type="table-of-contents"><i class="fas fa-list"></i> Table of Contents</div>
+            <div class="draggable" draggable="true" data-type="summary"><i class="fas fa-file-alt"></i> Summary</div>
+            <div class="draggable" draggable="true" data-type="faq"><i class="fas fa-question-circle"></i> FAQ</div>
+            <div class="draggable" draggable="true" data-type="quote"><i class="fas fa-quote-right"></i> Quote</div>
+            <div class="draggable" draggable="true" data-type="two-text-columns"><i class="fas fa-pen"></i> Two Text Columns</div>
+
+            <h4>Medias</h4>
+            <div class="draggable" draggable="true" data-type="image"><i class="fas fa-image"></i> Image (Product)</div>
+            <!-- <div class="draggable" draggable="true" data-type="images-gallery">Images Gallery</div> -->
+            <div class="draggable" draggable="true" data-type="two-images-columns"><i class="fas fa-images"></i> Two Images Columns</div>
+            <div class="draggable" draggable="true" data-type="three-images-columns"><i class="fas fa-images"></i> Three Images Columns</div>
+            <div class="draggable" draggable="true" data-type="text-image"><i class="fas fa-pen"></i> <i class="fas fa-image"> </i> &nbsp;Text + Image </i></div>
+            <div class="draggable" draggable="true" data-type="video"><i class="fas fa-video"></i> Video</div>
+            <div class="draggable" draggable="true" data-type="text-video"><i class="fas fa-pen"></i> <i class="fas fa-video"></i>&nbsp; Text + Video </div>
+
+            <h4>Products</h4>
+            <div class="draggable" draggable="true" data-type="one-product"><i class="fas fas fab fa-product-hunt"></i> One Product</div>
+            <!-- <div class="draggable" draggable="true" data-type="products-gallery">Products Gallery</div> -->
+            <!-- <div class="draggable" draggable="true" data-type="popular">Popular</div> -->
+            <div class="draggable" draggable="true" data-type="text-product"> <i class="fas fa-pen"></i> <i class="fas fa-image"> </i> &nbsp;Product + Text</div>
+            <div class="draggable" draggable="true" data-type="product-grid"> <i class="fas fab fa-product-hunt"></i> Product Grid</div>
+
+           
+            <h4>Other</h4>
+            <div class="draggable" draggable="true" data-type="button"><i class="fas fa-circle" ></i> Button</div>
+            <div class="draggable" draggable="true" data-type="divider"><i class="fas fa-minus"></i> Divider</div>
+            <div class="draggable" draggable="true" data-type="form">
+                <i class="fas fa-envelope"></i> Klaviyo Form
+            </div>
+            <div class="draggable" draggable="true" data-type="recipie-header">
+                <i class="fas fa-utensils"></i> Recipe Header
+            </div>
+      
+        </div>
+        </div>
+    </div>
+
+    <div class="editor desktop-view" id="editor">
+        <!-- Icons for Responsiveness -->
+        <div class="view-toggle">
+            <i class="fas fa-laptop" onclick="changeView('desktop'); toggleActiveClass(this)" > </i>
+            <i class="fas fa-tablet-alt" onclick="changeView('tablet'); toggleActiveClass(this)" ></i>
+            <i class="fas fa-mobile-alt" onclick="changeView('mobile'); toggleActiveClass(this)" ></i>
+       <div class="main">
+            <div >SEO <span class="seo-count">1</span> </div>
+            <div>UX <span class="ux-count">1</span></div>
+        </div>
+    </div>
+    <div class="seo-ux-wrapper">
+
+        <div class="seo-report"></div>
+        <div class="ux-report"></div>
+    </div>
+        <p>Drop your elements here     
+        </p>
+        <div class="blog-title">
+
+            <label for="blog-title">Title of blog</label>
+            <input type="text" required name="blog-title" id="blog-title" placeholder="Enter blog title...">
+        </div>
+        <div class="drop-zone"></div>
+   
+    </div>
+
+    <div class="customization-panel">
+        <div class="buttons" id="buttons">
+            <button class="btn-success" id="blog-create" style="margin-bottom: 1rem;">
+                <i class="fas fa-paper-plane"></i>
+                + Blog</button>
+                <button class="btn-success" style="margin-bottom: 1rem;" id="create-template">
+                    <i class="fas fa-paper-plane"></i>
+                    + Template </button>
+                </div>
+                <button class="btn-success" style="margin-bottom: 1rem;" 
+                    id="update">
+                    <i class="fas fa-edit"></i>
+                    Update </button>
+                    
+        <h3>Customize Element</h3>
+        <div id="customization-options">
+            <p>Select an element to customize</p>
+        </div>
+    </div>
+</div>
+
+
+    
+</main>
+
+    <script src="editor.js"></script>
+</body>
+</html>

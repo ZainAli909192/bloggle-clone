@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Templates</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="loader.js"></script>
+
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 class="logo">BLOGS+</h2>
+            <nav class="nav-links">
+                <a href="./dashboard.html">Dashboard</a>
+                <a href="./view-blogs.html">Blog Posts</a>
+                <a href="./templates.html" class="active">Templates</a>
+                <a href="./analytics.html">Analytics</a>
+                <a href="./seo.html">SEO Optimization</a>
+                <a href="./setting.html">Settings</a>
+                <a href="./">Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <header>
+                <h1>Templates</h1>
+            </header>
+
+            <!-- Search and Filters -->
+            <section class="actions">
+                <input type="text" class="search-bar" placeholder="Search template by title">
+                <div class="sort-dropdown">
+                    <button class="sort-btn">Sort ▼</button>
+                    <div class="sort-options">
+                        <button data-sort="title_asc">Title (A-Z) ▲</button>
+                        <button data-sort="title_desc">Title (Z-A) ▼</button>
+                        <button data-sort="updated_asc">Oldest First ▲</button>
+                        <button data-sort="updated_desc">Newest First ▼</button>
+                    </div>
+                </div>
+                <button class="filter-btn" onclick="window.location.href='./editor.html'"> + Create Template</button>
+            </section>
+
+            <!-- Template List -->
+            <section class="blog-list">
+                <!-- Dynamic content will be inserted here -->
+            </section>
+        </main>
+        <div class="error-main"></div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentSort = 'updated_desc';
+        const error = document.querySelector(".error-main");
+        
+        // Global functions
+        async function fetchBlogs() {
+            try {
+                const searchBar = document.querySelector('.search-bar');
+                const params = new URLSearchParams({
+                    search: searchBar.value,
+                    sort: currentSort
+                });
+                
+                const response = await fetch(`./apis/templates.php?${params.toString()}`);
+                const blogs = await response.json();
+                
+                renderBlogList(blogs);
+            } catch (err) {
+                console.error('Error loading templates:', err);
+                showError("Failed to load templates");
+            }
+        }
+
+        async function deleteBlog(blogId) {
+            if (confirm('Are you sure you want to delete this template?')) {
+                try {
+                    const response = await fetch(`./apis/templates.php?id=${blogId}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    if (response.ok) {
+                        fetchBlogs();
+                        showSuccess("Template deleted successfully");
+                    } else {
+                        throw new Error('Failed to delete template');
+                    }
+                } catch (err) {
+                    console.error('Error deleting template:', err);
+                    showError("Failed to delete template");
+                }
+            }
+        }
+
+        function editBlog(blogId) {
+            window.location.href = `editor.html?a=templates&id=${blogId}`;
+        }
+
+        function useTemplate(blogId) {
+            window.location.href = `editor.html?a=templates&id=${blogId}`;
+        }
+
+        function renderBlogList(blogs) {
+            const blogList = document.querySelector('.blog-list');
+            blogList.innerHTML = '';
+            
+            if (blogs.length === 0) {
+                blogList.innerHTML = '<p class="no-blogs">No templates found</p>';
+                return;
+            }
+            
+            blogs.forEach(blog => {
+                const blogItem = document.createElement('div');
+                blogItem.className = 'blog-item';
+                blogItem.dataset.id = blog.id;
+                
+                blogItem.innerHTML = `
+                    <div class="blog-info">
+                        <h3>${escapeHtml(blog.title)}</h3>
+                        <p class="last-update">${blog.last_update}</p>
+                    </div>
+                    <div class="score">
+                        <span class="seo-score green">seo ${blog.seo_score || 0}</span>
+                        <span class="ux-score yellow">ux ${blog.ux_score || 0}</span>
+                    </div>
+                    <div class="actions">
+                        <button class="edit-btn">
+                            <i class="fas fa-edit"></i> 
+                        </button>
+                        <button class="delete-btn">
+                            <i class="fas fa-trash"></i> 
+                        </button>
+                        <button class="use-template-btn edit-btn">
+                            <i class="fas fa-copy"></i> Use
+                        </button>
+                    </div>
+                `;
+                blogList.appendChild(blogItem);
+            });
+        }
+
+        function showError(message) {
+            error.textContent = message;
+            error.style.backgroundColor = '#f44336';
+            error.style.display = 'block';
+            setTimeout(() => error.style.display = 'none', 3000);
+        }
+
+        function showSuccess(message) {
+            error.textContent = message;
+            error.style.backgroundColor = '#4CAF50';
+            error.style.display = 'block';
+            setTimeout(() => error.style.display = 'none', 2000);
+        }
+
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function() {
+                const context = this, args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    func.apply(context, args);
+                }, wait);
+            };
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchBar = document.querySelector('.search-bar');
+            const sortBtn = document.querySelector('.sort-btn');
+            const sortOptions = document.querySelectorAll('.sort-options button');
+            const blogList = document.querySelector('.blog-list');
+            
+            // Event delegation for all buttons
+            blogList.addEventListener('click', (e) => {
+                const blogItem = e.target.closest('.blog-item');
+                if (!blogItem) return;
+                
+                const blogId = blogItem.dataset.id;
+                
+                if (e.target.closest('.delete-btn')) {
+                    deleteBlog(blogId);
+                } else if (e.target.closest('.edit-btn')) {
+                    editBlog(blogId);
+                } else if (e.target.closest('.use-template-btn')) {
+                    useTemplate(blogId);
+                }
+            });
+            
+            // Search functionality
+            searchBar.addEventListener('input', debounce(fetchBlogs, 300));
+            
+            // Sort option selection
+            sortOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    currentSort = option.dataset.sort;
+                    const arrow = option.textContent.includes('▲') ? '▲' : '▼';
+                    const baseText = option.textContent.split(' ')[0];
+                    sortBtn.textContent = `${baseText} ${arrow}`;
+                    fetchBlogs();
+                });
+            });
+            
+            // Initial load
+            fetchBlogs();
+        });
+    </script>
+</body>
+</html>
