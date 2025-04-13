@@ -14,6 +14,24 @@ main {
     display: flex;
     height: 100vh;
 }
+.blog-title { 
+    display: flex;
+    padding: 1rem 0;
+}
+.blog-title label{
+    margin-top: 10px;
+    margin-right: 10px;
+}
+.blog-title input::placeholder{
+color: #848181;
+}
+.blog-title input{
+    padding: 10px;
+    width: fit-content;
+    outline: none;
+    border-radius: 8px;
+    border: 1px solid;
+} 
 :root {
     --primary-color: #7c3aed;
     --secondary-color: #4c1d95;
@@ -756,4 +774,14 @@ border: 0.2px solid var(--primary-color);
     align-items: center;
     justify-content: center;
     gap: 5px;
+}
+#buttons{
+    display: flex;
+    gap: 1rem;
+}
+#buttons button{
+font-size: 0.8rem;    
+}
+#update{
+    display: none;
 }
