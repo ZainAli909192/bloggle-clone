@@ -1,6 +1,32 @@
 const draggables = document.querySelectorAll('.draggable');
 const dropZone = document.querySelector('.drop-zone');
 const customizationPanel = document.getElementById('customization-options');
+
+
+function addElementToDropZone(type, insertBeforeElement = null) {
+    let newElement = createElement(type);
+    if (newElement) {
+        newElement.classList.add('dropped-item');
+        
+      
+        
+      
+        dropZone.appendChild(newElement);
+        showCustomizationOptions(newElement);
+        // Click to Edit
+        newElement.addEventListener('click', (e) => {
+            // Prevent triggering drop zone click handler
+            e.stopPropagation();
+            selectedElement = newElement;
+            showCustomizationOptions(newElement);
+        });
+        
+        // Check SEO/UX after adding
+        setTimeout(checkSEOAndUX, 500);
+    }
+}
+
+// dropzone creation 
 document.addEventListener('DOMContentLoaded', () => {
 
     let selectedElement = null;
@@ -11,6 +37,12 @@ document.addEventListener('DOMContentLoaded', () => {
         draggable.addEventListener('dragstart', event => {
             event.dataTransfer.setData('type', draggable.getAttribute('data-type'));
         });
+          // Click Event for draggable items
+          draggable.addEventListener('click', () => {
+            const type = draggable.getAttribute('data-type');
+            addElementToDropZone(type);
+        });
+       
     });
 
     // Allow Drop
@@ -18,18 +50,56 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
     });
 
-    // Handle Drop Event
-    dropZone.addEventListener('drop', event => {
-        event.preventDefault();
-        setTimeout(checkSEOAndUX, 500); // Small delay to allow drop to complete
+    // old Handle Drop Event
+    // dropZone.addEventListener('drop', event => {
+    //     event.preventDefault();
+    //     setTimeout(checkSEOAndUX, 500); // Small delay to allow drop to complete
 
+    //     const type = event.dataTransfer.getData('type');
+    //     if (!type) return; // Prevent empty drops
+
+    //     let newElement = createElement(type);
+    //     if (newElement) {
+    //         newElement.classList.add('dropped-item');
+    //         dropZone.appendChild(newElement);
+
+    //         // Click to Edit
+    //         newElement.addEventListener('click', () => {
+    //             selectedElement = newElement;
+    //             showCustomizationOptions(newElement);
+    //         });
+    //     }
+
+    // });
+    
+    // Add click handlers for the + signs
+
+// Add click handlers for the + signs
+dropZone.addEventListener('click', (event) => {
+    const target = event.target;
+    const element = target.closest('.dropped-item');
+    
+    if (element) {
         const type = event.dataTransfer.getData('type');
-        if (!type) return; // Prevent empty drops
-
+        if (!type) return;
+        
         let newElement = createElement(type);
         if (newElement) {
             newElement.classList.add('dropped-item');
-            dropZone.appendChild(newElement);
+            
+            // Get the pseudo-element position relative to the mouse click
+            const rect = element.getBoundingClientRect();
+            const clickX = event.clientX - rect.left;
+            
+            // Show alert for pseudo-element click
+            alert('Pseudo-element clicked! Position: ' + (clickX < rect.width / 2 ? 'left' : 'right'));
+            
+            // If clicked left of center, insert before
+            if (clickX < rect.width / 2) {
+                dropZone.insertBefore(newElement, element);
+            } else {
+                dropZone.insertBefore(newElement, element.nextSibling);
+            }
 
             // Click to Edit
             newElement.addEventListener('click', () => {
@@ -37,26 +107,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 showCustomizationOptions(newElement);
             });
         }
-
-        // Update your drop handler to use the same function
-        dropZone.addEventListener('drop', event => {
+    }
+});
+// Modify the drop event to handle the + signs
+dropZone.addEventListener('drop', event => {
     event.preventDefault();
     setTimeout(checkSEOAndUX, 500);
-    
+
     const type = event.dataTransfer.getData('type');
     if (!type) return;
-    
+
     let newElement = createElement(type);
     if (newElement) {
         newElement.classList.add('dropped-item');
-        selectedElement = newElement;
         dropZone.appendChild(newElement);
-        
-        // Use the same handler function
-        newElement.addEventListener('click', handleElementClick);
+
+        // Add click handlers for the + signs
+        const plusBefore = document.createElement('div');
+        plusBefore.className = 'plus-sign before-plus';
+        plusBefore.innerHTML = '+';
+        newElement.insertBefore(plusBefore, newElement.firstChild);
+
+        const plusAfter = document.createElement('div');
+        plusAfter.className = 'plus-sign after-plus';
+        plusAfter.innerHTML = '+';
+        newElement.appendChild(plusAfter);
+
+        // Click to Edit
+        newElement.addEventListener('click', () => {
+            selectedElement = newElement;
+            showCustomizationOptions(newElement);
+        });
     }
 });
-    });
 
 // SEO and UX Checker Function (Count-based)
 function checkSEOAndUX() {
@@ -5090,69 +5173,69 @@ function updateBoxShadow(element) {
     element.style.boxShadow = `${x}px ${y}px ${blur}px ${spread}px ${color}`;
 }
 
-document.getElementById('box-shadow-x').addEventListener('input', () => updateBoxShadow(element));
-document.getElementById('box-shadow-y').addEventListener('input', () => updateBoxShadow(element));
-document.getElementById('box-shadow-blur').addEventListener('input', () => updateBoxShadow(element));
-document.getElementById('box-shadow-spread').addEventListener('input', () => updateBoxShadow(element));
-document.getElementById('box-shadow-color').addEventListener('input', () => updateBoxShadow(element));
+    document.getElementById('box-shadow-x').addEventListener('input', () => updateBoxShadow(element));
+    document.getElementById('box-shadow-y').addEventListener('input', () => updateBoxShadow(element));
+    document.getElementById('box-shadow-blur').addEventListener('input', () => updateBoxShadow(element));
+    document.getElementById('box-shadow-spread').addEventListener('input', () => updateBoxShadow(element));
+    document.getElementById('box-shadow-color').addEventListener('input', () => updateBoxShadow(element));
 
-// Event listeners for transform customization
-document.getElementById('rotate').addEventListener('input', (e) => {
-    const rotate = e.target.value;
-    const transform = element.style.transform.replace(/rotate\([^)]+\)/, '').trim();
-    element.style.transform = `${transform} rotate(${rotate}deg)`;
-});
+    // Event listeners for transform customization
+    document.getElementById('rotate').addEventListener('input', (e) => {
+        const rotate = e.target.value;
+        const transform = element.style.transform.replace(/rotate\([^)]+\)/, '').trim();
+        element.style.transform = `${transform} rotate(${rotate}deg)`;
+    });
 
-document.getElementById('skew').addEventListener('input', (e) => {
-    const skew = e.target.value;
-    const transform = element.style.transform.replace(/skew\([^)]+\)/, '').trim();
-    element.style.transform = `${transform} skew(${skew}deg)`;
-});
+    document.getElementById('skew').addEventListener('input', (e) => {
+        const skew = e.target.value;
+        const transform = element.style.transform.replace(/skew\([^)]+\)/, '').trim();
+        element.style.transform = `${transform} skew(${skew}deg)`;
+    });
 
-document.getElementById('translate-x').addEventListener('input', (e) => {
-    const translateX = e.target.value;
-    const transform = element.style.transform.replace(/translateX\([^)]+\)/, '').trim();
-    element.style.transform = `${transform} translateX(${translateX}px)`;
-});
+    document.getElementById('translate-x').addEventListener('input', (e) => {
+        const translateX = e.target.value;
+        const transform = element.style.transform.replace(/translateX\([^)]+\)/, '').trim();
+        element.style.transform = `${transform} translateX(${translateX}px)`;
+    });
 
-document.getElementById('translate-y').addEventListener('input', (e) => {
-    const translateY = e.target.value;
-    const transform = element.style.transform.replace(/translateY\([^)]+\)/, '').trim();
-    element.style.transform = `${transform} translateY(${translateY}px)`;
-});
+    document.getElementById('translate-y').addEventListener('input', (e) => {
+        const translateY = e.target.value;
+        const transform = element.style.transform.replace(/translateY\([^)]+\)/, '').trim();
+        element.style.transform = `${transform} translateY(${translateY}px)`;
+    });
 
-document.getElementById('scale').addEventListener('input', (e) => {
-    const scale = e.target.value;
-    const transform = element.style.transform.replace(/scale\([^)]+\)/, '').trim();
-    element.style.transform = `${transform} scale(${scale})`;
-});
+    document.getElementById('scale').addEventListener('input', (e) => {
+        const scale = e.target.value;
+        const transform = element.style.transform.replace(/scale\([^)]+\)/, '').trim();
+        element.style.transform = `${transform} scale(${scale})`;
+    });
 
-// Event listeners for background customization
-document.getElementById('section-bg-color').addEventListener('input', (e) => {
-    element.style.backgroundColor = e.target.value;
-});
+    // Event listeners for background customization
+    document.getElementById('section-bg-color').addEventListener('input', (e) => {
+        element.style.backgroundColor = e.target.value;
+    });
 
-document.getElementById('section-bg-image').addEventListener('input', (e) => {
-    element.style.backgroundImage = e.target.value ? `url("${e.target.value}")` : 'none';
-});
+    document.getElementById('section-bg-image').addEventListener('input', (e) => {
+        element.style.backgroundImage = e.target.value ? `url("${e.target.value}")` : 'none';
+    });
 
-// Action buttons
-document.getElementById('remove-text-product').addEventListener('click', () => {
-    element.remove();
-    customizationPanel.innerHTML = '';
-});
+    // Action buttons
+    document.getElementById('remove-text-product').addEventListener('click', () => {
+        element.remove();
+        customizationPanel.innerHTML = '';
+    });
 
-document.getElementById('reset-styles').addEventListener('click', () => {
-    element.removeAttribute('style');
-    textContent.removeAttribute('style');
-    productName.removeAttribute('style');
-    productDesc.removeAttribute('style');
-    productPrice.removeAttribute('style');
-    productImage.removeAttribute('style');
-    customizationPanel.innerHTML = '';
-    // Reopen the panel with default values
-    // (You might need to call this function again here)
-});
+    document.getElementById('reset-styles').addEventListener('click', () => {
+        element.removeAttribute('style');
+        textContent.removeAttribute('style');
+        productName.removeAttribute('style');
+        productDesc.removeAttribute('style');
+        productPrice.removeAttribute('style');
+        productImage.removeAttribute('style');
+        customizationPanel.innerHTML = '';
+        // Reopen the panel with default values
+        // (You might need to call this function again here)
+    });
 }
 
     else if (element.tagName !== 'HR'   ) {
@@ -5456,23 +5539,23 @@ customizationHTML = `
 <button 
     onclick="document.querySelector('.text').classList.toggle('show');
     document.querySelector('.design').classList.remove('show')" >
-        Text
+        <i class="fas fa-font"></i>
 </button>
 
     <button 
         onclick="document.querySelector('.text').classList.remove('show'); 
          document.querySelector('.design').classList.toggle('show')">
-        Design
+        <i class="fas fa-gear"></i> Setting
     </button>
 
     </br>
     </br>
 <div class="text">
-<h4>Text Customization</h4>
+<h4>Text Customization</h4> 
     <div class="two-column-grid"> 
         <!-- Row 1 -->
         <div>
-            <label for="text"><i class="fas fa-font"></i> Text:</label>
+            <label for="text"><i class="fas fa-font"></i> Title:</label>
             <input type="text" id="text" value="${element.textContent || ''}">
         </div>
         <div>
