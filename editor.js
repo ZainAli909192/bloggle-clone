@@ -5986,3 +5986,192 @@ function updateMargin() {
     selectedElement.style.margin = `${top} ${right} ${bottom} ${left}`;
 }
 
+// Save element functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const saveElementBtn = document.querySelector('#save-element');
+    
+    saveElementBtn.addEventListener('click', async () => {
+        if (!selectedElement) {
+            alert('Please select an element to save');
+            return;
+        }
+
+        try {
+            // Get the element's HTML and styles
+            const elementType = selectedElement.tagName.toLowerCase();
+            const elementHtml = selectedElement.outerHTML;
+            
+            // Get computed styles
+            const computedStyles = window.getComputedStyle(selectedElement);
+            const styles = {};
+            
+            // Extract relevant styles (you can add more properties as needed)
+            const styleProps = [
+                'color', 'background-color', 'font-size', 'font-family', 'font-weight',
+                'padding', 'margin', 'border', 'border-radius', 'text-align', 'width', 'height',
+                'display', 'flex-direction', 'justify-content', 'align-items', 'gap'
+            ];
+            
+            styleProps.forEach(prop => {
+                styles[prop] = computedStyles.getPropertyValue(prop);
+            });
+            
+            // Send data to server
+            const response = await fetch('./apis/elements.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    element_type: elementType,
+                    element_html: elementHtml,
+                    element_styles: JSON.stringify(styles)
+                })
+            });
+            
+            // const result = await response.json();
+            const result = await response.text();
+            alert(result);
+            
+            if (result.success) {
+                alert('Element saved successfully!');
+                console.log('Saved element ID:', result.element_id);
+            } else {
+                throw new Error(result.message || 'Failed to save element');
+            }
+            
+        } catch (error) {
+            console.error('Error saving element:', error);
+            alert('Error saving element: ' + error.message);
+        }
+    });
+
+    // Quick Library functionality
+    const quickLibraryBtn = document.querySelector('.quick-library');
+    const categoriesSection = document.querySelector('.categories');
+    
+    quickLibraryBtn.addEventListener('click', async () => {
+        try {
+            // Toggle active state
+            quickLibraryBtn.classList.toggle('active');
+            
+            // If already showing saved elements, remove them
+            const existingLibrary = document.querySelector('.saved-elements-container');
+            if (existingLibrary) {
+                existingLibrary.remove();
+                return;
+            }
+            
+            // Show loading state
+            quickLibraryBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+            
+            // Fetch saved elements
+            const response = await fetch('./apis/elements.php');
+            const result = await response.json();
+            
+            if (!result.success) {
+                throw new Error(result.message || 'Failed to load saved elements');
+            }
+            
+            // Create container for saved elements
+            const savedElementsContainer = document.createElement('div');
+            savedElementsContainer.className = 'elements-container';
+            savedElementsContainer.innerHTML = `
+                ${result.data.length > 0 
+                    ? result.data.map(element => {
+                        // Parse the HTML to get the element type
+                        const temp = document.createElement('div');
+                        temp.innerHTML = element.element_html;
+                        const elementType = temp.firstElementChild?.getAttribute('data-type') || 'element';
+                        
+                        // Get the icon based on element type
+                        const iconMap = {
+                            'heading': 'fa-heading',
+                            'paragraph': 'fa-paragraph',
+                            'table-of-contents': 'fa-list',
+                            'summary': 'fa-file-alt',
+                            'faq': 'fa-question-circle',
+                            'quote': 'fa-quote-right',
+                            'two-text-columns': 'fa-pen',
+                            'image': 'fa-image',
+                            'two-images-columns': 'fa-images',
+                            'three-images-columns': 'fa-images',
+                            'text-image': 'fa-image',
+                            'video': 'fa-video',
+                            'text-video': 'fa-video',
+                            'one-product': 'fa-product-hunt',
+                            'product-grid': 'fa-product-hunt',
+                            'button': 'fa-circle',
+                            'divider': 'fa-minus',
+                            'form': 'fa-envelope',
+                            'recipe-header': 'fa-utensils',
+                            'text-product': 'fa-image'
+                        };
+                        
+                        const iconClass = iconMap[elementType] || 'fa-save';
+                        
+                        return `
+                            <div class="draggable" draggable="true" 
+                                 data-html='${element.element_html.replace(/'/g, '&#39;')}'
+                                 data-styles='${element.element_styles.replace(/'/g, '&#39;')}'
+                                 data-type="${elementType}">
+                                <i class="fas ${iconClass}"></i> ${element.element_type || 'Saved Element'}
+                            </div>
+                        `;
+                    }).join('')
+                    : '<p class="no-elements">No saved elements yet</p>'
+                }
+            `;
+            
+            // Insert after the Quick Library button
+            quickLibraryBtn.insertAdjacentElement('afterend', savedElementsContainer);
+            
+            // Add event listeners to saved elements
+            savedElementsContainer.querySelectorAll('.draggable').forEach(element => {
+                element.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const html = element.getAttribute('data-html').replace(/&#39;/g, "'");
+                    const styles = JSON.parse(element.getAttribute('data-styles').replace(/&#39;/g, "'"));
+                    
+                    // Create a temporary container to parse the HTML
+                    const temp = document.createElement('div');
+                    temp.innerHTML = html;
+                    const newElement = temp.firstElementChild;
+                    
+                    // Apply styles
+                    Object.entries(styles).forEach(([prop, value]) => {
+                        if (value) newElement.style[prop] = value;
+                    });
+                    
+                    // Add to drop zone
+                    dropZone.appendChild(newElement);
+                    
+                    // Close the saved elements list
+                    savedElementsContainer.remove();
+                    quickLibraryBtn.classList.remove('active');
+                    
+                    // Reinitialize event listeners for the new element
+                    reinitializeEditor();
+                });
+            });
+            
+        } catch (error) {
+            console.error('Error loading saved elements:', error);
+            alert('Error loading saved elements: ' + error.message);
+        } finally {
+            // Reset button state
+            quickLibraryBtn.innerHTML = '<i class="fas fa-bolt"></i> Quick Library';
+        }
+    });
+    
+    // Close saved elements when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!quickLibraryBtn.contains(e.target) && !document.querySelector('.saved-elements-container')?.contains(e.target)) {
+            const savedElements = document.querySelector('.saved-elements-container');
+            if (savedElements) {
+                savedElements.remove();
+                quickLibraryBtn.classList.remove('active');
+            }
+        }
+    });
+});

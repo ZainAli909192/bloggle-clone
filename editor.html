@@ -307,10 +307,13 @@
                     document.querySelector('.schedule-container').style.display = 'none';
                 });
             </script>
-<!-- main left  -->
+<!-- Main left dragable elements  -->
     <div class="categories">
-        <h3 >Draggable Elements</h3>
-
+        <h3>Draggable Elements</h3>
+        
+        <div class="quick-library">
+            <i class="fas fa-bolt"></i> Quick Library
+        </div>
         <input type="search" placeholder="Search element..." id="element-search" class="search-input">
         <div class="elements-container">
             <h4>Content</h4>
@@ -388,16 +391,24 @@
 
 <div class="customization-panel">
     <div class="buttons" id="buttons">
-        <button class="btn-success" id="blog-create" style="margin-bottom: 1rem;">
+        <button class="btn-success" id="blog-create" style="margin-bottom: 1rem; font-size: 10px; ">
             <i class="fas fa-paper-plane"></i>
             + Blog</button>
-            <button class="btn-success" style="margin-bottom: 1rem;" id="create-template">
+            <button class="btn-success" style="margin-bottom: 1rem; font-size: 10px;" id="create-template">
                 <i class="fas fa-paper-plane"></i>
                 + Template </button>
             </div>
-            <button class="btn-success" style="margin-bottom: 1rem;" id="create-template">
-                <i class="fas fa-paper-plane"></i>
-                Save as Draft </button>
+            <div class="buttons">
+                <button class="btn-success" style="margin-bottom: 1rem; font-size: 10px;" id="create-template">
+                    <i class="fas fa-paper-plane"></i>
+                    Save as Draft </button>
+                    
+                    <button class="btn-success" style="margin-bottom: 1rem; font-size: 10px;" id="save-element">
+                        <i class="fas fa-save"></i>
+                        Save element </button>
+                        
+                        
+                                    </div>
             <button class="btn-success" style="margin-bottom: 1rem;" 
                 id="update">
                 <i class="fas fa-edit"></i>
