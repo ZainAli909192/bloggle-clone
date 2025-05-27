@@ -9,6 +9,8 @@
 
 :root{
     --primary-color:#a777e3;
+    --primary-gradient: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+
 }
 
 body {
