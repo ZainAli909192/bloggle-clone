@@ -9,9 +9,19 @@
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="loader.js"></script>
+
 </head>
 <body>
     <style>
+        #schedule-timezone{
+            padding: 10px;
+            width: 60%;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+            margin-bottom: 1rem;
+        }
         .error-main{
             background-color: red;
             color: white;
@@ -50,31 +60,27 @@
                 <li> 
                     <!-- <a href="https://apps.shopify.com/bloggle?utm_medium=website&utm_campaign=_&utm_source=homepage&_gl=1*11bps7*_gcl_au*MjEyMzQ1MjczMS4xNzM3NDQ1MjQy">  -->
                     <a href="./all-blogs.html"> 
-                        <i class="fas fa-box-open"></i> <!-- Products Icon -->
                         Products
                     </a>
                 </li>
                 <li> 
                     <a href="./.#pricing"> 
-                        <i class="fas fa-tags"></i> <!-- Pricing Icon -->
                         Pricing
                     </a>
                 </li>
                 <li>                
                     <a href="https://bloggle.app/"> 
-                        <i class="fas fa-users"></i> <!-- Clients Icon -->
                         Clients 
                     </a>
                 </li>                
                 <li>
                     <a href="./">
-                        <i class="fas fa-book-open"></i> <!-- Resources Icon -->
+                        
                         Resources
                     </a>
                 </li> 
                 <li>
                     <a href="#watch-demo">
-                        <i class="fas fa-play-circle"></i> <!-- Watch Demo Icon -->
                         Watch Demo
                     </a>
                 </li>  
@@ -92,9 +98,219 @@
     <main>
         <div class="error-main"></div>
     <!-- Left Sidebar -->
-    <div class="sidebar">
-        <h3>Draggable Elements</h3>
+        
+    <div class="sidebar elements-sidebar">
+        <div class="buttons">
+            <button class="btn-info" id="element">
+                <!-- <i class="fas fa-plus"></i> -->
+                Element
+            </button>
+            <button class="btn-info" id="update-seo">
+                <!-- <i class="fas fa-searchengin"></i> -->
+                SEO
+            </button>
+            <button class="btn-info" id="settings">
+                <!-- <i class="fas fa-cog"></i> -->
+                Settings
+            </button>
+            <button class="btn-info" id="schedule-show">
+                <!-- <i class="fas fas fa-clock"></i> -->
+                Schedule
+            </button>
+            <script>
+                // Function to handle button active state
+                function setActiveButton(activeButton) {
+                    // Remove active class from all buttons
+                    document.querySelectorAll('.buttons .btn-info').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    // Add active class to clicked button
+                    activeButton.classList.add('active');
+                }
+
+                // Element button
+                document.getElementById('element').addEventListener('click', function() {
+                    document.querySelector('.seo').style.display = 'none';
+                    document.querySelector('.categories').style.display = 'block';
+                    document.querySelector('.schedule-container').style.display = 'none';
+                    document.querySelector('.main-settings').style.display = 'none';
+                    setActiveButton(this);
+                });
+
+                // SEO button
+                document.getElementById('update-seo').addEventListener('click', function() {
+                    document.querySelector('.seo').style.display = 'block';
+                    document.querySelector('.categories').style.display = 'none';
+                    document.querySelector('.schedule-container').style.display = 'none';
+                    document.querySelector('.main-settings').style.display = 'none';
+                    setActiveButton(this);
+                });
+
+                // Settings button
+                document.getElementById('settings').addEventListener('click', function() {
+                    document.querySelector('.seo').style.display = 'none';
+                    document.querySelector('.categories').style.display = 'none';
+                    document.querySelector('.schedule-container').style.display = 'none';
+                    document.querySelector('.main-settings').style.display = 'block';
+                    setActiveButton(this);
+                });
+
+                // Schedule button
+                document.getElementById('schedule-show').addEventListener('click', function() {
+                    document.querySelector('.seo').style.display = 'none';
+                    document.querySelector('.categories').style.display = 'none';
+                    document.querySelector('.schedule-container').style.display = 'block';
+                    document.querySelector('.main-settings').style.display = 'none';
+                    setActiveButton(this);
+                });
+
+                // Set the first button as active by default
+                document.querySelector('.buttons .btn-info:first-child').classList.add('active');
+            </script>
+        </div>
+
+        <section class="schedule">
+            <div class="schedule-container">
+                <label for="schedule-date">Date</label>
+                <input type="date" id="schedule-date" required>
+            
+                <label for="schedule-timezone">Timezone</label>
+                <select id="schedule-timezone" required>
+                    <option value="Etc/GMT-5" selected>GMT-5</option>
+                    <option value="Etc/GMT-6">GMT-6</option>
+                    <option value="Etc/GMT-7">GMT-7</option>
+                    <option value="Etc/GMT-8">GMT-8</option>
+                
+                </select>
+            
+            
+                <label for="schedule-time">Time</label>
+                <input type="time" id="schedule-time" required>
+            
+            </div>
+        </section>
+        <style>
+            .schedule-container{
+                display: none;
+                /* display: flex; */
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .schedule-container label{
+                margin-bottom: 10px;
+                color: white;
+            }
+            .schedule-container input{
+                margin-bottom: 20px;
+                padding: 10px;
+                width: 60%;
+                border-radius: 5px;
+                border: none;
+                outline: none;
+            }
+        </style>
+        <script>
+            const scheduleSection = document.querySelector('#schedule-show');
+            const scheduleDateInput = document.querySelector('#schedule-date');
+            const scheduleTimeInput = document.querySelector('#schedule-time');
+            scheduleSection.addEventListener('click', () => {
+                document.querySelector('.seo').style.display = 'none';
+                document.querySelector('.categories').style.display = 'none';
+                document.querySelector('.schedule-container').style.display = 'flex';
+                document.querySelector('.main-settings').style.display = 'none';
+                });
+            scheduleDateInput.addEventListener('change', () => {
+                console.log(scheduleDateInput.value);
+            });
+            scheduleTimeInput.addEventListener('change', () => {
+                console.log(scheduleTimeInput.value);
+            });
+        </script>
+    
+
+
+        <section class="seo">
+            <h3>SEO</h3>
+            <div>
+                <label for="seo-title" style="margin-bottom: 0.5rem; margin-top: 1rem;">Title for SEO</label>
+                <input type="text" required name="blog-title" id="blog-title" placeholder="Title for SEO">
+            </div>
+            <div>
+                <label for="seo-description" style=" margin-top: 2rem;">Description for SEO</label>
+                <textarea id="seo-description" rows="
+                6" placeholder="Description for SEO"></textarea>
+            </div>
+        </section>
+          
+        <section class="main-settings">
+            <h3>Main Settings</h3>
+            <div>
+                <label for="main-article-title">Main Article Title</label>
+                <input type="text" required name="main-article-title" id="main-article-title" placeholder="Main Article Title">
+            </div>
+            <div>
+                <label for="article-summary">Article Summary</label>
+                <textarea id="article-summary" rows="6" placeholder="Article Summary"></textarea>
+            </div>
+            <div>
+                <label for="blog-name">Blog Name</label>
+                <input type="text" required name="blog-name" id="blog-name" placeholder="Blog Name">
+            </div>
+            <div>
+                <label for="author-name">Author Name</label>
+                <input type="text" required name="author-name" id="author-name" placeholder="Author Name">
+            </div>
+            <div>
+                <label for="feature-image">Feature Image</label>
+                <input type="file" required name="feature-image" id="feature-image" placeholder="Feature Image">
+            </div>
+            <div>
+                <label for="image-alt">Image Alt</label>
+                <input type="text" required name="image-alt" id="image-alt" placeholder="Image Alt">
+            </div>
+            <div>
+                <label for="tags">Tags</label>
+                <input type="text" required name="tags" id="tags" placeholder="Tags">
+            </div>
+        </section>
+            <style>
+                .main-settings {
+                    display: none;
+                    /* display: flex; */
+                    flex-direction: column;
+                    align-items: flex-start;
+                    width: 100%;
+                }
+                .main-settings > * {
+                    margin-bottom: 10px;
+                }
+                .main-settings input,.main-settings textarea {
+                    padding: 10px;
+                    width: 100%;
+                    border-radius: 5px;
+                    border: none;
+                    outline: none;
+                    margin-top: 0.7rem; 
+                }
+                .main-settings label {
+                    /* display: inline-block; */
+                    width: 150px;
+                    /* text-align: right; */
+                    color: white;
+                }
+            </style>
+            <script>
+                document.getElementById('settings').addEventListener('click', () => {
+                    document.querySelector('.main-settings').style.display = 'flex';
+                    document.querySelector('.seo').style.display = 'none';
+                    document.querySelector('.categories').style.display = 'none';
+                    document.querySelector('.schedule-container').style.display = 'none';
+                });
+            </script>
+<!-- main left  -->
     <div class="categories">
+        <h3 >Draggable Elements</h3>
+
         <input type="search" placeholder="Search element..." id="element-search" class="search-input">
         <div class="elements-container">
             <h4>Content</h4>
@@ -135,6 +351,8 @@
       
         </div>
         </div>
+       
+
     </div>
 
     <div class="editor desktop-view" id="editor">
@@ -157,35 +375,39 @@
         </p>
         <div class="blog-title">
 
-            <label for="blog-title">Title of blog</label>
-            <input type="text" required name="blog-title" id="blog-title" placeholder="Enter blog title...">
+            <!-- <label for="blog-title">Title of blog</label> -->
+            <!-- <input type="text" required name="blog-title" id="blog-title" placeholder="Enter blog title..."> -->
         </div>
         <div class="drop-zone"></div>
    
     </div>
 
-    <div class="customization-panel">
-        <div class="buttons" id="buttons">
-            <button class="btn-success" id="blog-create" style="margin-bottom: 1rem;">
-                <i class="fas fa-paper-plane"></i>
-                + Blog</button>
-                <button class="btn-success" style="margin-bottom: 1rem;" id="create-template">
-                    <i class="fas fa-paper-plane"></i>
-                    + Template </button>
-                </div>
-                <button class="btn-success" style="margin-bottom: 1rem;" 
-                    id="update">
-                    <i class="fas fa-edit"></i>
-                    Update </button>
-                    
-        <h3>Customize Element</h3>
-        <div id="customization-options">
-            <p>Select an element to customize</p>
-        </div>
-    </div>
+   
 </div>
 
 
+<div class="customization-panel">
+    <div class="buttons" id="buttons">
+        <button class="btn-success" id="blog-create" style="margin-bottom: 1rem;">
+            <i class="fas fa-paper-plane"></i>
+            + Blog</button>
+            <button class="btn-success" style="margin-bottom: 1rem;" id="create-template">
+                <i class="fas fa-paper-plane"></i>
+                + Template </button>
+            </div>
+            <button class="btn-success" style="margin-bottom: 1rem;" id="create-template">
+                <i class="fas fa-paper-plane"></i>
+                Save as Draft </button>
+            <button class="btn-success" style="margin-bottom: 1rem;" 
+                id="update">
+                <i class="fas fa-edit"></i>
+                Update </button>
+                
+    <h3>Customize Element</h3>
+    <div id="customization-options">
+        <p>Select an element to customize</p>
+    </div>
+</div>
     
 </main>
 
