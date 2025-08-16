@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Styles Editor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #3b82f6; /* A vibrant blue for main actions */
+            --dark-blue: #1e3a8a;    /* Darker blue for accents */
+            --black-text: #1a202c;   /* Dark text color */
+            --gray-text: #4a5568;    /* Lighter gray text */
+            --light-gray-bg: #f7fafc; /* Light background for sections */
+            --border-color: #e2e8f0;  /* Subtle border color */
+            --red-delete: #ef4444;   /* Red for delete buttons */
+            --red-delete-hover: #dc2626;
+            --white-bg: #ffffff;
+            --light-blue-hover: #bfdbfe; /* For light blue hover effect */
+            --highlight-border: #2563eb; /* Stronger blue for selected items */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-gray-bg);
+            color: var(--black-text);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top */
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--white-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin: 20px; /* Margin around the main container */
+            overflow: hidden; /* To contain border-radius on children */
+        }
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--white-bg);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--black-text);
+        }
+
+        .header-left i {
+            margin-right: 1rem;
+            color: var(--gray-text);
+        }
+
+        .header-right {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .header-button {
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            border: 1px solid transparent;
+        }
+
+        .header-button.theme-styles {
+            background-color: var(--light-gray-bg);
+            color: var(--gray-text);
+            border-color: var(--border-color);
+        }
+
+        .header-button.theme-styles:hover {
+            background-color: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        .header-button.save {
+            background-color: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .header-button.save:hover {
+            background-color: var(--dark-blue);
+            border-color: var(--dark-blue);
+        }
+
+        /* Tab Navigation */
+        .tabs-nav {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--white-bg);
+            padding: 0 2rem;
+        }
+
+        .tab-button {
+            padding: 1rem 1.5rem;
+            background-color: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--gray-text);
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            white-space: nowrap; /* Prevent wrapping */
+        }
+
+        .tab-button:hover {
+            color: var(--primary-blue);
+            border-bottom-color: var(--primary-blue);
+        }
+
+        .tab-button.active {
+            color: var(--primary-blue);
+            border-bottom-color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            padding: 2rem;
+            background-color: var(--white-bg);
+        }
+
+        /* NEW: Hide all tab panes by default */
+        .tab-pane {
+            display: none;
+        }
+
+        /* Show only the active tab pane */
+        .tab-pane.active {
+            display: block;
+        }
+
+        /* Text Styles Section */
+        .text-styles-section {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            background-color: var(--light-gray-bg);
+        }
+
+        .text-styles-header {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .text-styles-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            border: 1px solid transparent;
+        }
+
+        .text-styles-button.add-new {
+            background-color: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .text-styles-button.add-new:hover {
+            background-color: var(--dark-blue);
+        }
+
+        .text-styles-button.help {
+            background-color: transparent;
+            color: var(--gray-text);
+            border-color: var(--border-color);
+        }
+
+        .text-styles-button.help:hover {
+            background-color: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        /* Style Card */
+        .style-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            background-color: var(--white-bg);
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .style-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+
+        .style-name-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-right: 1rem; /* Space before buttons */
+        }
+
+        .style-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--black-text);
+        }
+
+        .manual-tag {
+            background-color: #cbd5e0;
+            color: #4a5568;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .style-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+        }
+
+        .css-class {
+            background-color: #edf2f7;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--black-text);
+        }
+
+        .style-card-button {
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            border: 1px solid transparent;
+        }
+
+        .style-card-button.edit {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .style-card-button.edit:hover {
+            background-color: var(--dark-blue);
+        }
+
+        .style-card-button.delete {
+            background-color: var(--red-delete);
+            color: white;
+        }
+
+        .style-card-button.delete:hover {
+            background-color: var(--red-delete-hover);
+        }
+
+        .style-description {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--gray-text);
+        }
+
+        /* Form-specific styles for General tab */
+        .color-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .color-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .color-group label {
+            font-weight: 600;
+            color: var(--black-text);
+        }
+
+        .color-group input[type="text"] {
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .personalized-css-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--white-bg);
+        }
+
+        .personalized-css-section h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .personalized-css-section p {
+            font-size: 0.9rem;
+            color: var(--gray-text);
+            margin-bottom: 1rem;
+        }
+
+        /* Styles for the new textarea */
+        .css-code-textarea {
+            background-color: #edf2f7;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--black-text);
+            width: 100%; /* Make it fill the container */
+            min-height: 150px; /* Give it a decent height */
+            resize: vertical; /* Allow vertical resizing */
+            border: 1px solid var(--border-color);
+            box-sizing: border-box; /* Include padding and border in width */
+        }
+        
+        /* Margin Section Styles */
+        .margin-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--black-text);
+            margin-bottom: 1.5rem;
+        }
+
+        .margin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .margin-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .margin-input-group label {
+            font-weight: 500;
+            color: var(--gray-text);
+            font-size: 0.95rem;
+        }
+
+        .margin-input-group div {
+            display: flex;
+            align-items: center;
+            background-color: var(--white-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .margin-input-group input[type="text"] {
+            flex-grow: 1;
+            padding: 0.75rem;
+            border: none;
+            outline: none;
+            font-size: 0.9rem;
+            color: var(--black-text);
+            background-color: transparent;
+        }
+
+        .margin-input-group span {
+            padding: 0.75rem 0.8rem;
+            background-color: #edf2f7;
+            border-left: 1px solid var(--border-color);
+            color: var(--gray-text);
+            font-size: 0.9rem;
+        }
+
+        /* New Style Creation Modal */
+        .create-style-modal {
+            display: none; /* Hidden by default */ 
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+            justify-content: center; /* Used when display:flex is active */
+            align-items: center; /* Used when display:flex is active */
+        }
+
+        .create-style-modal-content {
+            background: var(--white-bg);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 600px;
+            padding-bottom: 0; /* Remove bottom padding as buttons have their own */
+            overflow: hidden; /* For rounded corners on footer */
+            position: relative;
+        }
+
+        .create-style-modal-header {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .create-style-modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .create-style-modal-close {
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .create-style-modal-close:hover {
+            transform: rotate(90deg);
+        }
+
+        .style-options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+
+        .style-option-card {
+            background-color: var(--light-gray-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        .style-option-card:hover {
+            border-color: var(--primary-blue);
+            background-color: #f0f7ff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .style-option-card.selected {
+            border-color: var(--highlight-border);
+            box-shadow: 0 0 0 3px var(--highlight-border), 0 4px 10px rgba(0, 0, 0, 0.1);
+            background-color: #e0efff;
+        }
+
+        .style-option-card i {
+            font-size: 2.5rem;
+            color: var(--gray-text);
+            margin-bottom: 1rem;
+        }
+
+        .style-option-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--black-text);
+        }
+
+        .style-option-card p {
+            font-size: 0.85rem;
+            color: var(--gray-text);
+            line-height: 1.4;
+        }
+
+        .create-style-modal-footer {
+            background-color: var(--light-gray-bg);
+            padding: 1rem 2rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .create-style-modal-footer button {
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .create-style-modal-footer .cancel-btn {
+            background-color: transparent;
+            color: var(--gray-text);
+            border-color: var(--border-color);
+        }
+
+        .create-style-modal-footer .cancel-btn:hover {
+            background-color: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        .create-style-modal-footer .confirm-btn {
+            background-color: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .create-style-modal-footer .confirm-btn:hover {
+            background-color: var(--dark-blue);
+        }
+        
+        /* Inline Edit Form Styles */
+        .inline-edit-form {
+            background-color: var(--white-bg);
+            border: 1px solid var(--primary-blue); /* Highlight border when active */
+            border-radius: 8px;
+            margin-top: 1rem; /* Space from the clicked card */
+            padding: 0; /* Remove padding as inner sections will have it */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.3s ease-out; /* Simple fade-in animation */
+            overflow: hidden; /* To ensure inner border-radius */
+        }
+
+        .inline-edit-header {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px 8px 0 0; /* Rounded top corners */
+        }
+
+        .inline-edit-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .inline-edit-close {
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .inline-edit-close:hover {
+            transform: rotate(90deg);
+        }
+
+        .inline-edit-content {
+            padding: 1.5rem;
+        }
+
+        .inline-edit-content .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .inline-edit-content label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--black-text);
+            font-size: 0.95rem;
+        }
+
+        .inline-edit-content input[type="text"],
+        .inline-edit-content select {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+        }
+
+        .inline-edit-content input[type="color"] {
+            height: 36px;
+            padding: 0.2rem;
+            cursor: pointer;
+            border: 1px solid var(--border-color); /* Add border for color picker */
+            border-radius: 6px;
+        }
+
+        .inline-edit-content .color-picker-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .inline-edit-content .margin-input-group div { /* Reusing existing margin-input-group style */
+            margin-top: 0.5rem; /* Adjust margin if needed */
+        }
+
+        .inline-edit-content .tab-nav-edit {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .inline-edit-content .tab-nav-edit button {
+            padding: 0.7rem 1.2rem;
+            border: none;
+            background: transparent;
+            font-weight: 500;
+            color: var(--gray-text);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .inline-edit-content .tab-nav-edit button.active {
+            color: var(--primary-blue);
+            border-bottom-color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .inline-edit-content .edit-tab-pane {
+            display: none;
+        }
+
+        .inline-edit-content .edit-tab-pane.active {
+            display: block;
+        }
+
+        /* Sections for Manual vs. CSS options */
+        .manual-options-section,
+        .css-options-section {
+            display: none; /* Hidden by default, shown by JS */
+        }
+
+        .inline-edit-footer {
+            background-color: var(--light-gray-bg);
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            border-radius: 0 0 8px 8px; /* Rounded bottom corners */
+        }
+
+        .inline-edit-footer button {
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .inline-edit-footer .inline-cancel-btn {
+            background-color: transparent;
+            color: var(--gray-text);
+            border-color: var(--border-color);
+        }
+
+        .inline-edit-footer .inline-cancel-btn:hover {
+            background-color: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        .inline-edit-footer .inline-save-btn {
+            background-color: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .inline-edit-footer .inline-save-btn:hover {
+            background-color: var(--dark-blue);
+        }
+
+        /* Animation for inline form */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive adjustments for inline form */
+        @media (max-width: 768px) {
+            .inline-edit-header h3 {
+                font-size: 1.2rem;
+            }
+            .inline-edit-content {
+                padding: 1rem;
+            }
+            .inline-edit-footer {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+            }
+            .inline-edit-footer button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <i class="fas fa-times"></i>
+                <span>Global Styles</span>
+            </div>
+            <div class="header-right">
+                <button class="header-button theme-styles">Theme styles</button>
+                <button class="header-button save">Save</button>
+            </div>
+        </header>
+
+        <!-- Tab Navigation -->
+        <nav class="tabs-nav">
+            <button class="tab-button active" data-tab="headings">HEADINGS</button>
+            <button class="tab-button" data-tab="buttons">BUTTONS</button>
+            <button class="tab-button" data-tab="general">GENERAL</button>
+            <button class="tab-button" data-tab="margin-top-bottom">MARGIN - TOP & BOTTOM</button>
+            <button class="tab-button" data-tab="margin-left-right">MARGIN - LEFT & RIGHT</button>
+        </nav>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <div id="headings-content" class="tab-pane active">
+                <div class="text-styles-section">
+                    <div class="text-styles-header">
+                        <button class="text-styles-button add-new" id="addTextStyleBtn">Add new text style</button>
+                        <button class="text-styles-button help">Help</button>
+                    </div>
+                    <!-- Existing style cards will be loaded here by JavaScript -->
+                </div>
+            </div>
+
+            <div id="buttons-content" class="tab-pane">
+                <div class="text-styles-section">
+                    <div class="text-styles-header">
+                        <button class="text-styles-button add-new" id="addNewButtonBtn">Add new button</button>
+                        <button class="text-styles-button help">Help</button>
+                    </div>
+                    <!-- Existing button cards will be loaded here by JavaScript -->
+                </div>
+            </div>
+
+            <div id="general-content" class="tab-pane">
+                <div class="text-styles-section">
+                    <h2>Colors</h2>
+                    <p>Define your main colors, you can add up to 6 colors</p>
+                    <div class="color-grid">
+                        <div class="color-group">
+                            <label for="color1">Color</label>
+                            <input type="text" id="color1" placeholder="e.g., #000000">
+                        </div>
+                        <div class="color-group">
+                            <label for="color2">Color</label>
+                            <input type="text" id="color2" placeholder="e.g., #000000">
+                        </div>
+                        <div class="color-group">
+                            <label for="color3">Color</label>
+                            <input type="text" id="color3" placeholder="e.g., #000000">
+                        </div>
+                        <div class="color-group">
+                            <label for="color4">Color</label>
+                            <input type="text" id="color4" placeholder="e.g., #000000">
+                        </div>
+                        <div class="color-group">
+                            <label for="color5">Color</label>
+                            <input type="text" id="color5" placeholder="e.g., #000000">
+                        </div>
+                        <div class="color-group">
+                            <label for="color6">Color</label>
+                            <input type="text" id="color6" placeholder="e.g., #000000">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="personalized-css-section">
+                    <h3>Personalized CSS</h3>
+                    <p>Expert mode. You can add custom CSS but you need to have computing knowledge</p>
+                    <!-- Changed from <pre> to <textarea> -->
+                    <textarea id="personalizedCssInput" class="css-code-textarea">
+.bloggle--testament-button {
+    background: var(--button-color) !important;
+    color: var(--button-text) !important;
+    font-family: var(--main-family) !important;
+}
+                    </textarea>
+                </div>
+            </div>
+
+            <div id="margin-top-bottom-content" class="tab-pane">
+                <div class="text-styles-section margin-section">
+                    <h3>Vertical margins</h3>
+                    <div class="margin-grid">
+                        <div class="margin-input-group">
+                            <label for="top-desktop">Top margin (desktop)</label>
+                            <div>
+                                <input type="text" id="top-desktop" value="60">
+                                <span>px</span>
+                            </div>
+                        </div>
+                        <div class="margin-input-group">
+                            <label for="bottom-desktop">Bottom margin (desktop)</label>
+                            <div>
+                                <input type="text" id="bottom-desktop" value="60">
+                                <span>px</span>
+                            </div>
+                        </div>
+                        <div class="margin-input-group">
+                            <label for="top-tablet">Top margin (tablet)</label>
+                            <div>
+                                <input type="text" id="top-tablet" value="60">
+                                <span>px</span>
+                            </div>
+                        </div>
+                        <div class="margin-input-group">
+                            <label for="bottom-tablet">Bottom margin (tablet)</label>
+                            <div>
+                                <input type="text" id="bottom-tablet" value="60">
+                                <span>px</span>
+                            </div>
+                        </div>
+                        <div class="margin-input-group">
+                            <label for="top-mobile">Top margin (mobile)</label>
+                            <div>
+                                <input type="text" id="top-mobile" value="60">
+                                <span>px</span>
+                            </div>
+                        </div>
+                        <div class="margin-input-group">
+                            <label for="bottom-mobile">Bottom margin (mobile)</label>
+                            <div>
+                                <input type="text" id="bottom-mobile" value="60">
+                                <span>px</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="margin-left-right-content" class="tab-pane">
+                <div class="text-styles-section margin-section">
+                    <h3>Horizontal margins</h3>
+                    <div class="margin-grid">
+                        <div class="margin-input-group">
+                            <label for="left-desktop">Left margin (desktop)</label>
+                            <div>
+                                <input type="text" id="left-desktop" value="60">
+                                <span>px</span>
+                            </div>
+                        </div>
+                        <div class="margin-input-group">
+                            <label for="right-desktop">Right margin (desktop)</label>
+                            <div>
+                                <input type="text" id="right-desktop" value="60">
+                                <span>px</span>
+                            </div>
+                        </div>
+                        <div class="margin-input-group">
+                            <label for="left-tablet">Left margin (tablet)</label>
+                            <div>
+                                <input type="text" id="left-tablet" value="60">
+                                <span>px</span>
+                            </div>
+                        </div>
+                        <div class="margin-input-group">
+                            <label for="right-tablet">Right margin (tablet)</label>
+                            <div>
+                                <input type="text" id="right-tablet" value="60">
+                                <span>px</span>
+                            </div>
+                        </div>
+                        <div class="margin-input-group">
+                            <label for="left-mobile">Left margin (mobile)</label>
+                            <div>
+                                <input type="text" id="left-mobile" value="60">
+                                <span>px</span>
+                            </div>
+                        </div>
+                        <div class="margin-input-group">
+                            <label for="right-mobile">Right margin (mobile)</label>
+                            <div>
+                                <input type="text" id="right-mobile" value="60">
+                                <span>px</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New: Create Style Modal -->
+    <div id="createStyleModal" class="create-style-modal">
+        <div class="create-style-modal-content">
+            <div class="create-style-modal-header">
+                <h2>Create new text style</h2>
+                <span class="create-style-modal-close"><i class="fas fa-times"></i></span>
+            </div>
+            <div class="style-options-grid">
+                <div class="style-option-card selected" data-style-type="manual">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>MANUAL</h3>
+                    <p>Create custom styles (recommended)</p>
+                </div>
+                <div class="style-option-card" data-style-type="css">
+                    <i class="fas fa-code"></i>
+                    <h3>CSS</h3>
+                    <p>Styles based on CSS class (expert mode)</p>
+                </div>
+            </div>
+            <div class="create-style-modal-footer">
+                <button class="cancel-btn">Cancel</button>
+                <button class="confirm-btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+    <!-- End New: Create Style Modal -->
+
+    <!-- Template for Inline Edit Form -->
+    <template id="inlineEditFormTemplate">
+        <div class="inline-edit-form">
+            <div class="inline-edit-header">
+                <h3 class="inline-edit-title">Edit Style: <span class="style-name-display"></span></h3>
+                <span class="inline-edit-close"><i class="fas fa-times"></i></span>
+            </div>
+            <div class="inline-edit-content">
+                <div class="form-group">
+                    <label for="inlineEditTitle">Title</label>
+                    <input type="text" id="inlineEditTitle" value="">
+                    <small>Will be used to identify this style</small>
+                </div>
+
+                <!-- Conditional Content based on Style Type -->
+                <div class="manual-options-section">
+                    <div class="tab-nav-edit">
+                        <button class="active" data-edit-tab="default-styles">Default styles</button>
+                        <button data-edit-tab="hover-styles">Hover styles</button>
+                    </div>
+
+                    <div id="inline-default-styles-content" class="edit-tab-pane active">
+                        <div class="form-group">
+                            <label for="inlineBgColor">Background color</label>
+                            <div class="color-picker-group">
+                                <input type="text" id="inlineBgColor" value="#FFFFFF">
+                                <input type="color" id="inlineBgColorPicker" value="#FFFFFF">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inlineBorderColor">Border color</label>
+                            <div class="color-picker-group">
+                                <input type="text" id="inlineBorderColor" value="#000000">
+                                <input type="color" id="inlineBorderColorPicker" value="#000000">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inlineBorderWidth">Border width</label>
+                            <div class="margin-input-group">
+                                <input type="text" id="inlineBorderWidth" value="0">
+                                <span>px</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inlineBorderRadius">Border radius</label>
+                            <div class="margin-input-group">
+                                <input type="text" id="inlineBorderRadius" value="0">
+                                <span>px</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inlineBorderPosition">Border position</label>
+                            <select id="inlineBorderPosition">
+                                <option value="everywhere">Everywhere</option>
+                                <option value="top">Top</option>
+                                <option value="bottom">Bottom</option>
+                                <option value="left">Left</option>
+                                <option value="right">Right</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="inline-hover-styles-content" class="edit-tab-pane">
+                        <div class="form-group">
+                            <label for="inlineHoverBgColor">Background color</label>
+                            <div class="color-picker-group">
+                                <input type="text" id="inlineHoverBgColor" value="#F0F7FF">
+                                <input type="color" id="inlineHoverBgColorPicker" value="#F0F7FF">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inlineHoverCursor">Cursor</label>
+                            <select id="inlineHoverCursor">
+                                <option value="default">default</option>
+                                <option value="pointer">pointer</option>
+                                <option value="grab">grab</option>
+                                <option value="text">text</option>
+                                <option value="not-allowed">not-allowed</option>
+                                <option value="help">help</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="css-options-section">
+                    <div class="form-group">
+                        <label for="inlineCssClasses">CSS classes</label>
+                        <!-- Changed from textarea to input type="text" -->
+                        <input type="text" id="inlineCssClasses" placeholder="e.g. btn btn--primary">
+                        <small>Separate classes with spaces</small>
+                    </div>
+                </div>
+
+                <div class="inline-edit-footer">
+                    <button class="inline-cancel-btn">Cancel</button>
+                    <button class="inline-save-btn">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </template>
+    <!-- End Template for Inline Edit Form -->
+
+    <!-- Dynamic <style> tag for personalized CSS -->
+    <style id="dynamic-personalized-css"></style>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            const addTextStyleBtn = document.getElementById('addTextStyleBtn'); // For "HEADINGS" tab
+            const addNewButtonBtn = document.getElementById('addNewButtonBtn'); // For "BUTTONS" tab
+            const createStyleModal = document.getElementById('createStyleModal');
+            const createStyleModalClose = document.querySelector('.create-style-modal-close');
+            const cancelBtn = document.querySelector('.create-style-modal-footer .cancel-btn');
+            const confirmBtn = document.querySelector('.create-style-modal-footer .confirm-btn');
+            const styleOptionCards = document.querySelectorAll('.style-option-card');
+            const inlineEditFormTemplate = document.getElementById('inlineEditFormTemplate');
+            const personalizedCssInput = document.getElementById('personalizedCssInput'); // The new textarea for personalized CSS
+            const dynamicPersonalizedCssStyleTag = document.getElementById('dynamic-personalized-css');
+
+            // Margin inputs
+            const marginInputs = {
+                'top-desktop': document.getElementById('top-desktop'),
+                'bottom-desktop': document.getElementById('bottom-desktop'),
+                'top-tablet': document.getElementById('top-tablet'),
+                'bottom-tablet': document.getElementById('bottom-tablet'),
+                'top-mobile': document.getElementById('top-mobile'),
+                'bottom-mobile': document.getElementById('bottom-mobile'),
+                'left-desktop': document.getElementById('left-desktop'),
+                'right-desktop': document.getElementById('right-desktop'),
+                'left-tablet': document.getElementById('left-tablet'),
+                'right-tablet': document.getElementById('right-tablet'),
+                'left-mobile': document.getElementById('left-mobile'),
+                'right-mobile': document.getElementById('right-mobile'),
+            };
+
+            // Color inputs
+            const colorInputs = [];
+            for (let i = 1; i <= 6; i++) {
+                colorInputs.push(document.getElementById(`color${i}`));
+            }
+
+
+            // Helper function for API calls
+            async function callApi(url, method, data = null) {
+                // Ensure the URL is absolute for fetch in browser environments
+                const apiUrl = `/apis/${url}`; // Prepend '/' assuming apis/ is at web root
+
+                const options = {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                };
+                if (data) {
+                    options.body = JSON.stringify(data);
+                }
+                try {
+                    const response = await fetch(apiUrl, options);
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || `API call failed with status: ${response.status}`);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    console.error('API Error:', error);
+                    alert('Error: ' + error.message);
+                    throw error; // Re-throw to allow further error handling
+                }
+            }
+
+
+            // Function to show a specific tab
+            function showTab(tabId) {
+                tabPanes.forEach(pane => {
+                    pane.classList.remove('active');
+                });
+                tabButtons.forEach(button => {
+                    button.classList.remove('active');
+                });
+
+                document.getElementById(tabId + '-content').classList.add('active');
+                document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
+            }
+
+            // Add event listeners to main tab buttons
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.dataset.tab;
+                    showTab(tabId);
+                });
+            });
+
+            // Function to generate a random string for CSS class (for display purposes)
+            function generateRandomString(length) {
+                const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+                let result = '';
+                for (let i = 0; i < length; i++) {
+                    result += characters.charAt(Math.floor(Math.random() * characters.length));
+                }
+                return result;
+            }
+
+            // Function to create a new style card HTML element
+            function createStyleCardElement(styleData) {
+                const { id, type, style_type, title, description, user_css_classes, bg_color, border_color, border_width, border_radius, border_position, hover_bg_color, hover_cursor } = styleData;
+
+                const defaultDescription = type === 'text' ? 
+                    'Lorem ipsum dolor sit amet consectetur adipisicing elit. At, unde quos sunt maxime laborum porro itaque quae quibusdam corporis, error nemo fugiat repellendus placeat, incidunt quaerat? Animi repellendus molestiae vero.' :
+                    'Add to cart'; // Default text for button
+
+                const styleCard = document.createElement('div');
+                styleCard.className = 'style-card';
+                // Use the ID from the database
+                styleCard.dataset.id = id; 
+                styleCard.dataset.styleType = style_type; // manual or css
+                styleCard.dataset.cardType = type; // text or button
+
+                // Store manual style properties as data attributes if available
+                if (style_type === 'manual') {
+                    styleCard.dataset.bgColor = bg_color || '#FFFFFF';
+                    styleCard.dataset.borderColor = border_color || '#000000';
+                    styleCard.dataset.borderWidth = border_width || '0';
+                    styleCard.dataset.borderRadius = border_radius || '0';
+                    styleCard.dataset.borderPosition = border_position || 'everywhere';
+                    styleCard.dataset.hoverBgColor = hover_bg_color || '#F0F7FF';
+                    styleCard.dataset.hoverCursor = hover_cursor || 'default';
+                } else if (style_type === 'css') {
+                    // For CSS type, store the actual user-defined CSS class names
+                    styleCard.dataset.userCssClasses = user_css_classes || ''; 
+                    // Add the class directly to the element for actual application
+                    styleCard.classList.add(...(user_css_classes ? user_css_classes.split(' ') : []));
+                }
+
+                // Determine the CSS class text to display in the span
+                let displayedCssClass = '';
+                if (style_type === 'manual') {
+                    // This is for display only, not the actual class applied from user_css_classes
+                    displayedCssClass = `${type}--${generateRandomString(13)}`; 
+                } else if (style_type === 'css') {
+                    displayedCssClass = user_css_classes; // Display user's classes
+                }
+
+                styleCard.innerHTML = `
+                    <div class="style-card-header">
+                        <div class="style-name-group">
+                            <span class="style-name">${title}</span>
+                            <span class="manual-tag">${style_type.toUpperCase()}®</span>
+                        </div>
+                        <div class="style-actions">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="${type}-check-${styleCard.dataset.id}-1">
+                                <input type="checkbox" id="${type}-check-${styleCard.dataset.id}-2">
+                                <input type="checkbox" id="${type}-check-${styleCard.dataset.id}-3">
+                            </div>
+                            <span class="css-class">CSS class: ${displayedCssClass}</span>
+                            <button class="style-card-button edit">Edit</button>
+                            <button class="style-card-button delete">Delete</button>
+                        </div>
+                    </div>
+                    <p class="style-description" ${type === 'button' ? 'style="text-align: center;"' : ''}>
+                        ${description || defaultDescription}
+                    </p>
+                `;
+                return styleCard;
+            }
+
+            // Function to save all settings to backend
+            async function saveAllSettings() {
+                // 1. Save Styles
+                // This is now handled by individual POST/PUT/DELETE calls for styles.
+                // We'll only call saveGeneralSettings and saveMargins here.
+
+                // 2. Save General Settings (Colors, Personalized CSS)
+                const colorsArray = colorInputs.map(input => input.value);
+                const generalSettingsData = {
+                    colors_json: colorsArray,
+                    personalized_css: personalizedCssInput.value
+                };
+                await callApi('general_settings.php', 'PUT', generalSettingsData);
+
+                // 3. Save Margins
+                const marginsData = {};
+                for (const key in marginInputs) {
+                    marginsData[key] = marginInputs[key].value;
+                }
+                await callApi('margins.php', 'PUT', marginsData);
+
+                console.log('All settings saved to backend.');
+                applyPersonalizedCss(); // Apply changes immediately after saving
+            }
+
+            // Function to load all settings from backend
+            async function loadAllSettings() {
+                // Clear existing cards first and recreate headers
+                document.querySelector('#headings-content .text-styles-section').innerHTML = `
+                    <div class="text-styles-header">
+                        <button class="text-styles-button add-new" id="addTextStyleBtn">Add new text style</button>
+                        <button class="text-styles-button help">Help</button>
+                    </div>`;
+                document.querySelector('#buttons-content .text-styles-section').innerHTML = `
+                    <div class="text-styles-header">
+                        <button class="text-styles-button add-new" id="addNewButtonBtn">Add new button</button>
+                        <button class="text-styles-button help">Help</button>
+                    </div>`;
+
+                // 1. Load Styles
+                try {
+                    const styles = await callApi('styles.php', 'GET');
+                    styles.forEach(styleData => {
+                        const styleCardElement = createStyleCardElement(styleData);
+                        const targetSection = styleData.type === 'text' ? 
+                            document.querySelector('#headings-content .text-styles-section') : 
+                            document.querySelector('#buttons-content .text-styles-section');
+                        if (targetSection) {
+                            targetSection.appendChild(styleCardElement);
+                        }
+                    });
+                } catch (error) {
+                    console.error('Failed to load styles:', error);
+                    // Optionally load default styles if backend fails
+                    loadDefaultInitialStyles();
+                }
+
+                // 2. Load General Settings
+                try {
+                    const generalSettings = await callApi('general_settings.php', 'GET');
+                    if (generalSettings) {
+                        // Populate colors
+                        generalSettings.colors_json.forEach((color, index) => {
+                            if (colorInputs[index]) {
+                                colorInputs[index].value = color;
+                            }
+                        });
+                        // Populate personalized CSS
+                        personalizedCssInput.value = generalSettings.personalized_css;
+                    }
+                } catch (error) {
+                    console.error('Failed to load general settings:', error);
+                    // Set default if backend fails
+                    personalizedCssInput.value = `
+.bloggle--testament-button {
+    background: var(--button-color) !important;
+    color: var(--button-text) !important;
+    font-family: var(--main-family) !important;
+}
+`;
+                }
+
+                // 3. Load Margins
+                try {
+                    const margins = await callApi('margins.php', 'GET');
+                    if (margins) {
+                        for (const key in marginInputs) {
+                            if (margins[key]) {
+                                marginInputs[key].value = margins[key];
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('Failed to load margins:', error);
+                    // Set default if backend fails
+                    for (const key in marginInputs) {
+                        marginInputs[key].value = '60'; // Default value
+                    }
+                }
+
+                applyPersonalizedCss(); // Apply personalized CSS when loading
+                showTab('headings'); // Ensure headings tab is active on load
+            }
+
+            // Function to apply personalized CSS to the document
+            function applyPersonalizedCss() {
+                if (dynamicPersonalizedCssStyleTag && personalizedCssInput) {
+                    dynamicPersonalizedCssStyleTag.textContent = personalizedCssInput.value;
+                }
+            }
+
+            // Function to load initial default styles if backend is empty/fails
+            function loadDefaultInitialStyles() {
+                 const initialHeadingsStyle = {
+                    id: 'initial-text-style-1', // A unique ID for default
+                    type: 'text',
+                    style_type: 'manual',
+                    title: 'Style 1 (Default)',
+                    description: 'This is an example manual text style loaded by default.',
+                    bg_color: '#F0F0F0',
+                    border_color: '#CCCCCC',
+                    border_width: '1',
+                    border_radius: '5',
+                    border_position: 'everywhere',
+                    hover_bg_color: '#E0E0E0',
+                    hover_cursor: 'pointer'
+                };
+                const initialButtonsStyle = {
+                    id: 'initial-button-style-1', // A unique ID for default
+                    type: 'button',
+                    style_type: 'manual',
+                    title: 'Button 1 (Default)',
+                    description: 'Click Me!',
+                    bg_color: '#3b82f6',
+                    border_color: '#1e3a8a',
+                    border_width: '2',
+                    border_radius: '8',
+                    border_position: 'everywhere',
+                    hover_bg_color: '#1e3a8a',
+                    hover_cursor: 'pointer'
+                };
+                 const initialCssStyle = {
+                    id: 'initial-css-style-1', // A unique ID for default
+                    type: 'text',
+                    style_type: 'css',
+                    title: 'Custom CSS Heading (Default)',
+                    description: 'This heading uses a custom CSS class loaded by default.',
+                    user_css_classes: 'my-custom-heading' // User-defined class
+                };
+                 const initialCssButton = {
+                    id: 'initial-css-button-1', // A unique ID for default
+                    type: 'button',
+                    style_type: 'css',
+                    title: 'Custom CSS Button (Default)',
+                    description: 'Custom Button!',
+                    user_css_classes: 'custom-btn primary-color' // User-defined classes
+                };
+                
+                document.querySelector('#headings-content .text-styles-section').appendChild(createStyleCardElement(initialHeadingsStyle));
+                document.querySelector('#headings-content .text-styles-section').appendChild(createStyleCardElement(initialCssStyle));
+                document.querySelector('#buttons-content .text-styles-section').appendChild(createStyleCardElement(initialButtonsStyle));
+                document.querySelector('#buttons-content .text-styles-section').appendChild(createStyleCardElement(initialCssButton));
+                // Do NOT save these defaults to backend here; they are just for display if backend is empty.
+            }
+
+
+            // Event listener for "Add new text style" button
+            // Re-attach listeners because sections are re-rendered on loadStyles
+            document.querySelector('#headings-content').addEventListener('click', (e) => {
+                if (e.target.id === 'addTextStyleBtn') {
+                    createStyleModal.style.display = 'flex';
+                    createStyleModal.querySelector('.create-style-modal-header h2').textContent = 'Create new text style';
+                }
+            });
+
+            document.querySelector('#buttons-content').addEventListener('click', (e) => {
+                if (e.target.id === 'addNewButtonBtn') {
+                    createStyleModal.style.display = 'flex';
+                    createStyleModal.querySelector('.create-style-modal-header h2').textContent = 'Create new button style';
+                }
+            });
+
+            // Event listeners for closing the create new style modal
+            if (createStyleModalClose) {
+                createStyleModalClose.addEventListener('click', () => {
+                    createStyleModal.style.display = 'none';
+                });
+            }
+
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', () => {
+                    createStyleModal.style.display = 'none';
+                });
+            }
+
+            // Handle selection of style options in the modal
+            styleOptionCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    styleOptionCards.forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                });
+            });
+
+            // Handle Confirm button click (Create new style)
+            if (confirmBtn) {
+                confirmBtn.addEventListener('click', async () => {
+                    const selectedStyleType = document.querySelector('.style-option-card.selected')?.dataset.styleType;
+                    const activeTabId = document.querySelector('.tab-button.active')?.dataset.tab;
+                    const textStylesSection = document.querySelector(`#${activeTabId}-content .text-styles-section`);
+                    
+                    let newStyleData = {};
+                    let baseTitle = '';
+                    if (activeTabId === 'headings') {
+                        baseTitle = 'Style';
+                        newStyleData.type = 'text';
+                    } else if (activeTabId === 'buttons') {
+                        baseTitle = 'Button';
+                        newStyleData.type = 'button';
+                    }
+
+                    newStyleData.style_type = selectedStyleType; // Use style_type for backend
+                    newStyleData.title = `${baseTitle} ${textStylesSection.querySelectorAll('.style-card').length + 1}`;
+                    newStyleData.description = newStyleData.type === 'text' ? 'Lorem ipsum dolor sit amet consectetur adipisicing elit. At, unde quos sunt maxime laborum porro itaque quae quibusdam corporis, error nemo fugiat repellendus placeat, incidunt quaerat? Animi repellendus molestiae vero.' : 'Add to cart';
+
+                    if (selectedStyleType === 'manual') {
+                        newStyleData.bg_color = '#FFFFFF';
+                        newStyleData.border_color = '#000000';
+                        newStyleData.border_width = '0';
+                        newStyleData.border_radius = '0';
+                        newStyleData.border_position = 'everywhere';
+                        newStyleData.hover_bg_color = '#F0F7FF';
+                        newStyleData.hover_cursor = 'default';
+                    } else if (selectedStyleType === 'css') {
+                        newStyleData.user_css_classes = `${newStyleData.type}-custom-${generateRandomString(5)}`;
+                    }
+                    
+                    if (textStylesSection) {
+                        try {
+                            const response = await callApi('styles.php', 'POST', newStyleData);
+                            if (response.id) {
+                                // Add the ID from the backend to the styleData for createStyleCardElement
+                                newStyleData.id = response.id; 
+                                const newStyleCard = createStyleCardElement(newStyleData);
+                                textStylesSection.appendChild(newStyleCard);
+                            }
+                        } catch (error) {
+                            console.error('Error adding style:', error);
+                            alert('Failed to add new style.');
+                        }
+                    }
+
+                    createStyleModal.style.display = 'none';
+                });
+            }
+
+            // Close create new style modal when clicking outside of the modal content
+            createStyleModal.addEventListener('click', (e) => {
+                if (e.target === createStyleModal) {
+                    createStyleModal.style.display = 'none';
+                }
+            });
+
+            // Event delegation for Edit and Delete buttons on style cards
+            document.querySelectorAll('.tab-pane').forEach(tabPane => {
+                tabPane.addEventListener('click', async (e) => {
+                    const clickedElement = e.target;
+                    const styleCard = clickedElement.closest('.style-card');
+
+                    if (!styleCard) return; // Not a click on a style card button
+
+                    const styleId = styleCard.dataset.id;
+                    const styleName = styleCard.querySelector('.style-name').textContent;
+                    const styleType = styleCard.dataset.styleType; 
+                    const cardType = styleCard.dataset.cardType;
+
+                    // Handle Delete
+                    if (clickedElement.closest('.delete')) {
+                        if (confirm(`Are you sure you want to delete "${styleName}"?`)) {
+                            try {
+                                await callApi('styles.php', 'DELETE', { id: styleId });
+                                styleCard.remove();
+                                alert('Style deleted successfully!');
+                            } catch (error) {
+                                console.error('Error deleting style:', error);
+                                alert('Failed to delete style.');
+                            }
+                        }
+                    } 
+                    // Handle Edit
+                    else if (clickedElement.closest('.edit')) {
+                        // Close any other open inline edit forms within the same text-styles-section
+                        styleCard.parentNode.querySelectorAll('.inline-edit-form').forEach(form => {
+                            form.remove();
+                        });
+
+                        // Check if this specific style card already has an open inline form (for toggle effect)
+                        const existingInlineForm = styleCard.querySelector('.inline-edit-form');
+                        if (existingInlineForm) {
+                            existingInlineForm.remove();
+                            return; // Stop execution if we just closed it
+                        }
+
+                        // Get the template content
+                        const clone = inlineEditFormTemplate.content.cloneNode(true);
+                        const inlineEditForm = clone.querySelector('.inline-edit-form');
+
+                        // Append the cloned form right after the clicked style card
+                        styleCard.parentNode.insertBefore(inlineEditForm, styleCard.nextSibling);
+
+                        // Populate the form fields dynamically
+                        inlineEditForm.querySelector('.style-name-display').textContent = styleName;
+                        inlineEditForm.querySelector('#inlineEditTitle').value = styleName;
+
+                        // Conditionally show manual or CSS options
+                        const manualOptionsSection = inlineEditForm.querySelector('.manual-options-section');
+                        const cssOptionsSection = inlineEditForm.querySelector('.css-options-section');
+
+                        if (styleType === 'manual') {
+                            manualOptionsSection.style.display = 'block';
+                            cssOptionsSection.style.display = 'none';
+                            
+                            // Initialize default styles tab as active
+                            const defaultStylesTabBtn = inlineEditForm.querySelector('.tab-nav-edit button[data-edit-tab="default-styles"]');
+                            const hoverStylesTabBtn = inlineEditForm.querySelector('.tab-nav-edit button[data-edit-tab="hover-styles"]');
+                            const defaultStylesPane = inlineEditForm.querySelector('#inline-default-styles-content');
+                            const hoverStylesPane = inlineEditForm.querySelector('#inline-hover-styles-content');
+
+                            defaultStylesTabBtn.classList.add('active');
+                            hoverStylesTabBtn.classList.remove('active');
+                            defaultStylesPane.classList.add('active');
+                            hoverStylesPane.classList.remove('active');
+
+                            // Populate manual style inputs from data attributes
+                            inlineEditForm.querySelector('#inlineBgColor').value = styleCard.dataset.bgColor || '#FFFFFF';
+                            inlineEditForm.querySelector('#inlineBgColorPicker').value = styleCard.dataset.bgColor || '#FFFFFF';
+                            inlineEditForm.querySelector('#inlineBorderColor').value = styleCard.dataset.borderColor || '#000000';
+                            inlineEditForm.querySelector('#inlineBorderColorPicker').value = styleCard.dataset.borderColor || '#000000';
+                            inlineEditForm.querySelector('#inlineBorderWidth').value = styleCard.dataset.borderWidth || '0';
+                            inlineEditForm.querySelector('#inlineBorderRadius').value = styleCard.dataset.borderRadius || '0';
+                            inlineEditForm.querySelector('#inlineBorderPosition').value = styleCard.dataset.borderPosition || 'everywhere';
+                            inlineEditForm.querySelector('#inlineHoverBgColor').value = styleCard.dataset.hoverBgColor || '#F0F7FF';
+                            inlineEditForm.querySelector('#inlineHoverBgColorPicker').value = styleCard.dataset.hoverBgColor || '#F0F7FF';
+                            inlineEditForm.querySelector('#inlineHoverCursor').value = styleCard.dataset.hoverCursor || 'default';
+
+                            // Attach listeners for inner tabs (Default/Hover)
+                            inlineEditForm.querySelectorAll('.tab-nav-edit button').forEach(btn => {
+                                btn.addEventListener('click', (event) => {
+                                    const editTabId = event.target.dataset.editTab;
+                                    inlineEditForm.querySelectorAll('.edit-tab-pane').forEach(pane => pane.classList.remove('active'));
+                                    inlineEditForm.querySelectorAll('.tab-nav-edit button').forEach(b => b.classList.remove('active'));
+                                    
+                                    inlineEditForm.querySelector(`#inline-${editTabId}-content`).classList.add('active');
+                                    event.target.classList.add('active');
+                                });
+                            });
+
+                            // Color picker sync for inline form
+                            const inlineBgColor = inlineEditForm.querySelector('#inlineBgColor');
+                            const inlineBgColorPicker = inlineEditForm.querySelector('#inlineBgColorPicker');
+                            const inlineBorderColor = inlineEditForm.querySelector('#inlineBorderColor');
+                            const inlineBorderColorPicker = inlineEditForm.querySelector('#inlineBorderColorPicker');
+                            const inlineHoverBgColor = inlineEditForm.querySelector('#inlineHoverBgColor');
+                            const inlineHoverBgColorPicker = inlineEditForm.querySelector('#inlineHoverBgColorPicker');
+
+                            if(inlineBgColor && inlineBgColorPicker) {
+                                inlineBgColorPicker.addEventListener('input', (e) => inlineBgColor.value = e.target.value);
+                                inlineBgColor.addEventListener('input', (e) => inlineBgColorPicker.value = e.target.value);
+                            }
+                            if(inlineBorderColor && inlineBorderColorPicker) {
+                                inlineBorderColorPicker.addEventListener('input', (e) => inlineBorderColor.value = e.target.value);
+                                inlineBorderColor.addEventListener('input', (e) => inlineBorderColorPicker.value = e.target.value);
+                            }
+                            if(inlineHoverBgColor && inlineHoverBgColorPicker) {
+                                inlineHoverBgColorPicker.addEventListener('input', (e) => inlineHoverBgColor.value = e.target.value);
+                                inlineHoverBgColor.addEventListener('input', (e) => inlineHoverBgColorPicker.value = e.target.value);
+                            }
+
+
+                        } else if (styleType === 'css') {
+                            manualOptionsSection.style.display = 'none';
+                            cssOptionsSection.style.display = 'block';
+                            const inlineCssClassesInput = inlineEditForm.querySelector('#inlineCssClasses');
+                            if(inlineCssClassesInput) {
+                                inlineCssClassesInput.value = styleCard.dataset.userCssClasses || ''; // Set actual CSS class names
+                            }
+                        }
+
+                        // Attach event listeners to the inline form's buttons (Close, Cancel, Save)
+                        inlineEditForm.querySelector('.inline-edit-close').addEventListener('click', () => inlineEditForm.remove());
+                        inlineEditForm.querySelector('.inline-cancel-btn').addEventListener('click', () => inlineEditForm.remove());
+                        inlineEditForm.querySelector('.inline-save-btn').addEventListener('click', async () => {
+                            const updatedTitle = inlineEditForm.querySelector('#inlineEditTitle').value;
+                            const updateData = {
+                                id: styleId,
+                                title: updatedTitle,
+                                description: styleCard.querySelector('.style-description').textContent // Keep original description or update if needed
+                            };
+
+                            // For button type cards, also update the description text
+                            if (cardType === 'button') {
+                                updateData.description = updatedTitle; // Assuming button text is title for now
+                            }
+
+                            if (styleType === 'manual') {
+                                updateData.bgColor = inlineEditForm.querySelector('#inlineBgColor').value;
+                                updateData.borderColor = inlineEditForm.querySelector('#inlineBorderColor').value;
+                                updateData.borderWidth = inlineEditForm.querySelector('#inlineBorderWidth').value;
+                                updateData.borderRadius = inlineEditForm.querySelector('#inlineBorderRadius').value;
+                                updateData.borderPosition = inlineEditForm.querySelector('#inlineBorderPosition').value;
+                                updateData.hoverBgColor = inlineEditForm.querySelector('#inlineHoverBgColor').value;
+                                updateData.hoverCursor = inlineEditForm.querySelector('#inlineHoverCursor').value;
+
+                                // Update data attributes on the style card
+                                styleCard.dataset.bgColor = updateData.bgColor;
+                                styleCard.dataset.borderColor = updateData.borderColor;
+                                styleCard.dataset.borderWidth = updateData.borderWidth;
+                                styleCard.dataset.borderRadius = updateData.borderRadius;
+                                styleCard.dataset.borderPosition = updateData.borderPosition;
+                                styleCard.dataset.hoverBgColor = updateData.hoverBgColor;
+                                styleCard.dataset.hoverCursor = updateData.hoverCursor;
+
+                            } else if (styleType === 'css') {
+                                const updatedUserCssClasses = inlineEditForm.querySelector('#inlineCssClasses').value;
+                                updateData.user_css_classes = updatedUserCssClasses; // Send to backend
+                                
+                                // Update data attributes and actual class on the frontend element
+                                styleCard.dataset.userCssClasses = updatedUserCssClasses;
+                                styleCard.querySelector('.css-class').textContent = updatedUserCssClasses; 
+                                
+                                // Remove old user-defined classes and add new ones
+                                const currentClasses = Array.from(styleCard.classList); // Convert DOMTokenList to array
+                                const classesToRemove = currentClasses.filter(cls => 
+                                    (cls.startsWith('text-custom-') || cls.startsWith('button-custom-')) || // Remove auto-generated defaults
+                                    (styleCard.dataset.userCssClasses && !updatedUserCssClasses.split(' ').includes(cls)) // Remove old user classes if they are not in the new list
+                                );
+                                classesToRemove.forEach(cls => styleCard.classList.remove(cls)); // Remove classes
+                                styleCard.classList.add(...updatedUserCssClasses.split(' ').filter(cls => cls !== '')); // Add new non-empty classes
+                            }
+                            
+                            styleCard.querySelector('.style-name').textContent = updatedTitle;
+                            if (cardType === 'button') {
+                                styleCard.querySelector('.style-description').textContent = updateData.description;
+                            }
+
+                            try {
+                                await callApi('styles.php', 'PUT', updateData);
+                                alert('Style updated successfully!');
+                            } catch (error) {
+                                console.error('Error updating style:', error);
+                                alert('Failed to update style.');
+                            } finally {
+                                inlineEditForm.remove(); // Close after saving
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Event listener for personalized CSS input changes
+            if (personalizedCssInput) {
+                personalizedCssInput.addEventListener('input', saveAllSettings); // Calls saveAllSettings
+            }
+
+            // Event listeners for Margin inputs
+            for (const key in marginInputs) {
+                if (marginInputs[key]) {
+                    marginInputs[key].addEventListener('input', saveAllSettings); // Calls saveAllSettings
+                }
+            }
+            
+            // Event listeners for Color inputs
+            colorInputs.forEach(input => {
+                input.addEventListener('input', saveAllSettings); // Calls saveAllSettings
+            });
+
+            // Initial load of styles when DOM is ready
+            loadAllSettings();
+        });
+    </script>
+</body>
+</html>
