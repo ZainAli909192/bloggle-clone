@@ -719,7 +719,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropZone = document.querySelector('.drop-zone');
     const publishButton = document.querySelector('#blog-create');
     const templateButton = document.querySelector('#create-template');
-
+    const previewTitle = document.querySelector('.blog-title-preview');
+    previewTitle.textContent = document.querySelector('#blog-title').value || "main";
+    // previewTitle.textContent = 12;
     publishButton.addEventListener('click', async () => {
         const title = document.querySelector('#blog-title').value;
         if(title === '') {
@@ -958,11 +960,11 @@ function show_error(mesg){
     document.addEventListener('DOMContentLoaded', () => {
         // const dropZone = document.querySelector('.drop-zone');
         const urlParams = new URLSearchParams(window.location.search);
+        // const templateId = urlParams.get('id');
         const templateId = urlParams.get('id');
         const table = urlParams.get('a');
         const errorDiv = document.querySelector('.error-main');
         let updateButton= document.querySelector("#update");
-   
         if(table){
        updateButton.style.display="block";
     }
@@ -989,6 +991,7 @@ function show_error(mesg){
             });
 
             const result = await response.json();
+            console.warn(result);
             
             if (response.ok) {
                 if(table=="blogs")
@@ -1020,21 +1023,24 @@ function show_error(mesg){
         async function fetchTemplateContent(id) {
             try {
                 let response;
-                if(table=="template")
+                if(table=="templates")
                     response = await fetch(`./apis/templates.php?id=${id}`);
                 else
                      response = await fetch(`./apis/blogs.php?id=${id}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch template');
-                }
+                // if (!response.ok) {
+                //     throw new Error('Failed to fetch template'+response.text());
+                // }
     
                 const template = await response.json();
+                console.log(template);
                 
                 if (template && template.content) {
                     // Insert the template content into the dropzone
                    let title=document.querySelector("#blog-title");
                     dropZone.innerHTML = template.content;
                     title.value = template.title;
+                    let previewTitle=document.querySelector(".blog-title-preview");
+                    previewTitle.textContent = template.title;
                     reinitializeEditor();
                     // Reinitialize any event listeners for the loaded elements
                     // initializeDraggableElements();
